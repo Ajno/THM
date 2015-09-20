@@ -8,7 +8,12 @@
 #ifndef DISPLAY_TEST_H_
 #define DISPLAY_TEST_H_
 
+#include "display.h"
+
 void test_display_shiftAndBackLight_init();
 void test_display_shiftAndBackLight_run();
+
+void test_display_contrast_init();
+void test_display_contrast_run();
 
 #endif /* DISPLAY_TEST_H_ */

@@ -1,9 +1,11 @@
 #include "system.h"
 #include "base.h"
+#include "time.h"
+#include "display.h"
+#include "buttons.h"
+#include "pwr_mgmt.h"
 
 static pAppCallback_t pApp;
-
-extern void baseInitApp();
 
 void baseInstallApp(pAppCallback_t const pCallback)
 {
@@ -16,6 +18,10 @@ void baseInstallApp(pAppCallback_t const pCallback)
 void main(void)
 {
 	systemEnableInterrupts();
+	timerInit();
+	displayInit();
+	buttonsInit();
+	pwrMgmtInit();
 	baseInitApp();
 	
 	for (;;)

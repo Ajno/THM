@@ -258,6 +258,27 @@ void displayWrite(const uchar* pString)
 	}
 }
 
+void displaySetContrast(const Word cContrast)
+{
+    Word contrast = cContrast;
+    if (cDisplayMaxContrast < cContrast) 
+    {                
+        contrast = cDisplayMaxContrast;
+    }
+    
+    //todo
+    contrast = 30 + (contrast / 5);
+    pwmWriteChannel(contrast);
+    
+}
+
+Word displayGetContrast()
+{
+    Word ret = pwmReadChannel();
+    ret = (ret - 30) * 5;
+    return ret;//todo
+}
+
 void displayBackLightOn(const Bool bBackLightOn)
 {
     ioWrite(cDisplayBus_backLight, bBackLightOn);
@@ -321,7 +342,7 @@ void displayInit()
 {
     ioConfig_t pinCfg;
     pwmChannelConfig_t chnlCfg;
-    const Word cChannelValue = (pwmReadModulo() / 100) * 5 - 3;// todo
+    const Word cChannelValue = (pwmReadModulo() / 100) * 5 - 5;// 4,5% duty
 
     pinCfg.bOutput = TRUE;
     ioConfigurePortB(pinCfg);

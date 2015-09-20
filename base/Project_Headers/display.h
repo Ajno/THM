@@ -24,6 +24,7 @@ typedef struct
 }displayMovingDirection_t;
 
 static const Byte cDisplayAddressMax = 80;
+static const Word cDisplayMaxContrast = 100;
 
 void displayInit();
 void displayBackLightOn(const Bool bBackLightOn);
@@ -34,5 +35,7 @@ void displayOrCursorShift(const displayMovingDirection_t cSetting);
 void displayEntryModeSet(const displayMovingDirection_t cSetting);
 void displayMoveCursor(const Byte cAddress);
 void displayWrite(const uchar* pString);
+void displaySetContrast(const Word cContrast);
+Word displayGetContrast();
 
 #endif /* DISPLAY_H_ */

@@ -43,6 +43,11 @@ Word pwmReadModulo()
 	return TPMMOD;
 }
 
+Word pwmReadChannel()
+{
+    return TPMC0V;
+}
+
 void pwmWriteModulo(const Word modulo)
 {
 	TPMMOD = modulo;

@@ -6,7 +6,6 @@
  */
 
 #include "display_test.h"
-#include "display.h"
 #include "timer.h"
 #include "buttons.h"
 
@@ -61,5 +60,57 @@ void test_display_shiftAndBackLight_run()
         dir.bShiftScreenInsteadOfCursor = TRUE;   
         displayOrCursorShift(dir);
         cntr = 0;
+    }
+}
+
+void test_display_contrast_init()
+{
+    displayOnOffControl_t onOffSetting;
+
+    timerInit();
+    buttonsInit();
+
+    displayBackLightOn(TRUE);
+
+    // Display on
+    onOffSetting.bDisplayOn = TRUE;
+    onOffSetting.bCursorOn = TRUE;
+    onOffSetting.bBlinkingCursorOn = TRUE;
+    displayOnOffControl(onOffSetting);
+
+    //Display clear
+    displayClear();
+
+    displayWrite("contrast:");
+    displayMoveCursor(cDisplayAddressMax/2);
+    displayWrite("red(+), black(-)");
+}
+
+void test_display_contrast_run()
+{
+    static Word contrastOut = 50;
+    static Word contrastIn = 0;
+    buttonState_t stateLower;
+    buttonState_t stateUpper;
+    
+    buttonStateDetection(cButton_Lower,&stateLower);
+    buttonStateDetection(cButton_Upper,&stateUpper);
+    if (cButtonState_JustPressed == stateUpper)
+    {
+        if (100 != contrastOut) 
+        {
+            contrastOut = contrastOut + 5;            
+            displaySetContrast(contrastOut);
+            contrastIn = displayGetContrast();
+        }
+    }
+    if (cButtonState_JustPressed == stateLower)
+    {
+        if (0 != contrastOut) 
+        {
+            contrastOut = contrastOut - 5;   
+            displaySetContrast(contrastOut);
+            contrastIn = displayGetContrast();
+        }
     }
 }

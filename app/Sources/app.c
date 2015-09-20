@@ -11,11 +11,12 @@
 #include "display.h"
 #include "pwr_mgmt.h"
 
-#include "display_test.h"
-#include "io_test.h"
+void cyclic()
+{
+    
+}
 
 void baseInitApp()
 {
-    test_display_shiftAndBackLight_init();
-    baseInstallApp(&test_display_shiftAndBackLight_run);
+    baseInstallApp(&cyclic);
 }

@@ -61,6 +61,7 @@ void pwmConfigureChannel(const pwmChannelConfig_t cfg);
 void pwmSetOverflowInterruptEnable(const Bool bEnable);
 Word pwmReadTimer();
 Word pwmReadModulo();
+Word pwmReadChannel();
 void pwmWriteModulo(const Word modulo);
 void pwmWriteChannel(const Word value);
 void pwmClearTimer();

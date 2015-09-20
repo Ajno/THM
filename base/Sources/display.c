@@ -22,8 +22,10 @@ enum displayBus_t
     cDisplayBus_RS          = cPin_B7
 };
 
+static const Word cDutyCycle = 45;// 4,5% duty cycle
 static const Byte cMask_Backligh = 0x10;
-
+static const Word cOffset = 30;
+static const Word c5 = 5;
 static Bool bDataBusConfiguredAsOutput = FALSE;
 
 static void displayPrepareBusForWrite()
@@ -266,17 +268,15 @@ void displaySetContrast(const Word cContrast)
         contrast = cDisplayMaxContrast;
     }
     
-    //todo
-    contrast = 30 + (contrast / 5);
+    contrast = cOffset + (contrast / c5);
     pwmWriteChannel(contrast);
     
 }
-
 Word displayGetContrast()
 {
     Word ret = pwmReadChannel();
-    ret = (ret - 30) * 5;
-    return ret;//todo
+    ret = (ret - cOffset) * c5;
+    return ret;
 }
 
 void displayBackLightOn(const Bool bBackLightOn)
@@ -342,7 +342,7 @@ void displayInit()
 {
     ioConfig_t pinCfg;
     pwmChannelConfig_t chnlCfg;
-    const Word cChannelValue = (pwmReadModulo() / 100) * 5 - 5;// 4,5% duty
+    const Word cChannelValue = (pwmReadModulo() * cDutyCycle) / 1000;
 
     pinCfg.bOutput = TRUE;
     ioConfigurePortB(pinCfg);

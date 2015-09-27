@@ -24,4 +24,16 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Sources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Sources/controller.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app/Sources/controller.c</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

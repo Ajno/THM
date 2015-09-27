@@ -8,12 +8,10 @@
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
 
-#include "io.h"
-
 typedef enum
 {
-    cButton_Lower = cPin_A2,
-    cButton_Upper = cPin_A1
+    cButton_Upper = 0,
+    cButton_Lower = 1
 }buttons_t;
 
 typedef enum

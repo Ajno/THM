@@ -6,15 +6,18 @@
  */
 
 #include "buttons.h"
+#include "io.h"
 
 static buttonState_t bLowerState = cButtonState_Released;
 static buttonState_t bUpperState = cButtonState_Released;
+
+static const io_t cButtonIdx2ioIdx[2] = {cPinA1, cPinA2};
 
 static Bool buttonIsPressed(const buttons_t cButton)
 {
     Bool bInput = FALSE;
 
-    ioRead(cButton, &bInput);
+    ioRead(cButtonIdx2ioIdx[cButton], &bInput);
 
     return (!bInput);
 }
@@ -74,8 +77,8 @@ void buttonsInit()
     config.bOutput = FALSE;
     config.bPullUp = TRUE;
 
-    ioConfigure(cButton_Lower, config);
-    ioConfigure(cButton_Upper, config);
+    ioConfigure(cButtonIdx2ioIdx[cButton_Lower], config);
+    ioConfigure(cButtonIdx2ioIdx[cButton_Upper], config);
 
     bLowerState = cButtonState_Released;
     bUpperState = cButtonState_Released;

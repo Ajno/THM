@@ -5,18 +5,34 @@
  *      Author: Jano
  */
 
-#include "cppunit/TestCase.h"
+#include "test.h"
+#include "controller.h"
+#include "base.h"
+#include "base_test.h"
 using namespace CppUnit;
 
-class myFirstTest : public TestCase
-{
-public:
+CPPUNIT_TEST_SUITE_REGISTRATION(MyFirstTest);
 
-void runTest()
+void MyFirstTest::setUp()
 {
-	 CPPUNIT_ASSERT( true );
+
 }
 
-private:
-};
+void MyFirstTest::tearDown()
+{
+
+}
+
+void MyFirstTest::testInitApp()
+{
+    BaseTest* pBase = new BaseTest();
+    baseInitApp();
+    CPPUNIT_ASSERT(pBase->getFlag());
+}
+
+void MyFirstTest::testFirstCall()
+{
+    cyclic();
+    CPPUNIT_ASSERT(false);
+}
 

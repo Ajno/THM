@@ -10,6 +10,8 @@
 #include "timer.h"
 #include "display.h"
 #include "pwr_mgmt.h"
+#include "controller.h"
+
 
 void cyclic()
 {

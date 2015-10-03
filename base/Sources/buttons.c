@@ -11,7 +11,7 @@
 static buttonState_t bLowerState = cButtonState_Released;
 static buttonState_t bUpperState = cButtonState_Released;
 
-static const io_t cButtonIdx2ioIdx[2] = {cPinA1, cPinA2};
+static const io_t cButtonIdx2ioIdx[2] = {cPin_A1, cPin_A2};
 
 static Bool buttonIsPressed(const buttons_t cButton)
 {

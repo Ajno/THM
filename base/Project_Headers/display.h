@@ -7,6 +7,9 @@
 
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdtypes.h>
 
@@ -38,4 +41,7 @@ void displayWrite(const uchar* pString);
 void displaySetContrast(const Word cContrast);
 Word displayGetContrast();
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* DISPLAY_H_ */

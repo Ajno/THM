@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-void cyclic();
+void controller();
 
 #ifdef __cplusplus
 }

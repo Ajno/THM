@@ -12,13 +12,29 @@
 #include "pwr_mgmt.h"
 #include "controller.h"
 
+static Bool bBacklight = FALSE;
+static Byte toggleBacklight = 5;
 
-void cyclic()
+void controller()
 {
-    
+	if (0 < toggleBacklight)
+	{
+		if (timerElapsed())
+		{
+			bBacklight = bBacklight ? FALSE : TRUE;
+			displayBackLightOn(bBacklight);
+			toggleBacklight--;
+			if (0 != toggleBacklight)
+			{
+				timerRestart(500); // 500 ms
+			}
+		}
+	}
 }
 
 void baseInitApp()
 {
-    baseInstallApp(&cyclic);
+	bBacklight = FALSE;
+	toggleBacklight = 5;
+	baseInstallApp(&controller);
 }

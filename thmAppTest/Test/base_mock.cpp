@@ -5,7 +5,7 @@
  *      Author: Jano
  */
 #include "base.h"
-#include "base_test.h"
+#include "base_mock.h"
 
 static bool bInstalled = false;
 
@@ -17,12 +17,12 @@ extern "C" void baseInstallApp(pAppCallback_t const pCallback)
     }
 }
 
-BaseTest::BaseTest()
+BaseMock::BaseMock()
 {
     bInstalled = false;
 }
 
-bool BaseTest::getFlag()
+bool BaseMock::appInstalled()
 {
     return bInstalled;
 }

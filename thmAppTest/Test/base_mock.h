@@ -8,11 +8,11 @@
 #ifndef BASE_TEST_H_
 #define BASE_TEST_H_
 
-class BaseTest
+class BaseMock
 {
 public:
-    BaseTest();
-    bool getFlag();
+    BaseMock();
+    bool appInstalled();
 private:
 };
 

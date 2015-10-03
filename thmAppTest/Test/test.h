@@ -11,12 +11,15 @@
 #include <cppunit/extensions/HelperMacros.h>
 using namespace CppUnit;
 
-class MyFirstTest : public TestFixture
+class ControllerTest : public TestFixture
 {
-    CPPUNIT_TEST_SUITE(MyFirstTest);
+    CPPUNIT_TEST_SUITE(ControllerTest);
 
-    CPPUNIT_TEST(testFirstCall);
     CPPUNIT_TEST(testInitApp);
+    CPPUNIT_TEST(testFirstWakeUp1);
+    CPPUNIT_TEST(testFirstWakeUp2);
+    CPPUNIT_TEST(testFirstWakeUp3);
+    CPPUNIT_TEST(testFirstWakeUp4);
 
     CPPUNIT_TEST_SUITE_END();
 public:
@@ -24,7 +27,10 @@ public:
     void tearDown();
 
     void testInitApp();
-	void testFirstCall();
+	void testFirstWakeUp1();
+	void testFirstWakeUp2();
+	void testFirstWakeUp3();
+	void testFirstWakeUp4();
 };
 
 #endif /* TEST_H_ */

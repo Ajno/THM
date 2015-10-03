@@ -7,6 +7,9 @@
 
 #ifndef TIMER_H_
 #define TIMER_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdtypes.h>
 
@@ -16,4 +19,7 @@ void waitX100us(const Word cDelay);
 void timerRestart(const Word cTimeout_ms);
 Bool timerElapsed();
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* TIMER_H_ */

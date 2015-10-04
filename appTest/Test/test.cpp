@@ -25,7 +25,7 @@ void ControllerTest::tearDown()
 
 }
 
-void ControllerTest::testInitApp()
+void ControllerTest::initApp()
 {
     BaseMock* pBase = new BaseMock();
 
@@ -34,7 +34,7 @@ void ControllerTest::testInitApp()
     CPPUNIT_ASSERT(pBase->appInstalled());
 }
 
-void ControllerTest::testFirstWakeUp1()
+void ControllerTest::firstWakeUp1()
 {
 	DisplayMock* pDisplay = new DisplayMock();
 	TimerMock*	pTimer = new TimerMock();
@@ -43,10 +43,11 @@ void ControllerTest::testFirstWakeUp1()
 	controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(!pDisplay->displayIsOn());
     CPPUNIT_ASSERT(pTimer->isRunning());
 }
 
-void ControllerTest::testFirstWakeUp2()
+void ControllerTest::firstWakeUp2()
 {
 	DisplayMock* pDisplay = new DisplayMock();
 	TimerMock*	pTimer = new TimerMock();
@@ -57,10 +58,11 @@ void ControllerTest::testFirstWakeUp2()
     controller();
 
     CPPUNIT_ASSERT(!pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(!pDisplay->displayIsOn());
     CPPUNIT_ASSERT(pTimer->isRunning());
 }
 
-void ControllerTest::testFirstWakeUp3()
+void ControllerTest::firstWakeUp3()
 {
 	DisplayMock* pDisplay = new DisplayMock();
 	TimerMock*	pTimer = new TimerMock();
@@ -73,10 +75,11 @@ void ControllerTest::testFirstWakeUp3()
     controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(!pDisplay->displayIsOn());
     CPPUNIT_ASSERT(pTimer->isRunning());
 }
 
-void ControllerTest::testFirstWakeUp4()
+void ControllerTest::firstWakeUp4()
 {
 	DisplayMock* pDisplay = new DisplayMock();
 	TimerMock*	pTimer = new TimerMock();
@@ -93,5 +96,30 @@ void ControllerTest::testFirstWakeUp4()
 	controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(!pDisplay->displayIsOn());
     CPPUNIT_ASSERT(!pTimer->isRunning());
+}
+
+void ControllerTest::turnOnDisplay()
+{
+	DisplayMock* pDisplay = new DisplayMock();
+	TimerMock*	pTimer = new TimerMock();
+
+	baseInitApp();
+	controller();
+    pTimer->stop();
+    controller();
+    pTimer->stop();
+    controller();
+    pTimer->stop();
+    controller();
+    pTimer->stop();
+	controller();
+
+	controller();
+
+    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(pDisplay->displayIsOn());
+    CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursorState());
+    CPPUNIT_ASSERT(pTimer->isRunning());
 }

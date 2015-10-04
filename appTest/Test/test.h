@@ -15,22 +15,24 @@ class ControllerTest : public TestFixture
 {
     CPPUNIT_TEST_SUITE(ControllerTest);
 
-    CPPUNIT_TEST(testInitApp);
-    CPPUNIT_TEST(testFirstWakeUp1);
-    CPPUNIT_TEST(testFirstWakeUp2);
-    CPPUNIT_TEST(testFirstWakeUp3);
-    CPPUNIT_TEST(testFirstWakeUp4);
+    CPPUNIT_TEST(initApp);
+    CPPUNIT_TEST(firstWakeUp1);
+    CPPUNIT_TEST(firstWakeUp2);
+    CPPUNIT_TEST(firstWakeUp3);
+    CPPUNIT_TEST(firstWakeUp4);
+    CPPUNIT_TEST(turnOnDisplay);
 
     CPPUNIT_TEST_SUITE_END();
 public:
     void setUp();
     void tearDown();
 
-    void testInitApp();
-	void testFirstWakeUp1();
-	void testFirstWakeUp2();
-	void testFirstWakeUp3();
-	void testFirstWakeUp4();
+    void initApp();
+	void firstWakeUp1();
+	void firstWakeUp2();
+	void firstWakeUp3();
+	void firstWakeUp4();
+	void turnOnDisplay();
 };
 
 #endif /* TEST_H_ */

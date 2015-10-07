@@ -7,6 +7,9 @@
 
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum
 {
@@ -24,4 +27,7 @@ typedef enum
 void buttonsInit();
 void buttonStateDetection(const buttons_t cButton, buttonState_t* pState);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* BUTTONS_H_ */

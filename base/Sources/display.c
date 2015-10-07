@@ -249,7 +249,7 @@ void displayMoveCursor(const Byte cAddress)
     displayWaitTillNotBusy();
 }
 
-void displayWrite(const uchar* pString)
+void displayWrite(const char* pString)
 {
 	Byte i;
 	

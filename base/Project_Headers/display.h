@@ -37,7 +37,7 @@ void displayOnOffControl(const displayOnOffControl_t cControl);
 void displayOrCursorShift(const displayMovingDirection_t cSetting);
 void displayEntryModeSet(const displayMovingDirection_t cSetting);
 void displayMoveCursor(const Byte cAddress);
-void displayWrite(const uchar* pString);
+void displayWrite(const char* pString);
 void displaySetContrast(const Word cContrast);
 Word displayGetContrast();
 

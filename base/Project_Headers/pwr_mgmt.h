@@ -7,6 +7,9 @@
 
 #ifndef PWR_MGMT_H_
 #define PWR_MGMT_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdtypes.h>
 
@@ -23,6 +26,9 @@ typedef enum
 
 void pwrMgmtInit();
 void pwrMgmtGoToSleep(const Bool bDeepSleep);
-void pwrMgmtGetRcentResetSource(pwrMgmtRecentresetSource_t* pSource);
+void pwrMgmtGetRecentResetSource(pwrMgmtRecentresetSource_t* pSource);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* PWR_MGMT_H_ */

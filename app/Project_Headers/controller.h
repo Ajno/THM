@@ -11,6 +11,10 @@
 extern "C" {
 #endif
 
+#include <stdtypes.h>
+
+static const Byte cToggleBacklight = 7;
+
 void controller();
 
 #ifdef __cplusplus

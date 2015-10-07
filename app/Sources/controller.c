@@ -13,28 +13,59 @@
 #include "controller.h"
 
 static Bool bBacklight = FALSE;
-static Byte toggleBacklight = 5;
+static Byte cntrBacklightToggle; // todo figure out why can't be initialized here with cToggleBacklight
+static displayOnOffControl_t displayCntrl;
 
 void controller()
 {
-	if (0 < toggleBacklight)
-	{
-		if (timerElapsed())
-		{
-			bBacklight = bBacklight ? FALSE : TRUE;
-			displayBackLightOn(bBacklight);
-			toggleBacklight--;
-			if (0 != toggleBacklight)
-			{
-				timerRestart(500); // 500 ms
-			}
-		}
-	}
+    if (0 < cntrBacklightToggle)
+    {
+        if (timerElapsed())
+        {
+            bBacklight = bBacklight ? FALSE : TRUE;
+            displayBackLightOn(bBacklight);
+            cntrBacklightToggle--;
+            if (0 != cntrBacklightToggle)
+            {
+                timerRestart(250); // 250 ms
+            }
+        }
+    }
+    else
+    {
+        if (!displayCntrl.bDisplayOn)
+        {
+            displayClear();
+            displayCntrl.bDisplayOn = TRUE;
+            displayOnOffControl(displayCntrl);
+            displayWrite("Teplota neznama");
+            timerRestart(5000); // 5 sec
+        }
+
+        if (timerElapsed())
+        {
+            if (bBacklight)
+            {
+                bBacklight = FALSE;
+                displayBackLightOn(bBacklight);
+                timerRestart(5000); // 5 sec
+            }
+            else
+            {
+                displayCntrl.bDisplayOn = FALSE;
+                displayOnOffControl(displayCntrl);
+                pwrMgmtGoToSleep(TRUE);
+            }
+        }
+    }
 }
 
 void baseInitApp()
 {
-	bBacklight = FALSE;
-	toggleBacklight = 5;
-	baseInstallApp(&controller);
+    bBacklight = FALSE;
+    cntrBacklightToggle = cToggleBacklight;
+    displayCntrl.bDisplayOn = FALSE;
+    displayCntrl.bCursorOn = FALSE;
+    displayCntrl.bBlinkingCursorOn = FALSE;
+    baseInstallApp(&controller);
 }

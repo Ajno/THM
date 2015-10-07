@@ -35,12 +35,23 @@ extern "C" void displayOnOffControl(const displayOnOffControl_t cControl)
 	}
 }
 
+extern "C" void displayClear()
+{
+    screen = "";
+}
+
+extern "C" void displayWrite(const char* pString)
+{
+    string str(pString);
+    screen += str;
+}
+
 DisplayMock::DisplayMock()
 {
 	bBacklightIsOn = false;
 	bDisplayOn = false;
 	cursorState = DisplayMock::cCursor_off;
-	screen = "";
+	screen = "idkfa iddqd";
 }
 
 bool DisplayMock::backlightIsOn()
@@ -56,4 +67,9 @@ bool DisplayMock::displayIsOn()
 DisplayMock::cursorState_t DisplayMock::getCursorState()
 {
 	return cursorState;
+}
+
+string DisplayMock::getScreen()
+{
+    return screen;
 }

@@ -34,7 +34,7 @@ void pwrMgmtGoToSleep(const Bool bDeepSleep)
     }
 }
 
-void pwrMgmtGetRcentResetSource(pwrMgmtRecentresetSource_t* pSource)
+void pwrMgmtGetRecentResetSource(pwrMgmtRecentresetSource_t* pSource)
 {
     systemRecentResetSource_t source;
     systemReadResetSource(&source);

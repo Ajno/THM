@@ -7,6 +7,7 @@
 
 #include "pwr_mgmt.h"
 #include "system.h"
+#include "kbi.h"
 
 void pwrMgmtInit()
 {
@@ -19,12 +20,20 @@ void pwrMgmtInit()
     cfg.bLowVoltageTripPointHigh = TRUE;
     cfg.bLowVoltageWarningPointHigh = TRUE;
     systemConfigure(cfg);
+    
+    kbiInstallIsrCallback(&kbiDisable);
 }
 
 void pwrMgmtGoToSleep(const Bool bDeepSleep)
 {
+    kbiConfig_t cfg;
+    cfg.bPullUp = TRUE;
+    cfg.bRisingEdge = FALSE;
+    
     if (bDeepSleep) 
-    {        
+    {
+        kbiConfigure(cKbiIn_P1, cfg);
+        kbiConfigure(cKbiIn_P2, cfg);
         systemStop();
     } 
     else 

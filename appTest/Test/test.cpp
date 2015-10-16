@@ -16,6 +16,16 @@ using namespace CppUnit;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ControllerTest);
 
+void callControllerAndStopTimer(const int cCount, TimerMock& rTimer)
+{
+    for (int i = 0; i < cCount; ++i)
+    {
+
+        controller();
+        rTimer.stop();
+    }
+}
+
 void ControllerTest::setUp()
 {
 
@@ -54,8 +64,7 @@ void ControllerTest::firstWakeUp2()
     TimerMock* pTimer = new TimerMock();
 
     baseInitApp();
-    controller();
-    pTimer->stop();
+    callControllerAndStopTimer(1, *pTimer);
     controller();
 
     CPPUNIT_ASSERT(!pDisplay->backlightIsOn());
@@ -69,12 +78,7 @@ void ControllerTest::firstWakeUp3()
     TimerMock* pTimer = new TimerMock();
 
     baseInitApp();
-    for (int i = 0; i < 2; ++i)
-    {
-
-        controller();
-        pTimer->stop();
-    }
+    callControllerAndStopTimer(2, *pTimer);
     controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
@@ -88,12 +92,7 @@ void ControllerTest::firstWakeUp4()
     TimerMock* pTimer = new TimerMock();
 
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
-    {
-
-        controller();
-        pTimer->stop();
-    }
+    callControllerAndStopTimer((cToggleBacklight - 1), *pTimer);
     controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
@@ -107,15 +106,8 @@ void ControllerTest::turnOnDisplay()
     TimerMock* pTimer = new TimerMock();
 
     baseInitApp();
-
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
-    {
-
-        controller();
-        pTimer->stop();
-    }
+    callControllerAndStopTimer((cToggleBacklight - 1), *pTimer);
     controller();
-
     controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
@@ -131,17 +123,9 @@ void ControllerTest::turnOffBacklight()
     TimerMock* pTimer = new TimerMock();
 
     baseInitApp();
-
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
-    {
-
-        controller();
-        pTimer->stop();
-    }
+    callControllerAndStopTimer((cToggleBacklight - 1), *pTimer);
     controller();
-
-    controller();
-    pTimer->stop();
+    callControllerAndStopTimer(1, *pTimer);
     controller();
 
     CPPUNIT_ASSERT(!pDisplay->backlightIsOn());
@@ -159,19 +143,9 @@ void ControllerTest::goToSleep()
 
     baseInitApp();
 
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
-    {
-
-        controller();
-        pTimer->stop();
-    }
+    callControllerAndStopTimer((cToggleBacklight - 1), *pTimer);
     controller();
-
-    controller();
-    pTimer->stop();
-    controller();
-    pTimer->stop();
-
+    callControllerAndStopTimer(2, *pTimer);
     controller();
 
     CPPUNIT_ASSERT(!pDisplay->backlightIsOn());
@@ -189,20 +163,9 @@ void ControllerTest::wakeUp()
     PwrMgmtMock* pPwrMgmt = new PwrMgmtMock();
 
     baseInitApp();
-
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
-    {
-
-        controller();
-        pTimer->stop();
-    }
+    callControllerAndStopTimer((cToggleBacklight - 1), *pTimer);
     controller();
-
-    controller();
-    pTimer->stop();
-    controller();
-    pTimer->stop();
-
+    callControllerAndStopTimer(2, *pTimer);
     controller();
     pPwrMgmt->wakeUp();
     controller();

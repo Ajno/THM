@@ -29,3 +29,8 @@ bool PwrMgmtMock::isSleeping()
 {
     return bSleeping;
 }
+
+void PwrMgmtMock::wakeUp()
+{
+    bSleeping = false;
+}

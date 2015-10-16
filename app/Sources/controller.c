@@ -38,6 +38,11 @@ void controller()
             displayClear();
             displayCntrl.bDisplayOn = TRUE;
             displayOnOffControl(displayCntrl);
+            if (!bBacklight)
+            {
+                bBacklight = TRUE;
+                displayBackLightOn(bBacklight);
+            }
             displayWrite("Teplota neznama");
             timerRestart(5000); // 5 sec
         }

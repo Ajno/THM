@@ -204,7 +204,7 @@ void ControllerTest::wakeUp()
     pTimer->stop();
 
     controller();
-    // todo press any button
+    pPwrMgmt->wakeUp();
     controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());

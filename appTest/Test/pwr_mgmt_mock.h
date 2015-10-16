@@ -14,6 +14,7 @@ public:
     PwrMgmtMock();
     virtual ~PwrMgmtMock();
     bool isSleeping();
+    void wakeUp();
 };
 
 #endif /* PWR_MGMT_MOCK_H_ */

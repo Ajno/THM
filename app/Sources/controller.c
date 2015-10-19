@@ -43,7 +43,7 @@ void controller()
                 bBacklight = TRUE;
                 displayBackLightOn(bBacklight);
             }
-            displayWrite("Teplota neznama");
+            displayWrite("Teplota neznama Kontrast: --            Vlhkost neznama  Jazyk: SK");
             timerRestart(5000); // 5 sec
         }
 

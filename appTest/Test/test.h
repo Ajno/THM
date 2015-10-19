@@ -24,6 +24,7 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(turnOffBacklight);
     CPPUNIT_TEST(goToSleep);
     CPPUNIT_TEST(wakeUp);
+    CPPUNIT_TEST(slideScreen);
 
     CPPUNIT_TEST_SUITE_END();
 public:
@@ -39,6 +40,7 @@ public:
 	void turnOffBacklight();
 	void goToSleep();
 	void wakeUp();
+	void slideScreen();
 };
 
 #endif /* TEST_H_ */

@@ -26,6 +26,7 @@ public:
 	bool displayIsOn();
 	cursorState_t getCursorState();
 	string getScreen();
+	int getCursorPosition();
 private:
 };
 

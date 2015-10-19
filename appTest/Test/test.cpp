@@ -12,6 +12,7 @@
 #include "display_mock.h"
 #include "timer_mock.h"
 #include "pwr_mgmt_mock.h"
+#include "buttons_mock.h"
 using namespace CppUnit;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ControllerTest);
@@ -113,7 +114,7 @@ void ControllerTest::turnOnDisplay()
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursorState());
-    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama" == pDisplay->getScreen()));
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama Kontrast: --            Vlhkost neznama  Jazyk: SK" == pDisplay->getScreen()));
     CPPUNIT_ASSERT(pTimer->isRunning());
 }
 
@@ -131,7 +132,7 @@ void ControllerTest::turnOffBacklight()
     CPPUNIT_ASSERT(!pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursorState());
-    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama" == pDisplay->getScreen()));
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama Kontrast: --            Vlhkost neznama  Jazyk: SK" == pDisplay->getScreen()));
     CPPUNIT_ASSERT(pTimer->isRunning());
 }
 
@@ -151,7 +152,7 @@ void ControllerTest::goToSleep()
     CPPUNIT_ASSERT(!pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(!pDisplay->displayIsOn());
     CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursorState());
-    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama" == pDisplay->getScreen()));
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama Kontrast: --            Vlhkost neznama  Jazyk: SK" == pDisplay->getScreen()));
     CPPUNIT_ASSERT(!pTimer->isRunning());
     CPPUNIT_ASSERT(pPwrMgmt->isSleeping());
 }
@@ -173,7 +174,27 @@ void ControllerTest::wakeUp()
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursorState());
-    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama" == pDisplay->getScreen()));
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama Kontrast: --            Vlhkost neznama  Jazyk: SK" == pDisplay->getScreen()));
     CPPUNIT_ASSERT(pTimer->isRunning());
     CPPUNIT_ASSERT(!pPwrMgmt->isSleeping());
+}
+
+void ControllerTest::slideScreen()
+{
+    ButtonsMock* pButtons = new ButtonsMock();
+    TimerMock* pTimer = new TimerMock();
+    DisplayMock* pDisplay = new DisplayMock();
+
+    baseInitApp();
+    callControllerAndStopTimer((cToggleBacklight - 1), *pTimer);
+    controller();
+    controller();
+    // todo push button
+    controller();
+
+    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(pDisplay->displayIsOn());
+    CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursorState());
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen(),("Teplota neznama Kontrast: --            Vlhkost neznama  Jazyk: SK" == pDisplay->getScreen()));
+    CPPUNIT_ASSERT_EQUAL(41, pDisplay->getCursorPosition());
 }

@@ -13,6 +13,7 @@ class ButtonsMock
 public:
     ButtonsMock();
     virtual ~ButtonsMock();
+
 };
 
 #endif /* BUTTONS_MOCK_H_ */

@@ -10,9 +10,8 @@
 
 static bool bBacklightIsOn = false;
 static bool bDisplayOn = false;
-static DisplayMock::cursorState_t cursorState = DisplayMock::cCursor_off;
-static string screen = "";
-static int cursorPosition = 0;
+static DisplayMock::screen_t screen = {"", 0};
+static DisplayMock::cursor_t cursor = {DisplayMock::cCursor_off, 0};
 
 extern "C" void displayBackLightOn(const Bool bBackLightOn)
 {
@@ -24,37 +23,65 @@ extern "C" void displayOnOffControl(const displayOnOffControl_t cControl)
 	bDisplayOn = cControl.bDisplayOn;
 	if (cControl.bBlinkingCursorOn && cControl.bCursorOn)
 	{
-		cursorState = DisplayMock::cCursor_blinking;
+		cursor.state = DisplayMock::cCursor_blinking;
 	}
 	else if (cControl.bCursorOn)
 	{
-		cursorState = DisplayMock::cCursor_on;
+	    cursor.state = DisplayMock::cCursor_on;
 	}
 	else
 	{
-		cursorState = DisplayMock::cCursor_off;
+	    cursor.state = DisplayMock::cCursor_off;
 	}
 }
 
 extern "C" void displayClear()
 {
-    screen = "";
-    cursorPosition = 0;
+    screen.text = "";
+    screen.position = 0;
+    cursor.position = 0;
 }
 
 extern "C" void displayWrite(const char* pString)
 {
     string str(pString);
-    screen += str;
+    screen.text += str;
+}
+
+extern "C" void displayOrCursorShift(const displayMovingDirection_t cSetting)
+{
+    if (cSetting.bShiftRightInsteadOfLeft)
+    {
+        if (cSetting.bShiftScreenInsteadOfCursor)
+        {
+            screen.position--;
+        }
+        else
+        {
+
+        }
+    }
+    else
+    {
+        if (cSetting.bShiftScreenInsteadOfCursor)
+        {
+            screen.position++;
+        }
+        else
+        {
+
+        }
+    }
 }
 
 DisplayMock::DisplayMock()
 {
 	bBacklightIsOn = false;
 	bDisplayOn = false;
-	cursorState = DisplayMock::cCursor_off;
-	screen = "idkfa iddqd";
-	cursorPosition = 0;
+	screen.text = "idkfa iddqd";
+	screen.position = 0;
+	cursor.state = DisplayMock::cCursor_off;
+	cursor.position = 0;
 }
 
 bool DisplayMock::backlightIsOn()
@@ -67,17 +94,12 @@ bool DisplayMock::displayIsOn()
 	return bDisplayOn;
 }
 
-DisplayMock::cursorState_t DisplayMock::getCursorState()
+DisplayMock::cursor_t DisplayMock::getCursor()
 {
-	return cursorState;
+	return cursor;
 }
 
-string DisplayMock::getScreen()
+DisplayMock::screen_t DisplayMock::getScreen()
 {
     return screen;
-}
-
-int DisplayMock::getCursorPosition()
-{
-    return cursorPosition;
 }

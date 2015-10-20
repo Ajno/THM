@@ -9,7 +9,9 @@
 #define DISPLAY_TEST_H_
 
 #include <string>
+#include <display.h>
 using namespace std;
+
 
 class DisplayMock
 {
@@ -21,12 +23,24 @@ public:
 		cCursor_off
 	}cursorState_t;
 
+    typedef struct
+    {
+        cursorState_t   state;
+        int             position;
+    }cursor_t;
+
+    typedef struct
+    {
+        string  text;
+        int     position;
+    }screen_t;
+
+
 	DisplayMock();
 	bool backlightIsOn();
 	bool displayIsOn();
-	cursorState_t getCursorState();
-	string getScreen();
-	int getCursorPosition();
+	cursor_t getCursor();
+	screen_t getScreen();
 private:
 };
 

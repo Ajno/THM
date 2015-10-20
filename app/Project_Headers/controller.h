@@ -13,7 +13,7 @@ extern "C" {
 
 #include <stdtypes.h>
 
-static const Byte cToggleBacklight = 7;
+const Byte cToggleBacklight = 7;
 
 void controller();
 

@@ -13,8 +13,10 @@
 #include "controller.h"
 
 static Bool bBacklight = FALSE;
-static Byte cntrBacklightToggle; // todo figure out why can't be initialized here with cToggleBacklight
+static Byte cntrBacklightToggle = cToggleBacklight;
 static displayOnOffControl_t displayCntrl;
+static buttonState_t buttonState[2] = {cButtonState_Released, cButtonState_Released};
+static Byte currentScreen = 1;
 
 void controller()
 {
@@ -43,7 +45,7 @@ void controller()
                 bBacklight = TRUE;
                 displayBackLightOn(bBacklight);
             }
-            displayWrite("Teplota neznama Kontrast: --            Vlhkost neznama  Jazyk: SK");
+            displayWrite("Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK");
             timerRestart(5000); // 5 sec
         }
 
@@ -62,6 +64,42 @@ void controller()
                 pwrMgmtGoToSleep(TRUE);
             }
         }
+
+        buttonStateDetection(cButton_Lower, &buttonState[cButton_Lower]);
+        if (cButtonState_JustPressed == buttonState[cButton_Lower])
+        {
+            if (!bBacklight)
+            {
+                bBacklight = TRUE;
+                displayBackLightOn(bBacklight);
+                timerRestart(5000); // 5 sec
+            }
+
+            if (1 == currentScreen)
+            {
+                Byte i;
+                displayMovingDirection_t direction;
+                direction.bShiftRightInsteadOfLeft = FALSE;
+                direction.bShiftScreenInsteadOfCursor = TRUE;
+                for (i = 0; i < 16; ++i)
+                {
+                    displayOrCursorShift(direction);
+                }
+                currentScreen = 2;
+            }
+            else if (2 == currentScreen)
+            {
+                Byte i;
+                displayMovingDirection_t direction;
+                direction.bShiftRightInsteadOfLeft = TRUE;
+                direction.bShiftScreenInsteadOfCursor = TRUE;
+                for (i = 0; i < 16; ++i)
+                {
+                    displayOrCursorShift(direction);
+                }
+                currentScreen = 1;
+            }
+        }
     }
 }
 
@@ -72,5 +110,9 @@ void baseInitApp()
     displayCntrl.bDisplayOn = FALSE;
     displayCntrl.bCursorOn = FALSE;
     displayCntrl.bBlinkingCursorOn = FALSE;
+    buttonState[cButton_Lower] = cButtonState_Released;
+    buttonState[cButton_Upper] = cButtonState_Released;
+    currentScreen = 1;
+
     baseInstallApp(&controller);
 }

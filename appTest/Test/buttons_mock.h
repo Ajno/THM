@@ -8,12 +8,14 @@
 #ifndef BUTTONS_MOCK_H_
 #define BUTTONS_MOCK_H_
 
+#include <buttons.h>
+
 class ButtonsMock
 {
 public:
     ButtonsMock();
     virtual ~ButtonsMock();
-
+    void setState(const buttonState_t cState, const buttons_t cButton);
 };
 
 #endif /* BUTTONS_MOCK_H_ */

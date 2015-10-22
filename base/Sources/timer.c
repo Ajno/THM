@@ -107,7 +107,6 @@ static void processTimer(timer_t* pTimer, const Word cNumOfOvflws)
         {            
             pTimer->remaining--;
             pTimer->overflowCounter = cNumOfOvflws;
-            
         }
     }
 }

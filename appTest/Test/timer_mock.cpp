@@ -8,29 +8,55 @@
 #include "timer_mock.h"
 #include "timer.h"
 
-static bool bRunning = false;
+static bool bRunningMiliSec = false;
+static bool bRunningSec = false;
 
-extern "C" void timerRestart(const Word cTimeout_ms)
+extern "C" void timerRestartMiliSec(const Word cTimeout_ms)
 {
-	bRunning = true;
+	bRunningMiliSec = true;
+}
+
+extern "C" void timerRestartSec(const Word cTimeout_sec)
+{
+	bRunningSec = true;
 }
 
 TimerMock::TimerMock()
 {
-	bRunning = false;
+	bRunningMiliSec = false;
+	bRunningSec = false;
 }
 
-bool TimerMock::isRunning()
+bool TimerMock::isRunning(const timerType_t cType)
 {
-	return bRunning;
+	if (cTimerMiliSec == cType)
+	{
+		return bRunningMiliSec;
+	}
+	else if (cTimerSec == cType)
+	{
+		return bRunningSec;
+	}
 }
 
-void TimerMock::stop()
+void TimerMock::stop(const timerType_t cType)
 {
-	bRunning = false;
+	if (cTimerMiliSec == cType)
+	{
+		bRunningMiliSec = false;
+	}
+	else if (cTimerSec == cType)
+	{
+		bRunningSec = false;
+	}
 }
 
 extern "C" Bool timerElapsedMiliSec()
 {
-	return !bRunning;
+	return !bRunningMiliSec;
+}
+
+extern "C" Bool timerElapsedSec()
+{
+	return !bRunningSec;
 }

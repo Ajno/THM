@@ -11,10 +11,15 @@
 class TimerMock
 {
 public:
+	typedef enum
+	{
+		cTimerMiliSec,
+		cTimerSec
+	}timerType_t;
 	TimerMock();
 	~TimerMock(){}
-	void stop();
-	bool isRunning();
+	void stop(const timerType_t cType);
+	bool isRunning(const timerType_t cType);
 private:
 };
 

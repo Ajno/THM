@@ -46,16 +46,16 @@ void controller()
                 displayBackLightOn(bBacklight);
             }
             displayWrite("Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK");
-            timerRestartMiliSec(5000); // 5 sec
+            timerRestartSec(5); // 5 sec
         }
 
-        if (timerElapsedMiliSec())
+        if (timerElapsedSec())
         {
             if (bBacklight)
             {
                 bBacklight = FALSE;
                 displayBackLightOn(bBacklight);
-                timerRestartMiliSec(5000); // 5 sec
+                timerRestartSec(5); // 5 sec
             }
             else
             {
@@ -72,7 +72,7 @@ void controller()
             {
                 bBacklight = TRUE;
                 displayBackLightOn(bBacklight);
-                timerRestartMiliSec(5000); // 5 sec
+                timerRestartSec(5); // 5 sec
             }
 
             if (1 == currentScreen)

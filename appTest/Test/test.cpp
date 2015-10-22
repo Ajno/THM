@@ -67,7 +67,7 @@ void ControllerTest::backlightOff()
 void ControllerTest::backlightStayOn()
 {
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerMiliSec);
@@ -82,7 +82,7 @@ void ControllerTest::backlightStayOn()
 void ControllerTest::turnOnDisplay()
 {
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerMiliSec);
@@ -101,7 +101,7 @@ void ControllerTest::turnOnDisplay()
 void ControllerTest::turnOffBacklight()
 {
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerMiliSec);
@@ -122,7 +122,7 @@ void ControllerTest::turnOffBacklight()
 void ControllerTest::goToSleep()
 {
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerMiliSec);
@@ -146,7 +146,7 @@ void ControllerTest::goToSleep()
 void ControllerTest::wakeUp()
 {
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerMiliSec);
@@ -172,26 +172,8 @@ void ControllerTest::wakeUp()
 
 void ControllerTest::shiftScreenRight()
 {
-//    baseInitApp();
-//    callControllerAndStopTimer((cToggleBacklight - 1), *pTimer);
-//    controller();
-//    callControllerAndStopTimer(1, *pTimer);
-//    controller();
-//    pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-//    controller();
-//
-//    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
-//    CPPUNIT_ASSERT(pDisplay->displayIsOn());
-//    CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursor().state);
-//    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
-//    CPPUNIT_ASSERT_EQUAL(1, pDisplay->getScreen().position);
-//    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
-}
-
-void ControllerTest::slideToMenu2()
-{
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerMiliSec);
@@ -207,15 +189,15 @@ void ControllerTest::slideToMenu2()
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursor().state);
     CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
-    CPPUNIT_ASSERT_EQUAL(16, pDisplay->getScreen().position);
-    CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
-    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
+    CPPUNIT_ASSERT_EQUAL(1, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
 }
 
-void ControllerTest::slideToMenu1()
+void ControllerTest::slideToMenu2()
 {
     baseInitApp();
-    for (int i = 0; i < (cToggleBacklight - 1); ++i)
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerMiliSec);
@@ -225,11 +207,45 @@ void ControllerTest::slideToMenu1()
     pTimer->stop(TimerMock::cTimerSec);
     controller();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
+    for (int i = 0; i < 100; ++i)
+    {
+        controller();
+        pTimer->stop(TimerMock::cTimerMiliSec);
+    }
+
+    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(pDisplay->displayIsOn());
+    CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursor().state);
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
+    CPPUNIT_ASSERT_EQUAL(16, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
+}
+
+void ControllerTest::slideToMenu1()
+{
+    baseInitApp();
+    for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
+    {
+        controller();
+        pTimer->stop(TimerMock::cTimerMiliSec);
+    }
+    controller();
     controller();
     pTimer->stop(TimerMock::cTimerSec);
     controller();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-    controller();
+    for (int i = 0; i < 100; ++i)
+    {
+        controller();
+        pTimer->stop(TimerMock::cTimerMiliSec);
+    }
+    pButtons->setState(cButtonState_JustPressed, cButton_Lower);
+    for (int i = 0; i < 100; ++i)
+    {
+        controller();
+        pTimer->stop(TimerMock::cTimerMiliSec);
+    }
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());

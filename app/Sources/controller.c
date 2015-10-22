@@ -12,11 +12,23 @@
 #include "pwr_mgmt.h"
 #include "controller.h"
 
+static const Bool cToRight = TRUE;
+static const Bool cToLeft = FALSE;
+
 static Bool bBacklight = FALSE;
-static Byte cntrBacklightToggle = cToggleBacklight;
+static Byte cntrBacklightToggle = cNumOfBacklightToggle;
 static displayOnOffControl_t displayCntrl;
 static buttonState_t buttonState[2] = {cButtonState_Released, cButtonState_Released};
-static Byte currentScreen = 1;
+static screenState_t screenState = cScreenState_menu1;
+static Byte screenPosition = 0;
+
+static void shiftScreen(const Bool cDirection)
+{
+    displayMovingDirection_t direction;
+    direction.bShiftRightInsteadOfLeft = cDirection;
+    direction.bShiftScreenInsteadOfCursor = TRUE;
+    displayOrCursorShift(direction);
+}
 
 void controller()
 {
@@ -65,6 +77,38 @@ void controller()
             }
         }
 
+        if (timerElapsedMiliSec())
+        {
+            if (cScreenState_gotoMenu2 == screenState)
+            {
+                shiftScreen(cToLeft);
+                if ((cDisplayNumOfChars - 1) <= screenPosition)
+                {
+                    screenPosition = 0;
+                    screenState = cScreenState_menu2;
+                }
+                else
+                {
+                	screenPosition++;
+					timerRestartMiliSec(250);
+                }
+            }
+            else if (cScreenState_gotoMenu1 == screenState)
+            {
+            	shiftScreen(cToRight);
+                if ((cDisplayNumOfChars - 1) <= screenPosition)
+                {
+                    screenPosition = 0;
+                    screenState = cScreenState_menu1;
+                }
+                else
+                {
+                	screenPosition++;
+					timerRestartMiliSec(250);
+                }
+            }
+        }
+
         buttonStateDetection(cButton_Lower, &buttonState[cButton_Lower]);
         if (cButtonState_JustPressed == buttonState[cButton_Lower])
         {
@@ -75,29 +119,19 @@ void controller()
                 timerRestartSec(5); // 5 sec
             }
 
-            if (1 == currentScreen)
+            if (cScreenState_menu1 == screenState)
             {
-                Byte i;
-                displayMovingDirection_t direction;
-                direction.bShiftRightInsteadOfLeft = FALSE;
-                direction.bShiftScreenInsteadOfCursor = TRUE;
-                for (i = 0; i < 16; ++i)
-                {
-                    displayOrCursorShift(direction);
-                }
-                currentScreen = 2;
+            	shiftScreen(cToLeft);
+                screenPosition++;
+                timerRestartMiliSec(250);
+                screenState = cScreenState_gotoMenu2;
             }
-            else if (2 == currentScreen)
+            else if (cScreenState_menu2 == screenState)
             {
-                Byte i;
-                displayMovingDirection_t direction;
-                direction.bShiftRightInsteadOfLeft = TRUE;
-                direction.bShiftScreenInsteadOfCursor = TRUE;
-                for (i = 0; i < 16; ++i)
-                {
-                    displayOrCursorShift(direction);
-                }
-                currentScreen = 1;
+            	shiftScreen(cToRight);
+                screenPosition++;
+                timerRestartMiliSec(250);
+                screenState = cScreenState_gotoMenu1;
             }
         }
     }
@@ -106,13 +140,14 @@ void controller()
 void baseInitApp()
 {
     bBacklight = FALSE;
-    cntrBacklightToggle = cToggleBacklight;
+    cntrBacklightToggle = cNumOfBacklightToggle;
     displayCntrl.bDisplayOn = FALSE;
     displayCntrl.bCursorOn = FALSE;
     displayCntrl.bBlinkingCursorOn = FALSE;
     buttonState[cButton_Lower] = cButtonState_Released;
     buttonState[cButton_Upper] = cButtonState_Released;
-    currentScreen = 1;
+    screenState = cScreenState_menu1;
+    screenPosition = 0;
 
     baseInstallApp(&controller);
 }

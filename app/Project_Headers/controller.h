@@ -13,8 +13,16 @@ extern "C" {
 
 enum staticConst_t
 { 
-    cToggleBacklight = 7 
+    cNumOfBacklightToggle = 7 
 };
+
+typedef enum
+{
+	cScreenState_menu1,
+	cScreenState_menu2,
+	cScreenState_gotoMenu1,
+	cScreenState_gotoMenu2
+}screenState_t;
 
 void controller();
 

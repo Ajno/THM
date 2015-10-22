@@ -18,7 +18,8 @@ static const Bool cToLeft = FALSE;
 static Bool bBacklight = FALSE;
 static Byte cntrBacklightToggle = cNumOfBacklightToggle;
 static displayOnOffControl_t displayCntrl;
-static buttonState_t buttonState[2] = {cButtonState_Released, cButtonState_Released};
+static buttonState_t buttonState[2] =
+{ cButtonState_Released, cButtonState_Released };
 static screenState_t screenState = cScreenState_menu1;
 static Byte screenPosition = 0;
 
@@ -57,7 +58,8 @@ void controller()
                 bBacklight = TRUE;
                 displayBackLightOn(bBacklight);
             }
-            displayWrite("Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK");
+            displayWrite(
+                    "Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK");
             timerRestartSec(5); // 5 sec
         }
 
@@ -89,13 +91,13 @@ void controller()
                 }
                 else
                 {
-                	screenPosition++;
-					timerRestartMiliSec(250);
+                    screenPosition++;
+                    timerRestartMiliSec(250);
                 }
             }
             else if (cScreenState_gotoMenu1 == screenState)
             {
-            	shiftScreen(cToRight);
+                shiftScreen(cToRight);
                 if ((cDisplayNumOfChars - 1) <= screenPosition)
                 {
                     screenPosition = 0;
@@ -103,8 +105,8 @@ void controller()
                 }
                 else
                 {
-                	screenPosition++;
-					timerRestartMiliSec(250);
+                    screenPosition++;
+                    timerRestartMiliSec(250);
                 }
             }
         }
@@ -121,14 +123,14 @@ void controller()
 
             if (cScreenState_menu1 == screenState)
             {
-            	shiftScreen(cToLeft);
+                shiftScreen(cToLeft);
                 screenPosition++;
                 timerRestartMiliSec(250);
                 screenState = cScreenState_gotoMenu2;
             }
             else if (cScreenState_menu2 == screenState)
             {
-            	shiftScreen(cToRight);
+                shiftScreen(cToRight);
                 screenPosition++;
                 timerRestartMiliSec(250);
                 screenState = cScreenState_gotoMenu1;

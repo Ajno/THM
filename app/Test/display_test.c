@@ -13,7 +13,7 @@ void test_display_shiftAndBackLight_init()
 {
     displayOnOffControl_t onOffSetting;
 
-    timerInit();
+    timersInit();
     displayInit();
     buttonsInit();
 
@@ -67,7 +67,7 @@ void test_display_contrast_init()
 {
     displayOnOffControl_t onOffSetting;
 
-    timerInit();
+    timersInit();
     buttonsInit();
 
     displayBackLightOn(TRUE);

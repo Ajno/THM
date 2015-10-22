@@ -11,9 +11,10 @@
 extern "C" {
 #endif
 
-#include <stdtypes.h>
-
-const Byte cToggleBacklight = 7;
+enum staticConst_t
+{ 
+    cToggleBacklight = 7 
+};
 
 void controller();
 

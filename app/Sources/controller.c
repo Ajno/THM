@@ -22,14 +22,14 @@ void controller()
 {
     if (0 < cntrBacklightToggle)
     {
-        if (timerElapsed())
+        if (timerElapsedMiliSec())
         {
             bBacklight = bBacklight ? FALSE : TRUE;
             displayBackLightOn(bBacklight);
             cntrBacklightToggle--;
             if (0 != cntrBacklightToggle)
             {
-                timerRestart(250); // 250 ms
+                timerRestartMiliSec(250); // 250 ms
             }
         }
     }
@@ -46,16 +46,16 @@ void controller()
                 displayBackLightOn(bBacklight);
             }
             displayWrite("Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK");
-            timerRestart(5000); // 5 sec
+            timerRestartMiliSec(5000); // 5 sec
         }
 
-        if (timerElapsed())
+        if (timerElapsedMiliSec())
         {
             if (bBacklight)
             {
                 bBacklight = FALSE;
                 displayBackLightOn(bBacklight);
-                timerRestart(5000); // 5 sec
+                timerRestartMiliSec(5000); // 5 sec
             }
             else
             {
@@ -72,7 +72,7 @@ void controller()
             {
                 bBacklight = TRUE;
                 displayBackLightOn(bBacklight);
-                timerRestart(5000); // 5 sec
+                timerRestartMiliSec(5000); // 5 sec
             }
 
             if (1 == currentScreen)

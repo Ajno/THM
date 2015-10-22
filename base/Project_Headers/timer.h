@@ -13,11 +13,13 @@ extern "C" {
 
 #include <stdtypes.h>
 
-void timerInit();
+void timersInit();
 void wait500ns();
 void waitX100us(const Word cDelay);
-void timerRestart(const Word cTimeout_ms);
-Bool timerElapsed();
+void timerRestartMiliSec(const Word cTimeout_ms);
+void timerRestartSec(const Word cTimeout_sec);
+Bool timerElapsedMiliSec();
+Bool timerElapsedSec();
 
 #ifdef __cplusplus
 }

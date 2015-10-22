@@ -21,7 +21,7 @@ static struct
 
 void test_timer_wait_init()
 {    
-    timerInit();
+    timersInit();
     displayInit();
 }
 
@@ -38,31 +38,62 @@ void test_timer_wait_run(const Word cDelayToggle_x100ms)
     }
 }
 
+static Bool bLongTimeInsteadOfShort = FALSE;
+
 void test_timer_startStop_init()
 {
     displayOnOffControl_t control;
     
-    timerInit();
-    displayInit();
+    bLongTimeInsteadOfShort = FALSE;
     displayClear();
-    displayWaitTillNotBusy();
     control.bBlinkingCursorOn = FALSE;
     control.bCursorOn = FALSE;
     control.bDisplayOn = TRUE;
     displayOnOffControl(control);
-    displayWaitTillNotBusy();
     
     displayWrite("<timer test>");
 }
 
 void test_timer_startStop_run()
 {
+    const int c3blinks = 6;
     static Bool bBacklighOn = TRUE;
+    static int cntr = c3blinks;
     
-    if (timerElapsed())
+    if (bLongTimeInsteadOfShort) 
     {
-        timerRestart(1000);// 1 sec
-        bBacklighOn = (bBacklighOn ? FALSE : TRUE);
-        displayBackLightOn(bBacklighOn);
+        if (timerElapsedSec())
+        {
+            cntr--;
+            if (0 == cntr)
+            {
+                cntr = c3blinks;
+                bLongTimeInsteadOfShort = (bLongTimeInsteadOfShort ? FALSE : TRUE);
+            }
+            else
+            {                
+                timerRestartSec(2);// 2 sec
+                bBacklighOn = (bBacklighOn ? FALSE : TRUE);
+                displayBackLightOn(bBacklighOn);
+            }
+        }
+    }
+    else 
+    {        
+        if (timerElapsedMiliSec())
+        {
+            cntr--;
+            if (0 == cntr)
+            {
+                cntr = c3blinks;
+                bLongTimeInsteadOfShort = (bLongTimeInsteadOfShort ? FALSE : TRUE);
+            }
+            else
+            {                
+                timerRestartMiliSec(500);// 500 ms
+                bBacklighOn = (bBacklighOn ? FALSE : TRUE);
+                displayBackLightOn(bBacklighOn);
+            }
+        }
     }
 }

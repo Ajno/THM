@@ -30,7 +30,7 @@ void TimerMock::stop()
 	bRunning = false;
 }
 
-extern "C" Bool timerElapsed()
+extern "C" Bool timerElapsedMiliSec()
 {
 	return !bRunning;
 }

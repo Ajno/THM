@@ -25,7 +25,7 @@ void test_pwrMgmt_sleep_init()
     displayOnOffControl_t setting;
     
     pwrMgmtInit();
-    timerInit();
+    timersInit();
     buttonsInit();
     
     kbiCfg.bPullUp = TRUE;
@@ -62,7 +62,7 @@ void test_pwrMgmt_recentReset_init()
     displayOnOffControl_t setting;
     pwrMgmtRecentresetSource_t source;
     
-    timerInit();
+    timersInit();
     displayInit();
     buttonsInit();
     pwrMgmtInit();

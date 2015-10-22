@@ -6,10 +6,10 @@
  */
 
 #include "display_test.h"
-#include "io_test.h"
+#include "timer_test.h"
 
 void baseInitApp()
 {
-    test_display_contrast_init();
-    baseInstallApp(&test_display_contrast_run);
+    test_timer_startStop_init();
+    baseInstallApp(&test_timer_startStop_run);
 }

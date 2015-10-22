@@ -8,17 +8,20 @@
 #include "pwm.h"
 #include "timer.h"
 
+static Bool bBlockPwmTimerReset;
+
 typedef struct 
 {
-    Bool bBlockReset;
     Word overflowCounter;
-    Word remaining_ms;
+    Word remaining;
 }timer_t;
 
 static const Word cPwmModulo_200us = 800;
 static const Word c100us = 400;
 static const Word cNumOfOvrflwsIn1ms = 5;
-static timer_t timer;
+static const Word cNumOfOvrflwsIn1sec = 5000;
+static timer_t timerMiliSec;
+static timer_t timerSec;
 
 void wait500ns()
 {
@@ -32,8 +35,8 @@ void wait500ns()
 
 void waitX100us(const Word cDelay)
 {
-	volatile Word t1 = 0;
-	volatile Word t2 = 0;
+	Word t1 = 0;
+	Word t2 = 0;
 	Word counter = cDelay;
 	
 	t1 = pwmReadTimer();
@@ -52,15 +55,20 @@ void waitX100us(const Word cDelay)
 	} while (0 != counter);
 }
 
-void timerRestart(const Word cTimeout_ms)
+void timerRestartMiliSec(const Word cTimeout_ms)
 {
-    if (!timer.bBlockReset)
+    if (!bBlockPwmTimerReset)
     {
         // disable interrupt
         pwmSetOverflowInterruptEnable(FALSE);
-        timer.remaining_ms = cTimeout_ms; 
-        // timer won't be able to reset again until next overflow
-        timer.bBlockReset = TRUE;        
+        timerMiliSec.remaining = cTimeout_ms; 
+        /*
+         *  timer won't be possible to reset 
+         *  again until next overflow in order to 
+         *  ensure that no more than one PWM period
+         *  can be skipped
+         */
+        bBlockPwmTimerReset = TRUE;        
         // reset PWM timer
         pwmClearTimer();
         // enable interrupt
@@ -68,46 +76,69 @@ void timerRestart(const Word cTimeout_ms)
     }
 }
 
-Bool timerElapsed()
+void timerRestartSec(const Word cTimeout_sec)
 {
-    Bool ret = (timer.remaining_ms == 0);
+    timerSec.remaining = cTimeout_sec; 
+}
+
+Bool timerElapsedMiliSec()
+{
+    Bool ret = (timerMiliSec.remaining == 0);
     return ret;
+}
+
+Bool timerElapsedSec()
+{
+    Bool ret = (timerSec.remaining == 0);
+    return ret;
+}
+
+static void processTimer(timer_t* pTimer, const Word cNumOfOvflws)
+{
+    if (0 != pTimer->remaining) 
+    {
+        if (0 != pTimer->overflowCounter) 
+        {
+            // count num of overflows, protect against wrong init
+            pTimer->overflowCounter--;
+        }
+        
+        if (0 == pTimer->overflowCounter) 
+        {            
+            pTimer->remaining--;
+            pTimer->overflowCounter = cNumOfOvflws;
+            
+        }
+    }
 }
 
 void timerIsrCallback()
 {
     // timer can be reset again
-    timer.bBlockReset = FALSE;
+    bBlockPwmTimerReset = FALSE;
     
-    if (0 != timer.remaining_ms) 
-    {
-        if (0 != timer.overflowCounter) 
-        {
-            // count num of overflows, protect against wrong init
-            timer.overflowCounter--;
-        }
-        
-        if (0 == timer.overflowCounter) 
-        {            
-            timer.remaining_ms--;
-            timer.overflowCounter = cNumOfOvrflwsIn1ms;            
-        }
-    }
+    // stop-watch timer in miliseconds
+    processTimer(&timerMiliSec, cNumOfOvrflwsIn1ms);
+    
+    // stop-watch timer in seconds
+    processTimer(&timerSec, cNumOfOvrflwsIn1sec);
 }
 
-void timerInit()
+void timersInit()
 {
 	pwmTimerConfig_t cfg;
 	
-	timer.remaining_ms = 0;
-	timer.bBlockReset = FALSE;
-	timer.overflowCounter = cNumOfOvrflwsIn1ms; // 200us*5=1ms
+	bBlockPwmTimerReset = FALSE;
+	timerMiliSec.remaining = 0;
+	timerMiliSec.overflowCounter = cNumOfOvrflwsIn1ms; // 200us*5=1ms
+    timerSec.remaining = 0;
+    timerSec.overflowCounter = cNumOfOvrflwsIn1sec; // 200us*5000 = 1s
 	
 	pwmWriteModulo(cPwmModulo_200us);// 5kHz period
 	
 	cfg.clock = cPwmClk_bus;
 	cfg.prescaler = cPwmPrsclr_1;// 4MHz clock
-	cfg.bOverflowInterruptEnable = FALSE;
+	cfg.bOverflowInterruptEnable = TRUE;
 	pwmConfigureTimer(cfg);
 	
 	pwmInstallTimerIsrCallback(&timerIsrCallback);

@@ -18,7 +18,7 @@ void baseInstallApp(pAppCallback_t const pCallback)
 void main(void)
 {
 	systemEnableInterrupts();
-	timerInit();
+	timersInit();
 	displayInit();
 	buttonsInit();
 	pwrMgmtInit();

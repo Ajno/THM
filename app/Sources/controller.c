@@ -14,14 +14,17 @@
 
 static const Bool cToRight = TRUE;
 static const Bool cToLeft = FALSE;
+static const Word cAwakeTimeSec = 10;
+static const Word cScreenShiftTimeMiliSec = 100;
+static const Word cMenuActivationTimeMiliSec = 2000;
 
 static Bool bBacklight = FALSE;
 static Byte cntrBacklightToggle = cNumOfBacklightToggle;
 static displayOnOffControl_t displayCntrl;
 static buttonState_t buttonState[2] =
 { cButtonState_Released, cButtonState_Released };
-static screenState_t screenState = cScreenState_menu1;
-static Byte screenPosition = 0;
+static menuState_t menu = cMenuState_show1;
+static Byte screenShifts = 0;
 
 static void shiftScreen(const Bool cDirection)
 {
@@ -29,6 +32,8 @@ static void shiftScreen(const Bool cDirection)
     direction.bShiftRightInsteadOfLeft = cDirection;
     direction.bShiftScreenInsteadOfCursor = TRUE;
     displayOrCursorShift(direction);
+    screenShifts++;
+    timerRestartMiliSec(cScreenShiftTimeMiliSec);
 }
 
 void controller()
@@ -53,14 +58,60 @@ void controller()
             displayClear();
             displayCntrl.bDisplayOn = TRUE;
             displayOnOffControl(displayCntrl);
+            menu = cMenuState_show1;
             if (!bBacklight)
             {
                 bBacklight = TRUE;
                 displayBackLightOn(bBacklight);
             }
-            displayWrite(
-                    "Teplota neznama Kontrast: --            Vlhkost neznama Jazyk: SVK");
-            timerRestartSec(5); // 5 sec
+            displayWrite("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK");
+            timerRestartSec(cAwakeTimeSec);
+        }
+        else
+        {
+            buttonStateDetection(cButton_Lower, &buttonState[cButton_Lower]);
+            buttonStateDetection(cButton_Upper, &buttonState[cButton_Upper]);
+
+            if (cButtonState_JustPressed == buttonState[cButton_Lower])
+            {
+                if (!bBacklight)
+                {
+                    bBacklight = TRUE;
+                    displayBackLightOn(bBacklight);
+                }
+                timerRestartSec(cAwakeTimeSec);
+
+                if (cMenuState_show1 == menu)
+                {
+                    shiftScreen(cToLeft);
+                    menu = cMenuState_goto2;
+                }
+                else if (cMenuState_show2 == menu)
+                {
+                    shiftScreen(cToRight);
+                    menu = cMenuState_goto1;
+                }
+            }
+
+            if (cButtonState_JustPressed == buttonState[cButton_Upper])
+            {
+                if (!bBacklight)
+                {
+                    bBacklight = TRUE;
+                    displayBackLightOn(bBacklight);
+                }
+                timerRestartSec(cAwakeTimeSec);
+
+                if (cMenuState_show2 == menu)
+                {
+                    timerRestartMiliSec(cMenuActivationTimeMiliSec);
+                    menu = cMenuState_select2;
+                }
+            }
+            else if (cButtonState_Released == buttonState[cButton_Upper])
+            {
+                // todo stop timer
+            }
         }
 
         if (timerElapsedSec())
@@ -69,7 +120,7 @@ void controller()
             {
                 bBacklight = FALSE;
                 displayBackLightOn(bBacklight);
-                timerRestartSec(5); // 5 sec
+                timerRestartSec(cAwakeTimeSec);
             }
             else
             {
@@ -81,59 +132,37 @@ void controller()
 
         if (timerElapsedMiliSec())
         {
-            if (cScreenState_gotoMenu2 == screenState)
+            if (cMenuState_goto2 == menu)
             {
-                shiftScreen(cToLeft);
-                if ((cDisplayNumOfChars - 1) <= screenPosition)
+                if (cDisplayNumOfChars <= screenShifts)
                 {
-                    screenPosition = 0;
-                    screenState = cScreenState_menu2;
+                    screenShifts = 0;
+                    menu = cMenuState_show2;
                 }
                 else
                 {
-                    screenPosition++;
-                    timerRestartMiliSec(250);
+                    shiftScreen(cToLeft);
                 }
             }
-            else if (cScreenState_gotoMenu1 == screenState)
+            else if (cMenuState_goto1 == menu)
             {
-                shiftScreen(cToRight);
-                if ((cDisplayNumOfChars - 1) <= screenPosition)
+                if (cDisplayNumOfChars <= screenShifts)
                 {
-                    screenPosition = 0;
-                    screenState = cScreenState_menu1;
+                    screenShifts = 0;
+                    menu = cMenuState_show1;
                 }
                 else
                 {
-                    screenPosition++;
-                    timerRestartMiliSec(250);
+                    shiftScreen(cToRight);
                 }
             }
-        }
-
-        buttonStateDetection(cButton_Lower, &buttonState[cButton_Lower]);
-        if (cButtonState_JustPressed == buttonState[cButton_Lower])
-        {
-            if (!bBacklight)
+            else if (cMenuState_select2 == menu)
             {
-                bBacklight = TRUE;
-                displayBackLightOn(bBacklight);
-                timerRestartSec(5); // 5 sec
-            }
-
-            if (cScreenState_menu1 == screenState)
-            {
-                shiftScreen(cToLeft);
-                screenPosition++;
-                timerRestartMiliSec(250);
-                screenState = cScreenState_gotoMenu2;
-            }
-            else if (cScreenState_menu2 == screenState)
-            {
-                shiftScreen(cToRight);
-                screenPosition++;
-                timerRestartMiliSec(250);
-                screenState = cScreenState_gotoMenu1;
+                displayOnOffControl_t onOffControl;
+                onOffControl.bBlinkingCursor = TRUE;
+                onOffControl.bDisplayOn = TRUE;
+                onOffControl.bCursorOn = TRUE;
+                displayOnOffControl(onOffControl);
             }
         }
     }
@@ -145,11 +174,11 @@ void baseInitApp()
     cntrBacklightToggle = cNumOfBacklightToggle;
     displayCntrl.bDisplayOn = FALSE;
     displayCntrl.bCursorOn = FALSE;
-    displayCntrl.bBlinkingCursorOn = FALSE;
+    displayCntrl.bBlinkingCursor = FALSE;
     buttonState[cButton_Lower] = cButtonState_Released;
     buttonState[cButton_Upper] = cButtonState_Released;
-    screenState = cScreenState_menu1;
-    screenPosition = 0;
+    menu = cMenuState_show1;
+    screenShifts = 0;
 
     baseInstallApp(&controller);
 }

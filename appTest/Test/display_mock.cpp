@@ -21,7 +21,7 @@ extern "C" void displayBackLightOn(const Bool bBackLightOn)
 extern "C" void displayOnOffControl(const displayOnOffControl_t cControl)
 {
 	bDisplayOn = cControl.bDisplayOn;
-	if (cControl.bBlinkingCursorOn && cControl.bCursorOn)
+	if (cControl.bBlinkingCursor && cControl.bCursorOn)
 	{
 		cursor.state = DisplayMock::cCursor_blinking;
 	}

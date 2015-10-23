@@ -18,11 +18,12 @@ enum staticConst_t
 
 typedef enum
 {
-	cScreenState_menu1,
-	cScreenState_menu2,
-	cScreenState_gotoMenu1,
-	cScreenState_gotoMenu2
-}screenState_t;
+	cMenuState_show1,
+	cMenuState_show2,
+	cMenuState_goto1,
+	cMenuState_goto2,
+	cMenuState_select2
+}menuState_t;
 
 void controller();
 

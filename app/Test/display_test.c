@@ -22,7 +22,7 @@ void test_display_shiftAndBackLight_init()
     // Display on
     onOffSetting.bDisplayOn = TRUE;
     onOffSetting.bCursorOn = TRUE;
-    onOffSetting.bBlinkingCursorOn = TRUE;
+    onOffSetting.bBlinkingCursor = TRUE;
     displayOnOffControl(onOffSetting);
 
     //Display clear
@@ -75,7 +75,7 @@ void test_display_contrast_init()
     // Display on
     onOffSetting.bDisplayOn = TRUE;
     onOffSetting.bCursorOn = TRUE;
-    onOffSetting.bBlinkingCursorOn = TRUE;
+    onOffSetting.bBlinkingCursor = TRUE;
     displayOnOffControl(onOffSetting);
 
     //Display clear

@@ -31,15 +31,20 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(turnOnDisplay);
     CPPUNIT_TEST(turnOffBacklight);
     CPPUNIT_TEST(goToSleep);
-    CPPUNIT_TEST(wakeUp);
+    CPPUNIT_TEST(wakeUpAfterMenu1);
     CPPUNIT_TEST(shiftScreenRight);
     CPPUNIT_TEST(slideToMenu2);
     CPPUNIT_TEST(slideToMenu1);
+    CPPUNIT_TEST(wakeUpAfterMenu2);
+    CPPUNIT_TEST(selectMenu2Start);
+    CPPUNIT_TEST(selectMenu2End);
 
     CPPUNIT_TEST_SUITE_END();
 public:
     void setUp();
     void tearDown();
+
+    void init();
 
     void initApp();
 	void backlightOn();
@@ -48,10 +53,13 @@ public:
 	void turnOnDisplay();
 	void turnOffBacklight();
 	void goToSleep();
-	void wakeUp();
+	void wakeUpAfterMenu1();
+	void wakeUpAfterMenu2();
 	void shiftScreenRight();
 	void slideToMenu2();
 	void slideToMenu1();
+	void selectMenu2Start();
+	void selectMenu2End();
 };
 
 #endif /* TEST_H_ */

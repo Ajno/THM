@@ -24,8 +24,8 @@ enum displayBus_t
 
 static const Word cDutyCycle = 45;// 4,5% duty cycle
 static const Byte cMask_Backligh = 0x10;
-static const Word cOffset = 30;
-static const Word c5 = 5;
+static const Word cContrastToDutyCycleOffset = 30;
+static const Word cDutyCycleToContrastQuotient = 5;
 static Bool bDataBusConfiguredAsOutput = FALSE;
 
 static void displayPrepareBusForWrite()
@@ -156,7 +156,7 @@ void displayOnOffControl(const displayOnOffControl_t cControl)
     ioWrite(cDisplayBus_DB7,TRUE);
     ioWrite(cDisplayBus_DB6,cControl.bDisplayOn);
     ioWrite(cDisplayBus_DB5,cControl.bCursorOn);
-    ioWrite(cDisplayBus_DB4,cControl.bBlinkingCursorOn);
+    ioWrite(cDisplayBus_DB4,cControl.bBlinkingCursor);
     displayToggleEnable();
     
     displayWaitTillNotBusy();
@@ -262,20 +262,20 @@ void displayWrite(const char* pString)
 
 void displaySetContrast(const Word cContrast)
 {
-    Word contrast = cContrast;
+    Word dutyCycle = cContrast;
     if (cDisplayMaxContrast < cContrast) 
     {                
-        contrast = cDisplayMaxContrast;
+        dutyCycle = cDisplayMaxContrast;
     }
     
-    contrast = cOffset + (contrast / c5);
-    pwmWriteChannel(contrast);
+    dutyCycle = cContrastToDutyCycleOffset + (dutyCycle / cDutyCycleToContrastQuotient);
+    pwmWriteChannel(dutyCycle);
     
 }
 Word displayGetContrast()
 {
     Word ret = pwmReadChannel();
-    ret = (ret - cOffset) * c5;
+    ret = (ret - cContrastToDutyCycleOffset) * cDutyCycleToContrastQuotient;
     return ret;
 }
 
@@ -326,7 +326,7 @@ static void displayFirstStart()
     //Display off
     onOffSetting.bDisplayOn = FALSE;
     onOffSetting.bCursorOn = FALSE;
-    onOffSetting.bBlinkingCursorOn = FALSE;
+    onOffSetting.bBlinkingCursor = FALSE;
     displayOnOffControl(onOffSetting);
     
     //Display clear

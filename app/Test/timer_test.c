@@ -46,7 +46,7 @@ void test_timer_startStop_init()
     
     bLongTimeInsteadOfShort = FALSE;
     displayClear();
-    control.bBlinkingCursorOn = FALSE;
+    control.bBlinkingCursor = FALSE;
     control.bCursorOn = FALSE;
     control.bDisplayOn = TRUE;
     displayOnOffControl(control);

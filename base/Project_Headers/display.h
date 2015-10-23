@@ -17,7 +17,7 @@ typedef struct
 {
     Bool    bDisplayOn;
     Bool    bCursorOn;
-    Bool    bBlinkingCursorOn;
+    Bool    bBlinkingCursor;
 }displayOnOffControl_t;
 
 typedef struct

@@ -35,7 +35,7 @@ void test_pwrMgmt_sleep_init()
     
     displayInit();
     displayClear();
-    setting.bBlinkingCursorOn = FALSE;
+    setting.bBlinkingCursor = FALSE;
     setting.bCursorOn = FALSE;
     setting.bDisplayOn = TRUE;
     displayOnOffControl(setting);
@@ -69,7 +69,7 @@ void test_pwrMgmt_recentReset_init()
     
     pwrMgmtGetRcentResetSource(&source);
     displayClear();
-    setting.bBlinkingCursorOn = FALSE;
+    setting.bBlinkingCursor = FALSE;
     setting.bCursorOn = FALSE;
     setting.bDisplayOn = TRUE;
     displayOnOffControl(setting);

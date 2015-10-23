@@ -110,7 +110,11 @@ void controller()
             }
             else if (cButtonState_Released == buttonState[cButton_Upper])
             {
-                // todo stop timer
+                // stop selecting the menu 2
+                if (cMenuState_select2 == menu)
+                {
+                    menu = cMenuState_show2;                    
+                }
             }
         }
 

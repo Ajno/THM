@@ -22,7 +22,8 @@ typedef enum
 	cMenuState_show2,
 	cMenuState_goto1,
 	cMenuState_goto2,
-	cMenuState_select2
+	cMenuState_select2,
+	cMenuState_modify2
 }menuState_t;
 
 void controller();

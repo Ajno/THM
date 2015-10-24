@@ -26,7 +26,7 @@ static buttonState_t buttonState[2] =
 static menuState_t menu = cMenuState_show1;
 static Byte screenShifts = 0;
 
-static void shiftScreen(const Bool cDirection)
+static void screenShift(const Bool cDirection)
 {
     displayMovingDirection_t direction;
     direction.bShiftRightInsteadOfLeft = cDirection;
@@ -34,6 +34,15 @@ static void shiftScreen(const Bool cDirection)
     displayOrCursorShift(direction);
     screenShifts++;
     timerRestartMiliSec(cScreenShiftTimeMiliSec);
+}
+
+void backlightTurnOn()
+{
+    if (!bBacklight)
+    {
+        bBacklight = TRUE;
+        displayBackLightOn(bBacklight);
+    }
 }
 
 void controller()
@@ -59,11 +68,7 @@ void controller()
             displayCntrl.bDisplayOn = TRUE;
             displayOnOffControl(displayCntrl);
             menu = cMenuState_show1;
-            if (!bBacklight)
-            {
-                bBacklight = TRUE;
-                displayBackLightOn(bBacklight);
-            }
+            backlightTurnOn();
             displayWrite("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK");
             timerRestartSec(cAwakeTimeSec);
         }
@@ -74,32 +79,24 @@ void controller()
 
             if (cButtonState_JustPressed == buttonState[cButton_Lower])
             {
-                if (!bBacklight)
-                {
-                    bBacklight = TRUE;
-                    displayBackLightOn(bBacklight);
-                }
+                backlightTurnOn();
                 timerRestartSec(cAwakeTimeSec);
 
                 if (cMenuState_show1 == menu)
                 {
-                    shiftScreen(cToLeft);
+                    screenShift(cToLeft);
                     menu = cMenuState_goto2;
                 }
                 else if (cMenuState_show2 == menu)
                 {
-                    shiftScreen(cToRight);
+                    screenShift(cToRight);
                     menu = cMenuState_goto1;
                 }
             }
 
             if (cButtonState_JustPressed == buttonState[cButton_Upper])
             {
-                if (!bBacklight)
-                {
-                    bBacklight = TRUE;
-                    displayBackLightOn(bBacklight);
-                }
+                backlightTurnOn();
                 timerRestartSec(cAwakeTimeSec);
 
                 if (cMenuState_show2 == menu)
@@ -145,7 +142,7 @@ void controller()
                 }
                 else
                 {
-                    shiftScreen(cToLeft);
+                    screenShift(cToLeft);
                 }
             }
             else if (cMenuState_goto1 == menu)
@@ -157,11 +154,12 @@ void controller()
                 }
                 else
                 {
-                    shiftScreen(cToRight);
+                    screenShift(cToRight);
                 }
             }
             else if (cMenuState_select2 == menu)
             {
+                menu = cMenuState_modify2;
                 displayOnOffControl_t onOffControl;
                 onOffControl.bBlinkingCursor = TRUE;
                 onOffControl.bDisplayOn = TRUE;

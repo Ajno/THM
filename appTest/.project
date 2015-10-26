@@ -26,9 +26,19 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>Project_Headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>Sources</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Project_Headers/controller.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app/Project_Headers/controller.h</locationURI>
 		</link>
 		<link>
 			<name>Sources/controller.c</name>

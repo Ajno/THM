@@ -276,6 +276,8 @@ void ControllerTest::selectMenu2End()
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);
     controller();
+    pButtons->setState(cButtonState_JustPressed, cButton_Lower);
+    controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());

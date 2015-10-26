@@ -44,7 +44,10 @@ public:
     void setUp();
     void tearDown();
 
-    void init();
+    void callUntilInitEnd();
+    void callUntilTurnOnDisplayAfterInit();
+    void callUntilShiftTheScreen();
+    void callUntilSleep();
 
     void initApp();
 	void backlightOn();

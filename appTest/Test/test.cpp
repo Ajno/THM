@@ -31,7 +31,7 @@ void ControllerTest::tearDown()
     delete pPwrMgmt;
 }
 
-void ControllerTest::init()
+void ControllerTest::callUntilInitEnd()
 {
     baseInitApp();
     for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
@@ -40,6 +40,30 @@ void ControllerTest::init()
         pTimer->stop(TimerMock::cTimerMiliSec);
     }
     controller();
+}
+
+void ControllerTest::callUntilTurnOnDisplayAfterInit()
+{
+    ControllerTest::callUntilInitEnd();
+    controller();
+}
+
+void ControllerTest::callUntilShiftTheScreen()
+{
+    for (int i = 0; i < 100; ++i)
+    {
+        controller();
+        pTimer->stop(TimerMock::cTimerMiliSec);
+    }
+}
+
+void ControllerTest::callUntilSleep()
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        controller();
+        pTimer->stop(TimerMock::cTimerSec);
+    }
 }
 
 void ControllerTest::initApp()
@@ -77,7 +101,7 @@ void ControllerTest::backlightOff()
 
 void ControllerTest::backlightStayOn()
 {
-    ControllerTest::init();
+    ControllerTest::callUntilInitEnd();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(!pDisplay->displayIsOn());
@@ -86,8 +110,7 @@ void ControllerTest::backlightStayOn()
 
 void ControllerTest::turnOnDisplay()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -99,8 +122,7 @@ void ControllerTest::turnOnDisplay()
 
 void ControllerTest::turnOffBacklight()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
     pTimer->stop(TimerMock::cTimerSec);
     controller();
 
@@ -114,12 +136,8 @@ void ControllerTest::turnOffBacklight()
 
 void ControllerTest::goToSleep()
 {
-    ControllerTest::init();
-    for (int i = 0; i < 2; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerSec);
-    }
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    ControllerTest::callUntilSleep();
     controller();
 
     CPPUNIT_ASSERT(pPwrMgmt->isSleeping());
@@ -133,12 +151,8 @@ void ControllerTest::goToSleep()
 
 void ControllerTest::wakeUpAfterMenu1()
 {
-    ControllerTest::init();
-    for (int i = 0; i < 2; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerSec);
-    }
+    ControllerTest::callUntilInitEnd();
+    ControllerTest::callUntilSleep();
     controller();
     pPwrMgmt->wakeUp();
     controller();
@@ -155,21 +169,12 @@ void ControllerTest::wakeUpAfterMenu1()
 
 void ControllerTest::wakeUpAfterMenu2()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
     pTimer->stop(TimerMock::cTimerSec);
     controller();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-    for (int i = 0; i < 100; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerMiliSec);
-    }
-    for (int i = 0; i < 2; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerSec);
-    }
+    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::callUntilSleep();
     controller();
     pPwrMgmt->wakeUp();
     controller();
@@ -188,8 +193,7 @@ void ControllerTest::wakeUpAfterMenu2()
 
 void ControllerTest::shiftScreenRight()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
     pTimer->stop(TimerMock::cTimerSec);
     controller();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
@@ -206,16 +210,11 @@ void ControllerTest::shiftScreenRight()
 
 void ControllerTest::slideToMenu2()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
     pTimer->stop(TimerMock::cTimerSec);
     controller();// turn off backlight
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-    for (int i = 0; i < 100; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerMiliSec);
-    }
+    ControllerTest::callUntilShiftTheScreen();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -228,22 +227,13 @@ void ControllerTest::slideToMenu2()
 
 void ControllerTest::slideToMenu1()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-    for (int i = 0; i < 100; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerMiliSec);
-    }
+    ControllerTest::callUntilShiftTheScreen();
     pTimer->stop(TimerMock::cTimerSec);
     controller();// turn off backlight
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-    for (int i = 0; i < 100; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerMiliSec);
-    }
+    ControllerTest::callUntilShiftTheScreen();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -256,14 +246,9 @@ void ControllerTest::slideToMenu1()
 
 void ControllerTest::selectMenu2Start()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-    for (int i = 0; i < 100; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerMiliSec);
-    }
+    ControllerTest::callUntilShiftTheScreen();
     pTimer->stop(TimerMock::cTimerSec);
     controller();// turn off backlight
     pButtons->setState(cButtonState_JustPressed, cButton_Upper);
@@ -280,14 +265,9 @@ void ControllerTest::selectMenu2Start()
 
 void ControllerTest::selectMenu2End()
 {
-    ControllerTest::init();
-    controller();
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
-    for (int i = 0; i < 100; ++i)
-    {
-        controller();
-        pTimer->stop(TimerMock::cTimerMiliSec);
-    }
+    ControllerTest::callUntilShiftTheScreen();
     pTimer->stop(TimerMock::cTimerSec);
     controller();// turn off backlight
     pButtons->setState(cButtonState_JustPressed, cButton_Upper);

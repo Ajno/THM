@@ -36,8 +36,10 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(slideToMenu2);
     CPPUNIT_TEST(slideToMenu1);
     CPPUNIT_TEST(wakeUpAfterMenu2);
-    CPPUNIT_TEST(selectMenu2Start);
-    CPPUNIT_TEST(selectMenu2End);
+    CPPUNIT_TEST(selectMenu2);
+    CPPUNIT_TEST(modifyMenu2);
+    CPPUNIT_TEST(unselectMenu2);
+    CPPUNIT_TEST(showModifiedMenu2);
 
     CPPUNIT_TEST_SUITE_END();
 public:
@@ -61,8 +63,10 @@ public:
 	void shiftScreenRight();
 	void slideToMenu2();
 	void slideToMenu1();
-	void selectMenu2Start();
-	void selectMenu2End();
+	void selectMenu2();
+	void modifyMenu2();
+	void unselectMenu2();
+	void showModifiedMenu2();
 };
 
 #endif /* TEST_H_ */

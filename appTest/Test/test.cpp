@@ -9,11 +9,11 @@
 #include "controller.h"
 #include "base.h"
 #include "base_mock.h"
-
-
 using namespace CppUnit;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ControllerTest);
+
+const int cPositionMenu2 = 16;
 
 void ControllerTest::setUp()
 {
@@ -220,7 +220,7 @@ void ControllerTest::slideToMenu2()
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_EQUAL(DisplayMock::cCursor_off, pDisplay->getCursor().state);
     CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
-    CPPUNIT_ASSERT_EQUAL(16, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pDisplay->getScreen().position);
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
 }
@@ -244,46 +244,94 @@ void ControllerTest::slideToMenu1()
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
 }
 
-void ControllerTest::selectMenu2Start()
+void ControllerTest::selectMenu2()
 {
     ControllerTest::callUntilTurnOnDisplayAfterInit();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
     ControllerTest::callUntilShiftTheScreen();
-    pTimer->stop(TimerMock::cTimerSec);
-    controller();// turn off backlight
     pButtons->setState(cButtonState_JustPressed, cButton_Upper);
-    controller();// turn on backlight
+    controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
-    CPPUNIT_ASSERT_EQUAL(16, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pDisplay->getScreen().position);
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_off, pDisplay->getCursor().state);
 }
 
-void ControllerTest::selectMenu2End()
+void ControllerTest::modifyMenu2()
 {
     ControllerTest::callUntilTurnOnDisplayAfterInit();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
     ControllerTest::callUntilShiftTheScreen();
-    pTimer->stop(TimerMock::cTimerSec);
-    controller();// turn off backlight
     pButtons->setState(cButtonState_JustPressed, cButton_Upper);
-    controller();// turn on backlight
+    controller();
     pButtons->setState(cButtonState_Pressed, cButton_Upper);
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);
     controller();
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
+    controller();// stay at position 16
+
+    const int cCursorPosition = pDisplay->getScreen().text.length();
+    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(pDisplay->displayIsOn());
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", cCursorPosition, pDisplay->getCursor().position);
+}
+
+void ControllerTest::unselectMenu2()
+{
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    pButtons->setState(cButtonState_JustPressed, cButton_Lower);
+    ControllerTest::callUntilShiftTheScreen();
+    pButtons->setState(cButtonState_JustPressed, cButton_Upper);
+    controller();
+    pButtons->setState(cButtonState_Pressed, cButton_Upper);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSec);
+    controller();
+    pButtons->setState(cButtonState_JustPressed, cButton_Upper);
     controller();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
-    CPPUNIT_ASSERT_EQUAL(16, pDisplay->getScreen().position);
-    CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
+}
+
+void ControllerTest::showModifiedMenu2()
+{
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    pButtons->setState(cButtonState_JustPressed, cButton_Lower);
+    ControllerTest::callUntilShiftTheScreen();
+    pButtons->setState(cButtonState_JustPressed, cButton_Upper);
+    controller();
+    pButtons->setState(cButtonState_Pressed, cButton_Upper);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSec);
+    controller();
+    pButtons->setState(cButtonState_JustPressed, cButton_Upper);
+    controller();
+    pButtons->setState(cButtonState_Pressed, cButton_Upper);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSec);
+    controller();
+
+    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(pDisplay->displayIsOn());
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_off, pDisplay->getCursor().state);
 }

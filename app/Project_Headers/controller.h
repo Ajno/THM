@@ -23,6 +23,7 @@ typedef enum
 	cMenuState_goto1,
 	cMenuState_goto2,
 	cMenuState_select2,
+	cMenuState_unselect2,
 	cMenuState_modify2
 }menuState_t;
 

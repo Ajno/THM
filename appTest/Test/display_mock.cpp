@@ -46,6 +46,7 @@ extern "C" void displayWrite(const char* pString)
 {
     string str(pString);
     screen.text += str;
+    cursor.position += str.length();
 }
 
 extern "C" void displayOrCursorShift(const displayMovingDirection_t cSetting)

@@ -104,6 +104,11 @@ void controller()
                     timerRestartMiliSec(cMenuActivationTimeMiliSec);
                     menu = cMenuState_select2;
                 }
+                else if (cMenuState_modify2 == menu)
+                {
+                    timerRestartMiliSec(cMenuActivationTimeMiliSec);
+                    menu = cMenuState_unselect2;
+                }
             }
             else if (cButtonState_Released == buttonState[cButton_Upper])
             {
@@ -164,6 +169,15 @@ void controller()
                 onOffControl.bBlinkingCursor = TRUE;
                 onOffControl.bDisplayOn = TRUE;
                 onOffControl.bCursorOn = TRUE;
+                displayOnOffControl(onOffControl);
+            }
+            else if (cMenuState_unselect2 == menu)
+            {
+                menu = cMenuState_show2;
+                displayOnOffControl_t onOffControl;
+                onOffControl.bBlinkingCursor = FALSE;
+                onOffControl.bDisplayOn = TRUE;
+                onOffControl.bCursorOn = FALSE;
                 displayOnOffControl(onOffControl);
             }
         }

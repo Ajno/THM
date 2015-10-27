@@ -115,7 +115,11 @@ void controller()
                 // stop selecting the menu 2
                 if (cMenuState_select2 == menu)
                 {
-                    menu = cMenuState_show2;                    
+                    menu = cMenuState_show2;
+                }
+                else if(cMenuState_unselect2 == menu)
+                {
+                    menu = cMenuState_modify2;
                 }
             }
         }

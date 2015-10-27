@@ -39,6 +39,7 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(selectMenu2);
     CPPUNIT_TEST(modifyMenu2);
     CPPUNIT_TEST(unselectMenu2);
+    CPPUNIT_TEST(stopUnselectMenu2);
     CPPUNIT_TEST(showModifiedMenu2);
 
     CPPUNIT_TEST_SUITE_END();
@@ -66,6 +67,7 @@ public:
 	void selectMenu2();
 	void modifyMenu2();
 	void unselectMenu2();
+	void stopUnselectMenu2();
 	void showModifiedMenu2();
 };
 

@@ -15,7 +15,7 @@ class ButtonsMock
 public:
     ButtonsMock();
     virtual ~ButtonsMock();
-    void setState(const buttonState_t cState, const buttons_t cButton);
+    void setState(const bool cState, const buttons_t cButton);
 };
 
 #endif /* BUTTONS_MOCK_H_ */

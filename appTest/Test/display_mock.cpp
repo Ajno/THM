@@ -10,7 +10,7 @@
 
 static bool bBacklightIsOn = false;
 static bool bDisplayOn = false;
-static DisplayMock::screen_t screen = {"", 0, 75};
+static DisplayMock::screen_t screen = {"", 0};
 static DisplayMock::cursor_t cursor = {DisplayMock::cCursor_off, 0};
 
 extern "C" void displayBackLightOn(const Bool bBackLightOn)
@@ -45,7 +45,7 @@ extern "C" void displayClear()
 extern "C" void displayWrite(const char* pString)
 {
     string str(pString);
-    screen.text += str;
+    screen.text.replace(cursor.position, str.length(), str);
     cursor.position += str.length();
 }
 
@@ -96,7 +96,6 @@ DisplayMock::DisplayMock()
 	bDisplayOn = false;
 	screen.text = "idkfa iddqd";
 	screen.position = 0;
-	screen.contrast = 75;
 	cursor.state = DisplayMock::cCursor_off;
 	cursor.position = 0;
 }

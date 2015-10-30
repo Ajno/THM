@@ -11,21 +11,16 @@
 extern "C" {
 #endif
 
+#include <stdtypes.h>
+
 typedef enum
 {
     cButton_Upper = 0,
     cButton_Lower = 1
 }buttons_t;
 
-typedef enum
-{
-    cButtonState_Released,
-    cButtonState_Pressed,
-    cButtonState_JustPressed
-}buttonState_t;
-
 void buttonsInit();
-void buttonStateDetection(const buttons_t cButton, buttonState_t* pState);
+Bool buttonIsPressed(const buttons_t cButton);
 
 #ifdef __cplusplus
 }

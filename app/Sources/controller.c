@@ -21,10 +21,9 @@ static const Word cMenuActivationTimeMiliSec = 2000;
 static Bool bBacklight = FALSE;
 static Byte cntrBacklightToggle = cNumOfBacklightToggle;
 static displayOnOffControl_t displayCntrl;
-static buttonState_t buttonState[2] =
-{ cButtonState_Released, cButtonState_Released };
 static menuState_t menu = cMenuState_show1;
 static Byte screenShifts = 0;
+static Byte contrast = 75;
 
 static void screenShift(const Bool cDirection)
 {
@@ -69,15 +68,12 @@ void controller()
             displayOnOffControl(displayCntrl);
             menu = cMenuState_show1;
             backlightTurnOn();
-            displayWrite("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK");
+            displayWrite("Teplota neznama Kontrast: 75%          Vlhkost neznama Jazyk: SVK");
             timerRestartSec(cAwakeTimeSec);
         }
         else
         {
-            buttonStateDetection(cButton_Lower, &buttonState[cButton_Lower]);
-            buttonStateDetection(cButton_Upper, &buttonState[cButton_Upper]);
-
-            if (cButtonState_JustPressed == buttonState[cButton_Lower])
+            if (buttonIsPressed(cButton_Lower))
             {
                 backlightTurnOn();
                 timerRestartSec(cAwakeTimeSec);
@@ -94,7 +90,7 @@ void controller()
                 }
             }
 
-            if (cButtonState_JustPressed == buttonState[cButton_Upper])
+            if (buttonIsPressed(cButton_Upper))
             {
                 backlightTurnOn();
                 timerRestartSec(cAwakeTimeSec);
@@ -102,24 +98,35 @@ void controller()
                 if (cMenuState_show2 == menu)
                 {
                     timerRestartMiliSec(cMenuActivationTimeMiliSec);
-                    menu = cMenuState_select2;
+                    menu = cMenuState_selecting2;
                 }
                 else if (cMenuState_modify2 == menu)
                 {
                     timerRestartMiliSec(cMenuActivationTimeMiliSec);
-                    menu = cMenuState_unselect2;
+                    menu = cMenuState_unselecting2;
                 }
             }
-            else if (cButtonState_Released == buttonState[cButton_Upper])
+            else
             {
                 // stop selecting the menu 2
-                if (cMenuState_select2 == menu)
+                if (cMenuState_selecting2 == menu)
                 {
                     menu = cMenuState_show2;
                 }
-                else if(cMenuState_unselect2 == menu)
+                else if(cMenuState_selected2 == menu)
                 {
                     menu = cMenuState_modify2;
+                }
+                else if(cMenuState_unselecting2 == menu)
+                {
+                    menu = cMenuState_modify2;
+                    // todo add contrast also in real world :-)
+                    displayMoveCursor(cCursorPosEndOfLine1Menu2 - 3);
+                    displayWrite("80%");
+                }
+                else if(cMenuState_unselected2 == menu)
+                {
+                    menu = cMenuState_show2;
                 }
             }
         }
@@ -166,20 +173,20 @@ void controller()
                     screenShift(cToRight);
                 }
             }
-            else if (cMenuState_select2 == menu)
+            else if (cMenuState_selecting2 == menu)
             {
                 displayOnOffControl_t onOffControl;
-                menu = cMenuState_modify2;
+                menu = cMenuState_selected2;
                 onOffControl.bBlinkingCursor = TRUE;
                 onOffControl.bDisplayOn = TRUE;
                 onOffControl.bCursorOn = TRUE;
                 displayOnOffControl(onOffControl);
                 displayMoveCursor(cCursorPosEndOfLine1Menu2);
             }
-            else if (cMenuState_unselect2 == menu)
+            else if (cMenuState_unselecting2 == menu)
             {
                 displayOnOffControl_t onOffControl;
-                menu = cMenuState_show2;
+                menu = cMenuState_unselected2;
                 onOffControl.bBlinkingCursor = FALSE;
                 onOffControl.bDisplayOn = TRUE;
                 onOffControl.bCursorOn = FALSE;
@@ -196,10 +203,9 @@ void baseInitApp()
     displayCntrl.bDisplayOn = FALSE;
     displayCntrl.bCursorOn = FALSE;
     displayCntrl.bBlinkingCursor = FALSE;
-    buttonState[cButton_Lower] = cButtonState_Released;
-    buttonState[cButton_Upper] = cButtonState_Released;
     menu = cMenuState_show1;
     screenShifts = 0;
+    contrast = 75;
 
     baseInstallApp(&controller);
 }

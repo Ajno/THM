@@ -8,17 +8,17 @@
 #include <buttons_mock.h>
 #include <buttons.h>
 
-static buttonState_t buttonState[2];
+static bool buttonState[2];
 
-extern "C" void buttonStateDetection(const buttons_t cButton, buttonState_t* pState)
+extern "C" Bool buttonIsPressed(const buttons_t cButton)
 {
-    *pState = buttonState[cButton];
+    return buttonState[cButton];
 }
 
 ButtonsMock::ButtonsMock()
 {
-    buttonState[cButton_Lower] = cButtonState_Released;
-    buttonState[cButton_Upper] = cButtonState_Released;
+    buttonState[cButton_Lower] = false;
+    buttonState[cButton_Upper] = false;
 }
 
 ButtonsMock::~ButtonsMock()
@@ -26,7 +26,7 @@ ButtonsMock::~ButtonsMock()
     // TODO Auto-generated destructor stub
 }
 
-void ButtonsMock::setState(const buttonState_t cState, const buttons_t cButton)
+void ButtonsMock::setState(const bool cState, const buttons_t cButton)
 {
     buttonState[cButton] = cState;
 }

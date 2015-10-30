@@ -14,7 +14,7 @@ extern "C" {
 enum staticConst_t
 { 
     cNumOfBacklightToggle = 7,
-    cCursorPosEndOfLine1Menu2 = 30
+    cCursorPosEndOfLine1Menu2 = 29
 };
 
 typedef enum
@@ -23,8 +23,10 @@ typedef enum
 	cMenuState_show2,
 	cMenuState_goto1,
 	cMenuState_goto2,
-	cMenuState_select2,
-	cMenuState_unselect2,
+	cMenuState_selecting2,
+	cMenuState_selected2,
+	cMenuState_unselecting2,
+	cMenuState_unselected2,
 	cMenuState_modify2
 }menuState_t;
 

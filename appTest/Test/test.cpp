@@ -53,6 +53,7 @@ void ControllerTest::callUntilShiftTheScreen()
     for (int i = 0; i < 100; ++i)
     {
         controller();
+        pButtons->setState(cButtonState_Released, cButton_Lower);
         pTimer->stop(TimerMock::cTimerMiliSec);
     }
 }
@@ -275,7 +276,6 @@ void ControllerTest::modifyMenu2()
     pButtons->setState(cButtonState_JustPressed, cButton_Lower);
     controller();// stay at position 16
 
-    const int cCursorPosition = pDisplay->getScreen().text.length();
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
     CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast:  75%          Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
@@ -283,7 +283,35 @@ void ControllerTest::modifyMenu2()
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", cCursorPosition, pDisplay->getCursor().position);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cCursorPosEndOfLine1Menu2), pDisplay->getCursor().position);
+}
+
+void ControllerTest::addContrast()
+{
+    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    pButtons->setState(cButtonState_JustPressed, cButton_Lower);
+    ControllerTest::callUntilShiftTheScreen();
+    pButtons->setState(cButtonState_JustPressed, cButton_Upper);
+    controller();
+    pButtons->setState(cButtonState_Pressed, cButton_Upper);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSec);
+    controller();
+    pButtons->setState(cButtonState_JustReleased, cButton_Upper);
+    controller();// add contrast
+
+    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(pDisplay->displayIsOn());
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast:  80%          Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cCursorPosEndOfLine1Menu2), pDisplay->getCursor().position);
+}
+
+void ControllerTest::reduceContrast()
+{
 }
 
 void ControllerTest::unselectMenu2()

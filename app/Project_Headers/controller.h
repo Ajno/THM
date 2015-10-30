@@ -13,7 +13,8 @@ extern "C" {
 
 enum staticConst_t
 { 
-    cNumOfBacklightToggle = 7 
+    cNumOfBacklightToggle = 7,
+    cCursorPosEndOfLine1Menu2 = 30
 };
 
 typedef enum

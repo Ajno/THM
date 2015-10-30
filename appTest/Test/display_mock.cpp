@@ -10,7 +10,7 @@
 
 static bool bBacklightIsOn = false;
 static bool bDisplayOn = false;
-static DisplayMock::screen_t screen = {"", 0};
+static DisplayMock::screen_t screen = {"", 0, 75};
 static DisplayMock::cursor_t cursor = {DisplayMock::cCursor_off, 0};
 
 extern "C" void displayBackLightOn(const Bool bBackLightOn)
@@ -75,12 +75,28 @@ extern "C" void displayOrCursorShift(const displayMovingDirection_t cSetting)
     }
 }
 
+extern "C" void displayMoveCursor(const Byte cAddress)
+{
+    cursor.position = static_cast<int>(cAddress);
+}
+
+extern "C" void displaySetContrast(const Word cContrast)
+{
+
+}
+
+extern "C" Word displayGetContrast()
+{
+
+}
+
 DisplayMock::DisplayMock()
 {
 	bBacklightIsOn = false;
 	bDisplayOn = false;
 	screen.text = "idkfa iddqd";
 	screen.position = 0;
+	screen.contrast = 75;
 	cursor.state = DisplayMock::cCursor_off;
 	cursor.position = 0;
 }

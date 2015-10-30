@@ -13,10 +13,6 @@ static buttonState_t buttonState[2];
 extern "C" void buttonStateDetection(const buttons_t cButton, buttonState_t* pState)
 {
     *pState = buttonState[cButton];
-    if (cButtonState_JustPressed == buttonState[cButton])
-    {
-        buttonState[cButton] = cButtonState_Pressed;
-    }
 }
 
 ButtonsMock::ButtonsMock()

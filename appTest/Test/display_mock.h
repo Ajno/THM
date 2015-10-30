@@ -33,8 +33,8 @@ public:
     {
         string  text;
         int     position;
+        int     contrast;
     }screen_t;
-
 
 	DisplayMock();
 	bool backlightIsOn();

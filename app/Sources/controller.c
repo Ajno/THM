@@ -15,7 +15,7 @@
 static const Bool cToRight = TRUE;
 static const Bool cToLeft = FALSE;
 static const Word cAwakeTimeSec = 10;
-static const Word cScreenShiftTimeMiliSec = 100;
+static const Word cScreenShiftTimeMiliSec = 50;
 static const Word cMenuActivationTimeMiliSec = 2000;
 
 static Bool bBacklight = FALSE;
@@ -168,17 +168,18 @@ void controller()
             }
             else if (cMenuState_select2 == menu)
             {
-                menu = cMenuState_modify2;
                 displayOnOffControl_t onOffControl;
+                menu = cMenuState_modify2;
                 onOffControl.bBlinkingCursor = TRUE;
                 onOffControl.bDisplayOn = TRUE;
                 onOffControl.bCursorOn = TRUE;
                 displayOnOffControl(onOffControl);
+                displayMoveCursor(cCursorPosEndOfLine1Menu2);
             }
             else if (cMenuState_unselect2 == menu)
             {
-                menu = cMenuState_show2;
                 displayOnOffControl_t onOffControl;
+                menu = cMenuState_show2;
                 onOffControl.bBlinkingCursor = FALSE;
                 onOffControl.bDisplayOn = TRUE;
                 onOffControl.bCursorOn = FALSE;

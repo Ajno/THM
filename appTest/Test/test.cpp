@@ -31,7 +31,7 @@ void ControllerTest::tearDown()
     delete pPwrMgmt;
 }
 
-void ControllerTest::callUntilInitEnd()
+void ControllerTest::firstStart()
 {
     baseInitApp();
     for (int i = 0; i < (cNumOfBacklightToggle - 1); ++i)
@@ -42,13 +42,13 @@ void ControllerTest::callUntilInitEnd()
     controller();
 }
 
-void ControllerTest::callUntilTurnOnDisplayAfterInit()
+void ControllerTest::firstTurnOnDisplay()
 {
-    ControllerTest::callUntilInitEnd();
+    ControllerTest::firstStart();
     controller();
 }
 
-void ControllerTest::callUntilShiftTheScreen()
+void ControllerTest::shiftTheScreen()
 {
     pButtons->setState(true, cButton_Lower);
     for (int i = 0; i < 100; ++i)
@@ -59,12 +59,23 @@ void ControllerTest::callUntilShiftTheScreen()
     }
 }
 
-void ControllerTest::callUntilSleep()
+void ControllerTest::goSleep()
 {
-    for (int i = 0; i < 2; ++i)
+    for (uint i = 0; i < 2; ++i)
     {
         controller();
         pTimer->stop(TimerMock::cTimerSec);
+    }
+}
+
+void ControllerTest::pressAndReleaseButton(const buttons_t cButton, const uint count)
+{
+    for (uint i = 0; i < count; ++i)
+    {
+        pButtons->setState(true, cButton);
+        controller();
+        pButtons->setState(false, cButton);
+        controller();
     }
 }
 
@@ -103,7 +114,7 @@ void ControllerTest::backlightOff()
 
 void ControllerTest::backlightStayOn()
 {
-    ControllerTest::callUntilInitEnd();
+    ControllerTest::firstStart();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(!pDisplay->displayIsOn());
@@ -112,7 +123,7 @@ void ControllerTest::backlightStayOn()
 
 void ControllerTest::turnOnDisplay()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    ControllerTest::firstTurnOnDisplay();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -124,7 +135,7 @@ void ControllerTest::turnOnDisplay()
 
 void ControllerTest::turnOffBacklight()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    ControllerTest::firstTurnOnDisplay();
     pTimer->stop(TimerMock::cTimerSec);
     controller();
 
@@ -138,8 +149,8 @@ void ControllerTest::turnOffBacklight()
 
 void ControllerTest::goToSleep()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilSleep();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::goSleep();
     controller();
 
     CPPUNIT_ASSERT(pPwrMgmt->isSleeping());
@@ -153,8 +164,8 @@ void ControllerTest::goToSleep()
 
 void ControllerTest::wakeUpAfterMenu1()
 {
-    ControllerTest::callUntilInitEnd();
-    ControllerTest::callUntilSleep();
+    ControllerTest::firstStart();
+    ControllerTest::goSleep();
     controller();
     pPwrMgmt->wakeUp();
     controller();
@@ -171,11 +182,11 @@ void ControllerTest::wakeUpAfterMenu1()
 
 void ControllerTest::wakeUpAfterMenu2()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    ControllerTest::firstTurnOnDisplay();
     pTimer->stop(TimerMock::cTimerSec);
     controller();
-    ControllerTest::callUntilShiftTheScreen();
-    ControllerTest::callUntilSleep();
+    ControllerTest::shiftTheScreen();
+    ControllerTest::goSleep();
     controller();
     pPwrMgmt->wakeUp();
     controller();
@@ -194,7 +205,7 @@ void ControllerTest::wakeUpAfterMenu2()
 
 void ControllerTest::shiftScreenRight()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    ControllerTest::firstTurnOnDisplay();
     pTimer->stop(TimerMock::cTimerSec);
     controller();
     pButtons->setState(true, cButton_Lower);
@@ -211,10 +222,10 @@ void ControllerTest::shiftScreenRight()
 
 void ControllerTest::slideToMenu2()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
+    ControllerTest::firstTurnOnDisplay();
     pTimer->stop(TimerMock::cTimerSec);
     controller();// turn off backlight
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::shiftTheScreen();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -227,11 +238,11 @@ void ControllerTest::slideToMenu2()
 
 void ControllerTest::slideToMenu1()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pTimer->stop(TimerMock::cTimerSec);
     controller();// turn off backlight
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::shiftTheScreen();
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -242,10 +253,10 @@ void ControllerTest::slideToMenu1()
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
 }
 
-void ControllerTest::selectMenu2()
+void ControllerTest::selectMenu2Start()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pButtons->setState(true, cButton_Upper);
     controller();
 
@@ -258,10 +269,10 @@ void ControllerTest::selectMenu2()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_off, pDisplay->getCursor().state);
 }
 
-void ControllerTest::modifyMenu2()
+void ControllerTest::selectMenu2End()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pButtons->setState(true, cButton_Upper);
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);
@@ -278,23 +289,20 @@ void ControllerTest::modifyMenu2()
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cContrastPosition), pDisplay->getCursor().position);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cContrastPositionOnScreen), pDisplay->getCursor().position);
 }
 
 void ControllerTest::increaseContrastBy5()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pButtons->setState(true, cButton_Upper);
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);
     controller();
     pButtons->setState(false, cButton_Upper);
     controller();
-    pButtons->setState(true, cButton_Upper);
-    controller();
-    pButtons->setState(false, cButton_Upper);
-    controller();
+    pressAndReleaseButton(cButton_Upper, 1);
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -303,23 +311,42 @@ void ControllerTest::increaseContrastBy5()
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cContrastPosition + 3), pDisplay->getCursor().position);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cContrastPositionOnScreen + 3), pDisplay->getCursor().position);
 }
 
-void ControllerTest::decreaseContrastBy5()
+void ControllerTest::increaseContrastToMax()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pButtons->setState(true, cButton_Upper);
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);
     controller();
     pButtons->setState(false, cButton_Upper);
     controller();
-    pButtons->setState(true, cButton_Lower);
+    pressAndReleaseButton(cButton_Upper, 20);
+
+    CPPUNIT_ASSERT(pDisplay->backlightIsOn());
+    CPPUNIT_ASSERT(pDisplay->displayIsOn());
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pDisplay->getScreen().position);
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota neznama Kontrast: 100%         Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cContrastPositionOnScreen + 4), pDisplay->getCursor().position);
+}
+
+void ControllerTest::decreaseContrastBy5()
+{
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
+    pButtons->setState(true, cButton_Upper);
     controller();
-    pButtons->setState(false, cButton_Lower);
+    pTimer->stop(TimerMock::cTimerMiliSec);
     controller();
+    pButtons->setState(false, cButton_Upper);
+    controller();
+    pressAndReleaseButton(cButton_Lower, 1);
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());
     CPPUNIT_ASSERT(pDisplay->displayIsOn());
@@ -328,13 +355,13 @@ void ControllerTest::decreaseContrastBy5()
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cContrastPosition + 3), pDisplay->getCursor().position);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor position", static_cast<int>(cContrastPositionOnScreen + 3), pDisplay->getCursor().position);
 }
 
-void ControllerTest::unselectMenu2()
+void ControllerTest::unselectMenu2Start()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pButtons->setState(true, cButton_Upper);
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);
@@ -353,10 +380,10 @@ void ControllerTest::unselectMenu2()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
 }
 
-void ControllerTest::stopUnselectMenu2()
+void ControllerTest::unselectMenu2Stop()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pButtons->setState(true, cButton_Upper);
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);
@@ -378,10 +405,10 @@ void ControllerTest::stopUnselectMenu2()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_blinking, pDisplay->getCursor().state);
 }
 
-void ControllerTest::showModifiedMenu2()
+void ControllerTest::unselectMenu2End()
 {
-    ControllerTest::callUntilTurnOnDisplayAfterInit();
-    ControllerTest::callUntilShiftTheScreen();
+    ControllerTest::firstTurnOnDisplay();
+    ControllerTest::shiftTheScreen();
     pButtons->setState(true, cButton_Upper);
     controller();
     pTimer->stop(TimerMock::cTimerMiliSec);

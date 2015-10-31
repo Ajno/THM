@@ -14,21 +14,21 @@ extern "C" {
 enum staticConst_t
 { 
     cNumOfBacklightToggle = 7,
-    cContrastPosition = 26
+    cContrastPositionOnScreen = 26
 };
 
 typedef enum
 {
-	cMenuState_show1,
-	cMenuState_show2,
+	cMenuState_display1,
+	cMenuState_display2,
 	cMenuState_goto1,
 	cMenuState_goto2,
-	cMenuState_selecting2,
-	cMenuState_selected2,
-	cMenuState_unselecting2,
-	cMenuState_unselected2,
-	cMenuState_pressLowerWhenModify2,
-	cMenuState_modify2
+	cMenuState_upperPressedInDisplay2,
+	cMenuState_waitBeforeSelect2,
+	cMenuState_upperPressedInSelect2,
+	cMenuState_waitBeforeDisplay2,
+	cMenuState_pressLowerWhenSelect2,
+	cMenuState_select2
 }menuState_t;
 
 void controller();

@@ -36,23 +36,25 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(slideToMenu2);
     CPPUNIT_TEST(slideToMenu1);
     CPPUNIT_TEST(wakeUpAfterMenu2);
-    CPPUNIT_TEST(selectMenu2);
-    CPPUNIT_TEST(modifyMenu2);
+    CPPUNIT_TEST(selectMenu2Start);
+    CPPUNIT_TEST(selectMenu2End);
     CPPUNIT_TEST(increaseContrastBy5);
+    CPPUNIT_TEST(increaseContrastToMax);
     CPPUNIT_TEST(decreaseContrastBy5);
-    CPPUNIT_TEST(unselectMenu2);
-    CPPUNIT_TEST(stopUnselectMenu2);
-    CPPUNIT_TEST(showModifiedMenu2);
+    CPPUNIT_TEST(unselectMenu2Start);
+    CPPUNIT_TEST(unselectMenu2Stop);
+    CPPUNIT_TEST(unselectMenu2End);
 
     CPPUNIT_TEST_SUITE_END();
 public:
     void setUp();
     void tearDown();
 
-    void callUntilInitEnd();
-    void callUntilTurnOnDisplayAfterInit();
-    void callUntilShiftTheScreen();
-    void callUntilSleep();
+    void firstStart();
+    void firstTurnOnDisplay();
+    void shiftTheScreen();
+    void goSleep();
+    void pressAndReleaseButton(const buttons_t cButton, const uint count);
 
     void initApp();
 	void backlightOn();
@@ -66,13 +68,14 @@ public:
 	void shiftScreenRight();
 	void slideToMenu2();
 	void slideToMenu1();
-	void selectMenu2();
-	void modifyMenu2();
+	void selectMenu2Start();
+	void selectMenu2End();
 	void increaseContrastBy5();
+	void increaseContrastToMax();
 	void decreaseContrastBy5();
-	void unselectMenu2();
-	void stopUnselectMenu2();
-	void showModifiedMenu2();
+	void unselectMenu2Start();
+	void unselectMenu2Stop();
+	void unselectMenu2End();
 };
 
 #endif /* TEST_H_ */

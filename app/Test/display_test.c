@@ -38,29 +38,37 @@ void test_display_shiftAndBackLight_run()
     static displayMovingDirection_t dir = {TRUE, TRUE};
     static Word cntr = 0;
     static Bool bBacklightOn = TRUE;
-    buttonState_t stateLower;
-    buttonState_t stateUpper;
+    static Bool stateLowerCurrent = FALSE;
+    static Bool stateUpperCurrent = FALSE;
+    static Bool stateLowerPrevious = FALSE;
+    static Bool stateUpperPrevious = FALSE;
     
     waitX100us(500); // wait 50 ms
-    buttonStateDetection(cButton_Lower,&stateLower);
-    buttonStateDetection(cButton_Upper,&stateUpper);
     cntr++;
-    if (cButtonState_JustPressed == stateUpper)
+    
+    stateUpperCurrent = buttonIsPressed(cButton_Upper);
+    if ((!stateUpperPrevious) && (stateUpperCurrent))
     {
         dir.bShiftRightInsteadOfLeft = 
                 (dir.bShiftRightInsteadOfLeft ? FALSE : TRUE );
     }
-    if (cButtonState_JustPressed == stateLower)
+    
+    stateLowerCurrent = buttonIsPressed(cButton_Lower);
+    if ((!stateLowerPrevious) && (stateLowerCurrent))
     {
         bBacklightOn = (bBacklightOn ? FALSE : TRUE );
         displayBackLightOn(bBacklightOn);
     }
+    
     if (cntr >= 5)
     {        
         dir.bShiftScreenInsteadOfCursor = TRUE;   
         displayOrCursorShift(dir);
         cntr = 0;
     }
+    
+    stateUpperPrevious = stateUpperCurrent;
+    stateLowerPrevious = stateLowerCurrent;
 }
 
 void test_display_contrast_init()
@@ -90,12 +98,13 @@ void test_display_contrast_run()
 {
     static Word contrastOut = 50;
     static Word contrastIn = 0;
-    buttonState_t stateLower;
-    buttonState_t stateUpper;
+    static Bool stateLowerCurrent = FALSE;
+    static Bool stateUpperCurrent = FALSE;
+    static Bool stateLowerPrevious = FALSE;
+    static Bool stateUpperPrevious = FALSE;
     
-    buttonStateDetection(cButton_Lower,&stateLower);
-    buttonStateDetection(cButton_Upper,&stateUpper);
-    if (cButtonState_JustPressed == stateUpper)
+    stateUpperCurrent = buttonIsPressed(cButton_Upper);
+    if ((!stateUpperPrevious) && (stateUpperCurrent))
     {
         if (100 != contrastOut) 
         {
@@ -104,7 +113,9 @@ void test_display_contrast_run()
             contrastIn = displayGetContrast();
         }
     }
-    if (cButtonState_JustPressed == stateLower)
+    
+    stateLowerCurrent = buttonIsPressed(cButton_Lower);
+    if ((!stateLowerPrevious) && (stateLowerCurrent))
     {
         if (0 != contrastOut) 
         {
@@ -113,4 +124,7 @@ void test_display_contrast_run()
             contrastIn = displayGetContrast();
         }
     }
+    
+    stateUpperPrevious = stateUpperCurrent;
+    stateLowerPrevious = stateLowerCurrent;
 }

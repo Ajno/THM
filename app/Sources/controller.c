@@ -5,6 +5,8 @@
  *      Author: Jano
  */
 
+#include <stdio.h>
+
 #include "base.h"
 #include "buttons.h"
 #include "timer.h"
@@ -17,8 +19,9 @@ static const Bool cToLeft = FALSE;
 static const Word cAwakeTimeSec = 10;
 static const Word cScreenShiftTimeMiliSec = 50;
 static const Word cMenuActivationTimeMiliSec = 2000;
+static const Byte cContrastIncrement = 5;
 
-static Bool bBacklight = FALSE;
+static Bool bBacklightOn = FALSE;
 static Byte cntrBacklightToggle = cNumOfBacklightToggle;
 static displayOnOffControl_t displayCntrl;
 static menuState_t menu = cMenuState_show1;
@@ -37,10 +40,10 @@ static void screenShift(const Bool cDirection)
 
 void backlightTurnOn()
 {
-    if (!bBacklight)
+    if (!bBacklightOn)
     {
-        bBacklight = TRUE;
-        displayBackLightOn(bBacklight);
+        bBacklightOn = TRUE;
+        displayBackLightOn(bBacklightOn);
     }
 }
 
@@ -50,8 +53,8 @@ void controller()
     {
         if (timerElapsedMiliSec())
         {
-            bBacklight = bBacklight ? FALSE : TRUE;
-            displayBackLightOn(bBacklight);
+            bBacklightOn = bBacklightOn ? FALSE : TRUE;
+            displayBackLightOn(bBacklightOn);
             cntrBacklightToggle--;
             if (0 != cntrBacklightToggle)
             {
@@ -88,6 +91,25 @@ void controller()
                     screenShift(cToRight);
                     menu = cMenuState_goto1;
                 }
+                else if (cMenuState_modify2 == menu)
+                {
+                    menu = cMenuState_pressLowerWhenModify2;
+                }
+            }
+            else
+            {
+                if(cMenuState_pressLowerWhenModify2 == menu)
+                {
+                    char buffer[10];
+                    displayMoveCursor(cContrastPosition);
+                    contrast = displayGetContrast();
+                    contrast -= cContrastIncrement;
+                    displaySetContrast(contrast);
+                    sprintf(buffer,"%d",contrast);
+                    displayWrite(buffer);
+                    displayWrite("%");
+                    menu = cMenuState_modify2;
+                }
             }
 
             if (buttonIsPressed(cButton_Upper))
@@ -119,10 +141,15 @@ void controller()
                 }
                 else if(cMenuState_unselecting2 == menu)
                 {
+                    char buffer[10];
+                    displayMoveCursor(cContrastPosition);
+                    contrast = displayGetContrast();
+                    contrast += cContrastIncrement;
+                    displaySetContrast(contrast);
+                    sprintf(buffer,"%d",contrast);
+                    displayWrite(buffer);
+                    displayWrite("%");
                     menu = cMenuState_modify2;
-                    // todo add contrast also in real world :-)
-                    displayMoveCursor(cCursorPosEndOfLine1Menu2 - 3);
-                    displayWrite("80%");
                 }
                 else if(cMenuState_unselected2 == menu)
                 {
@@ -133,10 +160,10 @@ void controller()
 
         if (timerElapsedSec())
         {
-            if (bBacklight)
+            if (bBacklightOn)
             {
-                bBacklight = FALSE;
-                displayBackLightOn(bBacklight);
+                bBacklightOn = FALSE;
+                displayBackLightOn(bBacklightOn);
                 timerRestartSec(cAwakeTimeSec);
             }
             else
@@ -181,7 +208,7 @@ void controller()
                 onOffControl.bDisplayOn = TRUE;
                 onOffControl.bCursorOn = TRUE;
                 displayOnOffControl(onOffControl);
-                displayMoveCursor(cCursorPosEndOfLine1Menu2);
+                displayMoveCursor(cContrastPosition);
             }
             else if (cMenuState_unselecting2 == menu)
             {
@@ -198,7 +225,7 @@ void controller()
 
 void baseInitApp()
 {
-    bBacklight = FALSE;
+    bBacklightOn = FALSE;
     cntrBacklightToggle = cNumOfBacklightToggle;
     displayCntrl.bDisplayOn = FALSE;
     displayCntrl.bCursorOn = FALSE;
@@ -206,6 +233,7 @@ void baseInitApp()
     menu = cMenuState_show1;
     screenShifts = 0;
     contrast = 75;
+    displaySetContrast(contrast);
 
     baseInstallApp(&controller);
 }

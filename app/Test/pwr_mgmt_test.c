@@ -47,10 +47,7 @@ void test_pwrMgmt_sleep_init()
 
 void test_pwrMgmt_sleep_run()
 {
-    Bool bButtonState;
-    
-    buttonStateDetection(cButton_Upper, &bButtonState);
-    if (cButtonState_JustPressed == bButtonState)
+    if (buttonIsPressed(cButton_Upper))
     {        
         displayBackLightOn(FALSE);
         pwrMgmtGoToSleep(TRUE);
@@ -112,17 +109,13 @@ void test_pwrMgmt_recentReset_init()
 
 void test_pwrMgmt_recentReset_run()
 {
-    buttonState_t low;
-    buttonState_t upp;
     static Word* pIllegalAddress;
-    
-    buttonStateDetection(cButton_Lower,&low);
-    buttonStateDetection(cButton_Upper,&upp);
-    if (cButtonState_Pressed == low) 
+
+    if (buttonIsPressed(cButton_Lower)) 
     {
         waitX100us(0xffff);
     } 
-    else if (cButtonState_Pressed == upp)
+    else if (buttonIsPressed(cButton_Upper))
     {
         pIllegalAddress = (Word*)6224;//0x1850;
         *pIllegalAddress = 1;

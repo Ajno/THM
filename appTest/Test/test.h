@@ -30,7 +30,8 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(backlightStayOn);
     CPPUNIT_TEST(turnOnDisplay);
     CPPUNIT_TEST(turnOffBacklight);
-    CPPUNIT_TEST(goToSleep);
+    CPPUNIT_TEST(goToSleepInIdle);
+    CPPUNIT_TEST(goToSleepInModifyAndWakeUp);
     CPPUNIT_TEST(wakeUpAfterMenu1);
     CPPUNIT_TEST(shiftScreenRight);
     CPPUNIT_TEST(slideToMenu2);
@@ -41,9 +42,10 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(increaseContrastBy5);
     CPPUNIT_TEST(increaseContrastToMax);
     CPPUNIT_TEST(decreaseContrastBy5);
+    CPPUNIT_TEST(decreaseContrastToMin);
     CPPUNIT_TEST(unselectMenu2Start);
-    CPPUNIT_TEST(unselectMenu2Stop);
     CPPUNIT_TEST(unselectMenu2End);
+    CPPUNIT_TEST(slideToMenu1AfterModify2);
 
     CPPUNIT_TEST_SUITE_END();
 public:
@@ -62,7 +64,8 @@ public:
 	void backlightStayOn();
 	void turnOnDisplay();
 	void turnOffBacklight();
-	void goToSleep();
+	void goToSleepInIdle();
+	void goToSleepInModifyAndWakeUp();
 	void wakeUpAfterMenu1();
 	void wakeUpAfterMenu2();
 	void shiftScreenRight();
@@ -73,9 +76,10 @@ public:
 	void increaseContrastBy5();
 	void increaseContrastToMax();
 	void decreaseContrastBy5();
+	void decreaseContrastToMin();
 	void unselectMenu2Start();
-	void unselectMenu2Stop();
 	void unselectMenu2End();
+	void slideToMenu1AfterModify2();
 };
 
 #endif /* TEST_H_ */

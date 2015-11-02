@@ -25,7 +25,8 @@ static displayOnOffControl_t    displayOnOff;
 static displayMovingDirection_t displayDirection;
 static Byte                     screenShifts = 0;
 static Word                     contrast = 75;
-static menuState_t              menu = cMenuState_display1;
+static menuState_t              menu = cMenuState_idle1;
+char buffer[50] = {'X','X',0};
 
 static void screenShift()
 {
@@ -43,20 +44,36 @@ void backlightOn()
     }
 }
 
-void contrastChange(const sWord cInc)
+void contrastUpdateOnScreen()
 {
-    char buffer[10];
-
     displayMoveCursor(cContrastPositionOnScreen);
-    contrast = displayGetContrast();
-    if ((cDisplayMaxContrast > contrast) && (0 < contrast))
-    {
-        contrast += cInc;
-    }
-    displaySetContrast(contrast);
+    displayWrite("    ");
+    displayMoveCursor(cContrastPositionOnScreen);
     sprintf(buffer,"%d",contrast);
     displayWrite(buffer);
     displayWrite("%");
+}
+
+void contrastAdd(const Word cAdd)
+{
+    contrast = displayGetContrast();
+    if (cDisplayMaxContrast > contrast)
+    {
+        contrast += cAdd;
+    }
+    displaySetContrast(contrast);
+    contrastUpdateOnScreen();
+}
+
+void contrastDec(const Word cDecrease)
+{
+    contrast = displayGetContrast();
+    if (0 < contrast)
+    {
+        contrast -= cDecrease;
+    }
+    displaySetContrast(contrast);
+    contrastUpdateOnScreen();
 }
 
 void cursorOn(const Bool cCursorOn)
@@ -64,7 +81,6 @@ void cursorOn(const Bool cCursorOn)
     displayOnOff.bBlinkingCursor = cCursorOn;
     displayOnOff.bCursorOn = cCursorOn;
     displayOnOffControl(displayOnOff);
-    menu = cMenuState_waitBeforeSelect2;
 }
 
 void onElapsedShortTimer()
@@ -75,7 +91,7 @@ void onElapsedShortTimer()
             if (cDisplayNumOfChars <= screenShifts)
             {
                 screenShifts = 0;
-                menu = cMenuState_display1;
+                menu = cMenuState_idle1;
             }
             else
             {
@@ -87,7 +103,7 @@ void onElapsedShortTimer()
             if (cDisplayNumOfChars <= screenShifts)
             {
                 screenShifts = 0;
-                menu = cMenuState_display2;
+                menu = cMenuState_idle2;
             }
             else
             {
@@ -95,12 +111,14 @@ void onElapsedShortTimer()
                 screenShift();
             }
             break;
-        case cMenuState_upperPressedInDisplay2:
+        case cMenuState_upperPressedInIdle2:
             cursorOn(TRUE);
             displayMoveCursor(cContrastPositionOnScreen);
+            menu = cMenuState_waitToChangeContrast;
             break;
-        case cMenuState_upperPressedInSelect2:
+        case cMenuState_upperPressedInChangeContrast:
             cursorOn(FALSE);
+            menu = cMenuState_waitToEnterIdle2;
             break;
         default:
             break;
@@ -132,13 +150,13 @@ void processUpperButton()
 
         switch (menu)
         {
-            case cMenuState_display2:
+            case cMenuState_idle2:
                 timerRestartMiliSec(cMenuActivationTimeMiliSec);
-                menu = cMenuState_upperPressedInDisplay2;
+                menu = cMenuState_upperPressedInIdle2;
                 break;
-            case cMenuState_select2:
+            case cMenuState_changeContrast:
                 timerRestartMiliSec(cMenuActivationTimeMiliSec);
-                menu = cMenuState_upperPressedInSelect2;
+                menu = cMenuState_upperPressedInChangeContrast;
                 break;
             default:
                 break;
@@ -148,18 +166,18 @@ void processUpperButton()
     {
         switch (menu)
         {
-            case cMenuState_upperPressedInDisplay2:
-                menu = cMenuState_display2;
+            case cMenuState_upperPressedInIdle2:
+                menu = cMenuState_idle2;
                 break;
-            case cMenuState_waitBeforeSelect2:
-                menu = cMenuState_select2;
+            case cMenuState_waitToChangeContrast:
+                menu = cMenuState_changeContrast;
                 break;
-            case cMenuState_upperPressedInSelect2:
-                contrastChange(cContrastIncrement);
-                menu = cMenuState_select2;
+            case cMenuState_upperPressedInChangeContrast:
+                contrastAdd(cContrastIncrement);
+                menu = cMenuState_changeContrast;
                 break;
-            case cMenuState_waitBeforeDisplay2:
-                menu = cMenuState_display2;
+            case cMenuState_waitToEnterIdle2:
+                menu = cMenuState_idle2;
                 break;
             default:
                 break;
@@ -176,18 +194,18 @@ void processLowerButton()
 
         switch (menu)
         {
-            case cMenuState_display1:
+            case cMenuState_idle1:
                 displayDirection.bShiftRightInsteadOfLeft = FALSE;
                 screenShift();
                 menu = cMenuState_goto2;
                 break;
-            case cMenuState_display2:
+            case cMenuState_idle2:
                 displayDirection.bShiftRightInsteadOfLeft = TRUE;
                 screenShift();
                 menu = cMenuState_goto1;
                 break;
-            case cMenuState_select2:
-                menu = cMenuState_pressLowerWhenSelect2;
+            case cMenuState_changeContrast:
+                menu = cMenuState_lowerPressedInChangeContrast;
                 break;
             default:
                 break;
@@ -195,10 +213,10 @@ void processLowerButton()
     }
     else
     {
-        if(cMenuState_pressLowerWhenSelect2 == menu)
+        if(cMenuState_lowerPressedInChangeContrast == menu)
         {
-            contrastChange(-cContrastIncrement);
-            menu = cMenuState_select2;
+            contrastDec(cContrastIncrement);
+            menu = cMenuState_changeContrast;
         }
     }
 }
@@ -224,11 +242,17 @@ void controller()
         {
             displayClear();
             displayOnOff.bDisplayOn = TRUE;
+            if (displayOnOff.bCursorOn)
+            {
+                displayOnOff.bCursorOn = FALSE;
+                displayOnOff.bBlinkingCursor = FALSE;
+            }
             displayOnOffControl(displayOnOff);
             backlightOn();
-            displayWrite("Teplota neznama Kontrast: 75%          Vlhkost neznama Jazyk: SVK");
+            displayWrite("Teplota neznama Kontrast: 75%           Vlhkost neznama Jazyk: SVK");
+            contrastUpdateOnScreen();
             timerRestartSec(cAwakeTimeSec);
-            menu = cMenuState_display1;
+            menu = cMenuState_idle1;
         }
         else
         {
@@ -257,7 +281,7 @@ void baseInitApp()
     displayOnOff.bBlinkingCursor = FALSE;
     displayDirection.bShiftRightInsteadOfLeft = TRUE;
     displayDirection.bShiftScreenInsteadOfCursor = TRUE;
-    menu = cMenuState_display1;
+    menu = cMenuState_idle1;
     screenShifts = 0;
     contrast = 75;
     displaySetContrast(contrast);

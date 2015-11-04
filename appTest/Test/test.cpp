@@ -9,6 +9,7 @@
 #include "controller.h"
 #include "base.h"
 #include "base_mock.h"
+#include "thm_lib.h"
 using namespace CppUnit;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ControllerTest);
@@ -478,4 +479,33 @@ void ControllerTest::slideToMenu1AfterModify2()
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",DisplayMock::cCursor_off, pDisplay->getCursor().state);
+}
+
+void ControllerTest::itoaTest()
+{
+    string exp1 = "127";
+    string act1(thmLibItoa(127));
+    string exp2 = "1";
+    string act2(thmLibItoa(1));
+    string exp3 = "0";
+    string act3(thmLibItoa(0));
+    string exp4 = "25";
+    string act4(thmLibItoa(25));
+    string exp5 = "99";
+    string act5(thmLibItoa(99));
+    string exp6 = "-1";
+    string act6(thmLibItoa(-1));
+    string exp7 = "-25";
+    string act7(thmLibItoa(-25));
+    string exp8 = "-127";
+    string act8(thmLibItoa(-127));
+
+    CPPUNIT_ASSERT_EQUAL(exp1,act1);
+    CPPUNIT_ASSERT_EQUAL(exp2,act2);
+    CPPUNIT_ASSERT_EQUAL(exp3,act3);
+    CPPUNIT_ASSERT_EQUAL(exp4,act4);
+    CPPUNIT_ASSERT_EQUAL(exp5,act5);
+    CPPUNIT_ASSERT_EQUAL(exp6,act6);
+    CPPUNIT_ASSERT_EQUAL(exp7,act7);
+    CPPUNIT_ASSERT_EQUAL(exp8,act8);
 }

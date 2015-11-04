@@ -17,10 +17,10 @@ using namespace CppUnit;
 
 class ControllerTest : public TestFixture
 {
-    ButtonsMock* pButtons;
-    TimerMock* pTimer;
-    DisplayMock* pDisplay;
-    PwrMgmtMock* pPwrMgmt;
+    ButtonsMock*    pButtons;
+    TimerMock*      pTimer;
+    DisplayMock*    pDisplay;
+    PwrMgmtMock*    pPwrMgmt;
 
     CPPUNIT_TEST_SUITE(ControllerTest);
 
@@ -46,6 +46,7 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(unselectMenu2Start);
     CPPUNIT_TEST(unselectMenu2End);
     CPPUNIT_TEST(slideToMenu1AfterModify2);
+    CPPUNIT_TEST(itoaTest);
 
     CPPUNIT_TEST_SUITE_END();
 public:
@@ -80,6 +81,7 @@ public:
 	void unselectMenu2Start();
 	void unselectMenu2End();
 	void slideToMenu1AfterModify2();
+	void itoaTest();
 };
 
 #endif /* TEST_H_ */

@@ -13,7 +13,7 @@ extern "C" {
 
 #include <stdtypes.h>
 
-schar* thmLibItoa(const sWord cNum, schar buffer[], const sWord cBase);
+char* thmLibItoa(const sByte cNum);
 
 #ifdef __cplusplus
 }

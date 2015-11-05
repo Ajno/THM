@@ -24,7 +24,7 @@ enum displayBus_t
 
 static const Word cDutyCycle = 45;// 4,5% duty cycle
 static const Byte cMask_Backligh = 0x10;
-static const Word cContrastToDutyCycleOffset = 30;
+static const Word cContrastToDutyCycleOffset = 28;
 static const Word cDutyCycleToContrastQuotient = 5;
 static Bool bDataBusConfiguredAsOutput = FALSE;
 

@@ -13,7 +13,12 @@ extern "C" {
 
 #include <stdtypes.h>
 
-char* thmLibItoa(const sByte cNum);
+/*
+ * @brief integer to string
+ *
+ * @param[in] <-32767, 32767>
+ */
+char* thmLibItoa(const sWord cNum);
 
 #ifdef __cplusplus
 }

@@ -9,69 +9,32 @@
 
 static enum digits
 {
-    cNumOfDigits = 4,
+    cNumOfDigits = 6,
 };
 
-/*
- * todo
- * <-127;+127>
- */
-char* thmLibItoa(const sByte cNum)
+char* thmLibItoa(const sWord cNum)
 {
-    static char buffer[cNumOfDigits + 1] = {0};
+    static char buffer[cNumOfDigits + 1] =
+    { 0 };
     Byte i = cNumOfDigits;
-    sByte num = cNum;
+    sWord num = cNum;
+    Bool bNegative = FALSE;
 
-    if(0 <= num)
-    {
-        if (0 == num)
-        {
-            i=3;
-            buffer[3] = num % 10 + '0';
-        }
-        else if (1 == num)
-        {
-            i=3;
-            buffer[3] = num % 10 + '0';
-        }
-        else if ((10 <= num) && (100 > num))
-        {
-            i=2;
-            buffer[2] = num/10 % 10 + '0';
-            buffer[3] = num % 10 + '0';
-        }
-        else if (127 == num)
-        {
-            i=1;
-            buffer[1] = num/100 % 10 + '0';
-            buffer[2] = num/10 % 10 + '0';
-            buffer[3] = num % 10 + '0';
-        }
-    }
-    else
+    if (0 > num)
     {
         num = -num;
-        if (1 == num)
-        {
-            i=2;
-            buffer[2] = '-';
-            buffer[3] = num % 10 + '0';
-        }
-        else if (25 == num)
-        {
-            i=1;
-            buffer[1] = '-';
-            buffer[2] = num/10 % 10 + '0';
-            buffer[3] = num % 10 + '0';
-        }
-        else if (127 == num)
-        {
-            i=0;
-            buffer[0] = '-';
-            buffer[1] = num/100 % 10 + '0';
-            buffer[2] = num/10 % 10 + '0';
-            buffer[3] = num % 10 + '0';
-        }
+        bNegative = TRUE;
+    }
+
+    do
+    {
+        buffer[--i] = num % 10 + '0';
+        num /= 10;
+    } while (num != 0);
+
+    if (bNegative)
+    {
+        buffer[--i] = '-';
     }
 
     return &buffer[i];

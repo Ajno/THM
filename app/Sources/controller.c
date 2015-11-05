@@ -5,7 +5,7 @@
  *      Author: Jano
  */
 
-#include <stdio.h>
+#include "thm_lib.h"
 
 #include "base.h"
 #include "buttons.h"
@@ -26,7 +26,6 @@ static displayMovingDirection_t displayDirection;
 static Byte                     screenShifts = 0;
 static Word                     contrast = 75;
 static menuState_t              menu = cMenuState_idle1;
-char buffer[50] = {'X','X',0};
 
 static void screenShift()
 {
@@ -49,8 +48,7 @@ void contrastUpdateOnScreen()
     displayMoveCursor(cContrastPositionOnScreen);
     displayWrite("    ");
     displayMoveCursor(cContrastPositionOnScreen);
-    sprintf(buffer,"%d",contrast);
-    displayWrite(buffer);
+    displayWrite(thmLibItoa(contrast));
     displayWrite("%");
 }
 
@@ -249,7 +247,7 @@ void controller()
             }
             displayOnOffControl(displayOnOff);
             backlightOn();
-            displayWrite("Teplota neznama Kontrast: 75%           Vlhkost neznama Jazyk: SVK");
+            displayWrite("Teplota neznama Kontrast: 50%           Vlhkost neznama Jazyk: SVK");
             contrastUpdateOnScreen();
             timerRestartSec(cAwakeTimeSec);
             menu = cMenuState_idle1;
@@ -283,7 +281,7 @@ void baseInitApp()
     displayDirection.bShiftScreenInsteadOfCursor = TRUE;
     menu = cMenuState_idle1;
     screenShifts = 0;
-    contrast = 75;
+    contrast = 50;
     displaySetContrast(contrast);
 
     baseInstallApp(&controller);

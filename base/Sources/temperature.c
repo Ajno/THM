@@ -7,3 +7,8 @@
 
 #include "temperature.h"
 
+sWord temperatureRead()
+{
+    //todo
+    return 205;
+}

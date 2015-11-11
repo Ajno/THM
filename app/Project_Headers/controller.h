@@ -14,11 +14,13 @@ extern "C" {
 enum staticConst_t
 { 
     cNumOfBacklightToggle = 7,
-    cContrastPositionOnScreen = 26
+    cContrastPositionOnScreen = 26,
+    cTemperaturePositionOnSreen = 9
 };
 
 typedef enum
 {
+    cMenuState_sleep,
 	cMenuState_idle1,
 	cMenuState_idle2,
 	cMenuState_goto1,

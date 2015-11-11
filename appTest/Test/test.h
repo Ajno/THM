@@ -13,14 +13,16 @@
 #include "display_mock.h"
 #include "timer_mock.h"
 #include "pwr_mgmt_mock.h"
+#include "temperature_mock.h"
 using namespace CppUnit;
 
 class ControllerTest : public TestFixture
 {
-    ButtonsMock*    pButtons;
-    TimerMock*      pTimer;
-    DisplayMock*    pDisplay;
-    PwrMgmtMock*    pPwrMgmt;
+    ButtonsMock*        pButtons;
+    TimerMock*          pTimer;
+    DisplayMock*        pDisplay;
+    PwrMgmtMock*        pPwrMgmt;
+    TemperatureMock*    pTemperature;
 
     CPPUNIT_TEST_SUITE(ControllerTest);
 

@@ -12,6 +12,7 @@
 #include "timer.h"
 #include "display.h"
 #include "pwr_mgmt.h"
+#include "temperature.h"
 #include "controller.h"
 
 static const Word cAwakeTimeSec = 10;
@@ -50,6 +51,21 @@ void contrastUpdateOnScreen()
     displayMoveCursor(cContrastPositionOnScreen);
     displayWrite(thmLibItoa(contrast));
     displayWrite("%");
+}
+
+void temperatureUpdateOnScreen()
+{
+    sWord temperatureRaw = 0;
+
+    displayMoveCursor(cTemperaturePositionOnSreen);
+    displayWrite("    ");
+    displayMoveCursor(cTemperaturePositionOnSreen);
+    temperatureRaw = temperatureRead();
+    displayWrite(thmLibItoa(temperatureRaw / 10));
+    displayWrite(",");
+    displayWrite(thmLibItoa(temperatureRaw % 10));
+    displayWrite(&displayDegreeSymbol);
+    displayWrite("C");
 }
 
 void contrastAdd(const Word cAdd)
@@ -135,6 +151,7 @@ void onElapsedLongTimer()
     {
         displayOnOff.bDisplayOn = FALSE;
         displayOnOffControl(displayOnOff);
+        menu = cMenuState_sleep;
         pwrMgmtGoToSleep(TRUE);
     }
 }
@@ -211,10 +228,17 @@ void processLowerButton()
     }
     else
     {
-        if(cMenuState_lowerPressedInChangeContrast == menu)
+        switch (menu)
         {
-            contrastDec(cContrastIncrement);
-            menu = cMenuState_changeContrast;
+            case cMenuState_lowerPressedInChangeContrast:
+                contrastDec(cContrastIncrement);
+                menu = cMenuState_changeContrast;
+                break;
+            case cMenuState_sleep:
+                menu = cMenuState_idle1;
+                break;
+            default:
+                break;
         }
     }
 }
@@ -247,10 +271,10 @@ void controller()
             }
             displayOnOffControl(displayOnOff);
             backlightOn();
-            displayWrite("Teplota neznama Kontrast: 50%           Vlhkost neznama Jazyk: SVK");
+            displayWrite("Teplota:        Kontrast: 50%           Vlhkost neznama Jazyk: SVK");
+            temperatureUpdateOnScreen();
             contrastUpdateOnScreen();
             timerRestartSec(cAwakeTimeSec);
-            menu = cMenuState_idle1;
         }
         else
         {

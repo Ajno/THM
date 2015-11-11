@@ -11,6 +11,16 @@
 extern "C" {
 #endif
 
+#include <stdtypes.h>
+
+/*
+ * @brief Reads the temperature
+ *
+ * returns temperature in tenth of degrees
+ * e.g. 21,5 deg equals 215
+ */
+sWord temperatureRead();
+
 #ifdef __cplusplus
 }
 #endif

@@ -8,10 +8,16 @@
 #include <temperature_mock.h>
 #include <temperature.h>
 
-TemperatureMock::TemperatureMock()
-{
-    // TODO Auto-generated constructor stub
+static sWord temperature = 0;
 
+extern "C" sWord temperatureRead()
+{
+    return temperature;
+}
+
+TemperatureMock::TemperatureMock(const sWord cTemperature)
+{
+    temperature = cTemperature;
 }
 
 TemperatureMock::~TemperatureMock()
@@ -19,3 +25,7 @@ TemperatureMock::~TemperatureMock()
     // TODO Auto-generated destructor stub
 }
 
+void TemperatureMock::setTemperature(const sWord cTemperature)
+{
+    temperature = cTemperature;
+}

@@ -49,6 +49,7 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(unselectMenu2End);
     CPPUNIT_TEST(slideToMenu1AfterModify2);
     CPPUNIT_TEST(itoaTest);
+    CPPUNIT_TEST(temperatureUpdate);
 
     CPPUNIT_TEST_SUITE_END();
 public:
@@ -84,6 +85,7 @@ public:
 	void unselectMenu2End();
 	void slideToMenu1AfterModify2();
 	void itoaTest();
+	void temperatureUpdate();
 };
 
 #endif /* TEST_H_ */

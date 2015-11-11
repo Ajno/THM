@@ -14,6 +14,7 @@ public:
 	typedef enum
 	{
 		cTimerMiliSec,
+		cTimerMiliSecX100,
 		cTimerSec
 	}timerType_t;
 	TimerMock();

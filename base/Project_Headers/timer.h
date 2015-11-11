@@ -17,8 +17,10 @@ void timersInit();
 void wait500ns();
 void waitX100us(const Word cDelay);
 void timerRestartMiliSec(const Word cTimeout_ms);
+void timerRestartMiliSecX100(const Word cTimeout_msX100);
 void timerRestartSec(const Word cTimeout_sec);
 Bool timerElapsedMiliSec();
+Bool timerElapsedMiliSecX100();
 Bool timerElapsedSec();
 
 #ifdef __cplusplus

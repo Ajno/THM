@@ -20,7 +20,9 @@ static const Word cPwmModulo_200us = 800;
 static const Word c100us = 400;
 static const Word cNumOfOvrflwsIn1ms = 5;
 static const Word cNumOfOvrflwsIn1sec = 5000;
+static const Word cNumOfOvrflwsIn100ms = 500;
 static timer_t timerMiliSec;
+static timer_t timerMiliSecX100;
 static timer_t timerSec;
 
 void wait500ns()
@@ -76,6 +78,11 @@ void timerRestartMiliSec(const Word cTimeout_ms)
     }
 }
 
+void timerRestartMiliSecX100(const Word cTimeout_msX100)
+{
+    timerMiliSecX100.remaining = cTimeout_msX100; 
+}
+
 void timerRestartSec(const Word cTimeout_sec)
 {
     timerSec.remaining = cTimeout_sec; 
@@ -84,6 +91,12 @@ void timerRestartSec(const Word cTimeout_sec)
 Bool timerElapsedMiliSec()
 {
     Bool ret = (timerMiliSec.remaining == 0);
+    return ret;
+}
+
+Bool timerElapsedMiliSecX100()
+{
+    Bool ret = (timerMiliSecX100.remaining == 0);
     return ret;
 }
 
@@ -116,10 +129,13 @@ void timerIsrCallback()
     // timer can be reset again
     bBlockPwmTimerReset = FALSE;
     
-    // stop-watch timer in miliseconds
+    // stop-watch timer of miliseconds
     processTimer(&timerMiliSec, cNumOfOvrflwsIn1ms);
     
-    // stop-watch timer in seconds
+    // stop-watch timer of hundreds of miliseconds
+    processTimer(&timerMiliSecX100, cNumOfOvrflwsIn100ms);
+    
+    // stop-watch timer of seconds
     processTimer(&timerSec, cNumOfOvrflwsIn1sec);
 }
 
@@ -130,6 +146,8 @@ void timersInit()
 	bBlockPwmTimerReset = FALSE;
 	timerMiliSec.remaining = 0;
 	timerMiliSec.overflowCounter = cNumOfOvrflwsIn1ms; // 200us*5=1ms
+    timerMiliSecX100.remaining = 0;
+    timerMiliSecX100.overflowCounter = cNumOfOvrflwsIn100ms; // 200us*500=100ms
     timerSec.remaining = 0;
     timerSec.overflowCounter = cNumOfOvrflwsIn1sec; // 200us*5000 = 1s
 	

@@ -517,3 +517,8 @@ void ControllerTest::itoaTest()
     CPPUNIT_ASSERT_EQUAL(exp9,act9);
     CPPUNIT_ASSERT_EQUAL(exp10,act10);
 }
+
+void ControllerTest::temperatureUpdate()
+{
+    // todo
+}

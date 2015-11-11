@@ -9,11 +9,17 @@
 #include "timer.h"
 
 static bool bRunningMiliSec = false;
+static bool bRunningMiliSecX100 = false;
 static bool bRunningSec = false;
 
 extern "C" void timerRestartMiliSec(const Word cTimeout_ms)
 {
 	bRunningMiliSec = true;
+}
+
+extern "C" void timerRestartMiliSecX100(const Word cTimeout_msX100)
+{
+    bRunningMiliSecX100 = true;
 }
 
 extern "C" void timerRestartSec(const Word cTimeout_sec)
@@ -24,19 +30,30 @@ extern "C" void timerRestartSec(const Word cTimeout_sec)
 TimerMock::TimerMock()
 {
 	bRunningMiliSec = false;
+	bRunningMiliSecX100 = false;
 	bRunningSec = false;
 }
 
 bool TimerMock::isRunning(const timerType_t cType)
 {
-	if (cTimerMiliSec == cType)
-	{
-		return bRunningMiliSec;
-	}
-	else if (cTimerSec == cType)
-	{
-		return bRunningSec;
-	}
+    bool ret = false;
+
+    switch (cType)
+    {
+        case cTimerMiliSec:
+            ret = bRunningMiliSec;
+            break;
+        case cTimerMiliSecX100:
+            ret = bRunningMiliSecX100;
+            break;
+        case cTimerSec:
+            return bRunningSec;
+            break;
+        default:
+            break;
+    }
+
+    return ret;
 }
 
 void TimerMock::stop(const timerType_t cType)
@@ -54,6 +71,11 @@ void TimerMock::stop(const timerType_t cType)
 extern "C" Bool timerElapsedMiliSec()
 {
 	return !bRunningMiliSec;
+}
+
+extern "C" Bool timerElapsedMiliSecX100()
+{
+    return !bRunningMiliSecX100;
 }
 
 extern "C" Bool timerElapsedSec()

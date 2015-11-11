@@ -29,7 +29,7 @@ typedef struct
 static const Byte cDisplayAddressMax = 80;
 static const Word cDisplayMaxContrast = 100;
 static const Byte cDisplayNumOfChars = 16;
-static const char displayDegreeSymbol[2] = {223,0};// degree symbol = °
+static const char cDisplayDegreeSymbol[2] = {223,0};// degree symbol = °
 
 void displayInit();
 void displayBackLightOn(const Bool bBackLightOn);

@@ -64,7 +64,7 @@ void temperatureUpdateOnScreen()
     displayWrite(thmLibItoa(temperatureRaw / 10));
     displayWrite(",");
     displayWrite(thmLibItoa(temperatureRaw % 10));
-    displayWrite(&displayDegreeSymbol);
+    displayWrite(&cDisplayDegreeSymbol);
     displayWrite("C");
 }
 
@@ -97,7 +97,7 @@ void cursorOn(const Bool cCursorOn)
     displayOnOffControl(displayOnOff);
 }
 
-void onElapsedShortTimer()
+void onElapsedVeryShortTimer()
 {
     switch (menu)
     {
@@ -271,7 +271,7 @@ void controller()
             }
             displayOnOffControl(displayOnOff);
             backlightOn();
-            displayWrite("Teplota:        Kontrast: 50%           Vlhkost neznama Jazyk: SVK");
+            displayWrite("Teplota:        Kontrast:               Vlhkost neznama Jazyk: SVK");
             temperatureUpdateOnScreen();
             contrastUpdateOnScreen();
             timerRestartSec(cAwakeTimeSec);
@@ -289,7 +289,7 @@ void controller()
 
         if (timerElapsedMiliSec())
         {
-            onElapsedShortTimer();
+            onElapsedVeryShortTimer();
         }
     }
 }

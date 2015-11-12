@@ -13,6 +13,7 @@ extern "C" {
 
 #include <stdtypes.h>
 
+void temperatureInit();
 /*
  * @brief Reads the temperature
  *

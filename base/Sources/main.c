@@ -22,6 +22,7 @@ void main(void)
 	displayInit();
 	buttonsInit();
 	pwrMgmtInit();
+	temperatureInit();
 	baseInitApp();
 	
 	for (;;)

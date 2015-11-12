@@ -5,10 +5,15 @@
  *      Author: z0037ysj
  */
 
+#include "adc.h"
 #include "temperature.h"
 
 sWord temperatureRead()
 {
-    //todo
-    return 205;
+    return adcSampleChannel(cAdcChnnl_A3);
+}
+
+void temperatureInit()
+{
+    adcConfigure();
 }

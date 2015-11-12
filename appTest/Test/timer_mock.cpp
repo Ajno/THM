@@ -66,6 +66,10 @@ void TimerMock::stop(const timerType_t cType)
 	{
 		bRunningSec = false;
 	}
+    else if (cTimerMiliSecX100 == cType)
+    {
+        bRunningMiliSecX100 = false;
+    }
 }
 
 extern "C" Bool timerElapsedMiliSec()

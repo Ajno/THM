@@ -520,5 +520,13 @@ void ControllerTest::itoaTest()
 
 void ControllerTest::temperatureUpdate()
 {
-    // todo
+    const sWord cTemperature = 123;
+
+    ControllerTest::firstTurnOnDisplay();
+    pTemperature->setTemperature(cTemperature);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSecX100));
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota: 12,3ßC Kontrast: 50%           Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
 }

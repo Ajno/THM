@@ -8,6 +8,8 @@
 #ifndef ADC_H_
 #define ADC_H_
 
+#include <stdtypes.h>
+
 typedef enum
 {
     cAdcChnnl_A3            = 3,
@@ -16,5 +18,6 @@ typedef enum
 }adcChannel_t;
 
 void adcConfigure();
+Word adcSampleChannel(const adcChannel_t cChnnl);
 
 #endif /* ADC_H_ */

@@ -18,6 +18,7 @@
 static const Word cAwakeTimeSec = 10;
 static const Word cScreenShiftTimeMiliSec = 50;
 static const Word cMenuActivationTimeMiliSec = 2000;
+static const Word cTemperatureSamplingMiliSecX100 = 3; // 300 ms
 static const Word cContrastIncrement = 5;
 
 static Bool                     bBacklightOn = FALSE;
@@ -137,6 +138,12 @@ void onElapsedVeryShortTimer()
         default:
             break;
     }
+}
+
+void onElapsedShortTimer()
+{
+    temperatureUpdateOnScreen();
+    timerRestartMiliSecX100(cTemperatureSamplingMiliSecX100);
 }
 
 void onElapsedLongTimer()
@@ -282,14 +289,19 @@ void controller()
             processUpperButton();
         }
 
-        if (timerElapsedSec())
-        {
-            onElapsedLongTimer();
-        }
-
         if (timerElapsedMiliSec())
         {
             onElapsedVeryShortTimer();
+        }
+
+        if (timerElapsedMiliSecX100())
+        {
+            onElapsedShortTimer();
+        }
+
+        if (timerElapsedSec())
+        {
+            onElapsedLongTimer();
         }
     }
 }

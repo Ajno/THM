@@ -58,6 +58,7 @@ void temperatureUpdateOnScreen()
 {
     sWord temperatureRaw = 0;
 
+    // todo get cursor    
     displayMoveCursor(cTemperaturePositionOnSreen);
     displayWrite("    ");
     displayMoveCursor(cTemperaturePositionOnSreen);
@@ -67,6 +68,8 @@ void temperatureUpdateOnScreen()
     displayWrite(thmLibItoa(temperatureRaw % 10));
     displayWrite(&cDisplayDegreeSymbol);
     displayWrite("C");
+    // todo set cursor back
+    displayMoveCursor(cContrastPositionOnScreen);// fixme replace this
 }
 
 void contrastAdd(const Word cAdd)

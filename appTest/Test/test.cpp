@@ -307,6 +307,7 @@ void ControllerTest::selectMenu2End()
     pButtons->setState(true, cButton_Lower);
     controller();// stay at position 16
     pButtons->setState(false, cButton_Upper);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);// short timer elapsed, should have no effect
     controller();// stay at position 16
 
     CPPUNIT_ASSERT(pDisplay->backlightIsOn());

@@ -18,6 +18,6 @@ typedef enum
 }adcChannel_t;
 
 void adcConfigure();
-Word adcSampleChannel(const adcChannel_t cChnnl);
+Word adcChannelSample(const adcChannel_t cChnnl);
 
 #endif /* ADC_H_ */

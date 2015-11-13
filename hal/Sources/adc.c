@@ -33,7 +33,7 @@ void adcConfigure()
  * sampling time = 43 ADCK cycles + 5 bus clock cycles
  * i.e. 22,75 micro seconds when busclk = 4MHz
  */
-Word adcSampleChannel(const adcChannel_t cChnnl)
+Word adcChannelSample(const adcChannel_t cChnnl)
 {
     volatile Word ret = 0;
     

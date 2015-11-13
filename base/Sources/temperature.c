@@ -8,9 +8,20 @@
 #include "adc.h"
 #include "temperature.h"
 
+static const sWord cScale = 10;
+static const sWord cQ = -5000;
+static const sWord cK = 32;
+
+/*
+ * k = 0,32258065
+ * q = -50
+ * 
+ * return temperature in [deg x 10]
+ */
 sWord temperatureRead()
 {
-    return adcSampleChannel(cAdcChnnl_A3);
+    sWord ret = (cK * adcChannelSample(cAdcChnnl_A3) + cQ);
+    return (ret/cScale);
 }
 
 void temperatureInit()

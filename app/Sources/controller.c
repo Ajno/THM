@@ -65,6 +65,10 @@ void temperatureUpdateOnScreen()
     temperatureRaw = temperatureRead();
     displayWrite(thmLibItoa(temperatureRaw / 10));
     displayWrite(",");
+    if (0 > temperatureRaw)
+    {
+        temperatureRaw = -temperatureRaw;
+    }
     displayWrite(thmLibItoa(temperatureRaw % 10));
     displayWrite(&cDisplayDegreeSymbol);
     displayWrite("C");

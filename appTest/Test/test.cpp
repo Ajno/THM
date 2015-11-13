@@ -521,13 +521,22 @@ void ControllerTest::itoaTest()
 
 void ControllerTest::temperatureUpdate()
 {
-    const sWord cTemperature = 123;
+    const sWord cTemperature1 = 123;
+    const sWord cTemperature2 = -151;
+    string screenTemp1("");
+    string screenTemp2("");
 
     ControllerTest::firstTurnOnDisplay();
-    pTemperature->setTemperature(cTemperature);
+    pTemperature->setTemperature(cTemperature1);
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
+    screenTemp1 = pDisplay->getScreen().text;
+    pTemperature->setTemperature(cTemperature2);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenTemp2 = pDisplay->getScreen().text;
 
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSecX100));
-    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota: 12,3ßC Kontrast: 50%           Vlhkost neznama Jazyk: SVK" == pDisplay->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota: 12,3ßC Kontrast: 50%           Vlhkost neznama Jazyk: SVK" == screenTemp1));
+    CPPUNIT_ASSERT_MESSAGE(pDisplay->getScreen().text,("Teplota: -15,1ßCKontrast: 50%           Vlhkost neznama Jazyk: SVK" == screenTemp2));
 }

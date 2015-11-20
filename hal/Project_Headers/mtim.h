@@ -8,6 +8,13 @@
 #ifndef MTIM_H_
 #define MTIM_H_
 
+#include <stdtypes.h>
+
+typedef void (*pMtimInterruptCallback_t)(void);
+
 void mtimConfigure();
+void mtimResetCounter();
+Byte mtimReadCounter();
+void mtimInstallIsrCallback(pMtimInterruptCallback_t const pcIsrClbck);
 
 #endif /* MTIM_H_ */

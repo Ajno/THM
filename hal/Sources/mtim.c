@@ -7,9 +7,44 @@
 
 #include <derivative.h>
 #include "mtim.h"
+#include <stdtypes.h>
+
+static Bool bIsrClbckInstalled = FALSE;
+static pMtimInterruptCallback_t pIsrClbck;
+
+void mtimResetCounter()
+{
+    MTIMSC_TSTP = 0; // start the counter
+}
+
+Byte mtimReadCounter()
+{
+    return MTIMCNT;
+}
+
+void mtimInstallIsrCallback(pMtimInterruptCallback_t const pcIsrClbck)
+{
+    if (0 != pcIsrClbck)
+    {
+        pIsrClbck = pcIsrClbck;
+        bIsrClbckInstalled = TRUE;
+    }
+}
 
 void mtimConfigure()
 {
     MTIMCLK_CLKS = 3; // External source (TCLK pin), rising edge
-    //todo
+    MTIMSC_TOIE = 1; // interrupts are enabled
+    mtimResetCounter();
+}
+
+static void __interrupt VectorNumber_Vmtim isr_timerOverflow(void)
+{
+    if (bIsrClbckInstalled)
+    {
+        (*pIsrClbck)();
+    }
+    
+    (void)(MTIMSC == 0x00); // Overflow int. flag clearing (first part) 
+    MTIMSC_TOF=0;// Overflow int. flag clearing (second part) 
 }

@@ -4,6 +4,8 @@
 #include "display.h"
 #include "buttons.h"
 #include "pwr_mgmt.h"
+#include "temperature.h"
+#include "oscillator.h"
 
 static pAppCallback_t pApp;
 
@@ -23,6 +25,7 @@ void main(void)
 	buttonsInit();
 	pwrMgmtInit();
 	temperatureInit();
+	oscillatorInit();
 	baseInitApp();
 	
 	for (;;)

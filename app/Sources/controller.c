@@ -18,7 +18,7 @@
 static const Word cAwakeTimeSec = 10;
 static const Word cScreenShiftTimeMiliSec = 50;
 static const Word cMenuActivationTimeMiliSec = 2000;
-static const Word cTemperatureSamplingMiliSecX100 = 3; // 300 ms
+static const Word cTemperatureSamplingMiliSecX100 = 5; // 500 ms
 static const Word cContrastIncrement = 5;
 
 static Bool                     bBacklightOn = FALSE;

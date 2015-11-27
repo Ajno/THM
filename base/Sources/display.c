@@ -33,6 +33,10 @@ static void displayPrepareBusForWrite()
     Byte portB = 0;
     ioConfig_t pinCfg;
     
+    // clear port B except backlight
+    ioReadPortB(&portB);
+    portB = portB & cMask_Backligh;
+    ioWritePortB(portB);
     if (!bDataBusConfiguredAsOutput)
     {
         pinCfg.bOutput = TRUE;
@@ -43,10 +47,6 @@ static void displayPrepareBusForWrite()
         ioConfigure(cDisplayBus_DB7,pinCfg);
         bDataBusConfiguredAsOutput = pinCfg.bOutput;
     }
-    // clear port B except backlight
-    ioReadPortB(&portB);
-    portB = portB & cMask_Backligh;
-    ioWritePortB(portB);
 }
 
 static void displayToggleEnable()
@@ -345,6 +345,7 @@ void displayInit()
     const Word cChannelValue = (pwmReadModulo() * cDutyCycle) / 1000;
 
     pinCfg.bOutput = TRUE;
+    pinCfg.bPullUp = FALSE;
     ioConfigurePortB(pinCfg);
     bDataBusConfiguredAsOutput = TRUE;
 

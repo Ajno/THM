@@ -25,7 +25,6 @@ void adcConfigure()
 //    3. Update status and control register 1 (ADCSC1) to select whether conversions will be continuous
 //    or completed only once, and to enable or disable conversion complete interrupts. The input channel
 //    on which conversions will be performed is also selected here.
-    ADCSC1_ADCH = cAdcChnnl_A3;// default adc channel
     APCTL1_ADPC3 = 1; // IO control for pin A3 disabled
 }
 

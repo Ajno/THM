@@ -19,7 +19,7 @@ void test_adc_run()
     static Word tempSensorInternal = 0;
     static Word vdd = 0;
     
-    tempSensorExternal = adcSampleChannel(cAdcChnnl_A3);
-    tempSensorInternal = adcSampleChannel(cAdcChnnl_tempSensor);
-    vdd = adcSampleChannel(cAdcChnnl_vdd);
+    tempSensorExternal = adcChannelSample(cAdcChnnl_A3);
+    tempSensorInternal = adcChannelSample(cAdcChnnl_tempSensor);
+    vdd = adcChannelSample(cAdcChnnl_vdd);
 }

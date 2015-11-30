@@ -6,6 +6,7 @@
  */
 
 #include "oscillator_test.h"
+#include "timer.h"
 
 void test_oscillator_init()
 {
@@ -16,5 +17,9 @@ void test_oscillator_run()
 {
     static Word oscillator = 0;
     
-    oscillator = oscillatorRead();
+    if (timerElapsedSec()) 
+    {
+        oscillator = oscillatorReadAndClear();
+        timerRestartSec(50);
+    }
 }

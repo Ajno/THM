@@ -8,13 +8,10 @@
 #include "oscillator.h"
 #include "mtim.h"
 
-typedef union
-{
-    Word value;
-    Byte bytes[2];
-}oscillator_t;
-
-static oscillator_t oscillator;
+static const Word cInc = 0x0100; // 256
+static const Word cLimit = 0xff00; // 65280
+static Word oscillator = 0;
+static Bool bClearOscillator = FALSE;
 
 /*
  * read number of oscillations since last read,
@@ -22,28 +19,36 @@ static oscillator_t oscillator;
  * read the number of oscillations at least 
  * once per 1,1 sec to prevent undersampling
  */
-Word oscillatorRead()
+Word oscillatorReadAndClear()
 {
-    oscillator.bytes[0] = mtimReadCounter();
-    return oscillator.value;
+    Word oscillatorRet = oscillator;
+    
+    if (bClearOscillator)
+    {
+        oscillatorRet = 0;
+    }
+    oscillatorRet += mtimReadCounter();        
+    bClearOscillator = TRUE;    
+    
+    return oscillatorRet;
 }
 
 void counterIsrCallback()
 {
-    oscillator.bytes[0] = 0;
-    if (255 > oscillator.bytes[1])
-    {        
-        oscillator.bytes[1]++;
+    if ((bClearOscillator) || (cLimit <= oscillator))
+    {
+        oscillator = cInc;
+        bClearOscillator = FALSE;
     }
     else
     {
-        oscillator.bytes[1] = 0;
+        oscillator += cInc;        
     }
 }
 
 void oscillatorInit()
 {
     mtimConfigure();// counter is started here
-    oscillator.value = 0;
+    oscillator = 0;
     mtimInstallIsrCallback(&counterIsrCallback);
 }

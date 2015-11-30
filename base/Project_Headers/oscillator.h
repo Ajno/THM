@@ -20,7 +20,7 @@ void oscillatorInit();
  * read the number of oscillations at least 
  * once per 1,1 sec to prevent undersampling
  */
-Word oscillatorRead();
+Word oscillatorReadAndClear();
 
 #ifdef __cplusplus
 }

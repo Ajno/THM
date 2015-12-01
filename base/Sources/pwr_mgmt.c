@@ -8,6 +8,7 @@
 #include "pwr_mgmt.h"
 #include "system.h"
 #include "kbi.h"
+#include "io.h"
 
 void pwrMgmtInit()
 {
@@ -26,14 +27,15 @@ void pwrMgmtInit()
 
 void pwrMgmtGoToSleep(const Bool bDeepSleep)
 {
-    kbiConfig_t cfg;
-    cfg.bPullUp = TRUE;
-    cfg.bRisingEdge = FALSE;
+    kbiConfig_t cfgKbi;
     
     if (bDeepSleep) 
-    {
-        kbiConfigure(cKbiIn_P1, cfg);
-        kbiConfigure(cKbiIn_P2, cfg);
+    {        
+        // configure keyboard interrupt to make wake up possible
+        cfgKbi.bPullUp = TRUE;
+        cfgKbi.bRisingEdge = FALSE;
+        kbiConfigure(cKbiIn_P1, cfgKbi);
+        kbiConfigure(cKbiIn_P2, cfgKbi);
         systemStop();
     } 
     else 

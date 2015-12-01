@@ -12,17 +12,18 @@
 
 typedef enum
 {
-	cPin_A1	= 0,
-	cPin_A2	= 1,
-	cPin_A3	= 2,
-	cPin_B0	= 3,
-	cPin_B1	= 4,
-	cPin_B2	= 5,
-	cPin_B3	= 6,
-	cPin_B4	= 7,
-	cPin_B5	= 8,
-	cPin_B6	= 9,
-	cPin_B7	= 10
+    cPin_A0 = 0,
+	cPin_A1	= 1,
+	cPin_A2	= 2,
+	cPin_A3	= 3,
+	cPin_B0	= 4,
+	cPin_B1	= 5,
+	cPin_B2	= 6,
+	cPin_B3	= 7,
+	cPin_B4	= 8,
+	cPin_B5	= 9,
+	cPin_B6	= 10,
+	cPin_B7	= 11
 } io_t;
 
 typedef struct

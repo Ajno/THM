@@ -12,6 +12,7 @@ static const Byte cByteMax = 0xFF;
 
 static const Byte cIoIdx2IoMask[cPin_B7 + 1] = 
 {
+    PTAD_PTAD0_MASK,
     PTAD_PTAD1_MASK,
     PTAD_PTAD2_MASK,
     PTAD_PTAD3_MASK,

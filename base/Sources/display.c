@@ -338,6 +338,28 @@ static void displayFirstStart()
     displayEntryModeSet(dirSetting);
 }
 
+//todo
+void displayPrepareForSleep()
+{
+    ioConfig_t pinCfg;
+    
+    pinCfg.bOutput = FALSE;
+    pinCfg.bPullUp = TRUE;
+    ioConfigure(cDisplayBus_E,pinCfg);
+    
+    pinCfg.bOutput = FALSE;
+    pinCfg.bPullUp = FALSE;
+    ioConfigure(cDisplayBus_RS,pinCfg);
+    ioConfigure(cDisplayBus_RW,pinCfg);
+    
+    pinCfg.bOutput = FALSE;
+    pinCfg.bPullUp = FALSE;
+    ioConfigure(cDisplayBus_DB4,pinCfg);
+    ioConfigure(cDisplayBus_DB5,pinCfg);
+    ioConfigure(cDisplayBus_DB6,pinCfg);
+    ioConfigure(cDisplayBus_DB7,pinCfg);
+}
+
 void displayInit()
 {
     ioConfig_t pinCfg;

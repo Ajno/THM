@@ -13,6 +13,8 @@ extern "C" {
 
 #include <stdtypes.h>
 
+typedef void (*pWakeUpCallback_t)(void);
+
 typedef enum
 {
     cPwrMgmtResetSource_unknown,
@@ -24,7 +26,7 @@ typedef enum
     cPwrMgmtResetSource_lowVoltage
 }pwrMgmtRecentresetSource_t;
 
-void pwrMgmtInit();
+void pwrMgmtInit(pWakeUpCallback_t pWakeUpCallback);
 void pwrMgmtGoToSleep(const Bool bDeepSleep);
 void pwrMgmtGetRecentResetSource(pwrMgmtRecentresetSource_t* pSource);
 

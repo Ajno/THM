@@ -42,6 +42,7 @@ void displayMoveCursor(const Byte cAddress);
 void displayWrite(const char* pString);
 void displaySetContrast(const Word cContrast);
 Word displayGetContrast();
+void displayPrepareForSleep();
 
 #ifdef __cplusplus
 }

@@ -10,7 +10,16 @@
 #include "kbi.h"
 #include "io.h"
 
-void pwrMgmtInit()
+static pWakeUpCallback_t pIsrClbck;
+
+static void wakeUpRoutine()
+{
+    // todo null
+    pIsrClbck();
+    kbiDisable();
+}
+
+void pwrMgmtInit(pWakeUpCallback_t pWakeUpCallback)
 {
     systemConfig_t cfg;
     
@@ -22,7 +31,9 @@ void pwrMgmtInit()
     cfg.bLowVoltageWarningPointHigh = TRUE;
     systemConfigure(cfg);
     
-    kbiInstallIsrCallback(&kbiDisable);
+    // todo null
+    pIsrClbck = pWakeUpCallback;
+    kbiInstallIsrCallback(&wakeUpRoutine);
 }
 
 void pwrMgmtGoToSleep(const Bool bDeepSleep)

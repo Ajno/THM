@@ -166,6 +166,7 @@ void onElapsedLongTimer()
         displayOnOff.bDisplayOn = FALSE;
         displayOnOffControl(displayOnOff);
         menu = cMenuState_sleep;
+        displayPrepareForSleep();
         pwrMgmtGoToSleep(TRUE);
     }
 }

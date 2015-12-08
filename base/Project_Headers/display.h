@@ -43,6 +43,7 @@ void displayWrite(const char* pString);
 void displaySetContrast(const Word cContrast);
 Word displayGetContrast();
 void displayPrepareForSleep();
+void displayWakeUpCallback();
 
 #ifdef __cplusplus
 }

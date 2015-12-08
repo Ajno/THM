@@ -90,7 +90,7 @@ static void displayReadBusyAndAddress(Bool* pBusy, Byte* pAddress)
     ioRead(cDisplayBus_DB7, pBusy);
     ioReadPortB(&upperBits);
     // clear enable
-    ioWrite(cDisplayBus_E,TRUE);
+    ioWrite(cDisplayBus_E,FALSE);
     wait500ns();
     
     // set enable
@@ -99,7 +99,7 @@ static void displayReadBusyAndAddress(Bool* pBusy, Byte* pAddress)
     // read lower 4 bits
     ioReadPortB(&lowerBits); 
     // clear enable
-    ioWrite(cDisplayBus_E,TRUE);
+    ioWrite(cDisplayBus_E,FALSE);
     wait500ns();
     
     upperBits = ((upperBits << 4) & 0x70);
@@ -338,19 +338,15 @@ static void displayFirstStart()
     displayEntryModeSet(dirSetting);
 }
 
-//todo
 void displayPrepareForSleep()
 {
     ioConfig_t pinCfg;
     
-    pinCfg.bOutput = FALSE;
-    pinCfg.bPullUp = TRUE;
-    ioConfigure(cDisplayBus_E,pinCfg);
+    displayWaitTillNotBusy();
     
-    pinCfg.bOutput = FALSE;
-    pinCfg.bPullUp = FALSE;
-    ioConfigure(cDisplayBus_RS,pinCfg);
-    ioConfigure(cDisplayBus_RW,pinCfg);
+    // these pins have external pullup 
+    ioWrite(cDisplayBus_RS, TRUE);
+    ioWrite(cDisplayBus_RW, TRUE);
     
     pinCfg.bOutput = FALSE;
     pinCfg.bPullUp = FALSE;
@@ -358,6 +354,12 @@ void displayPrepareForSleep()
     ioConfigure(cDisplayBus_DB5,pinCfg);
     ioConfigure(cDisplayBus_DB6,pinCfg);
     ioConfigure(cDisplayBus_DB7,pinCfg);
+    bDataBusConfiguredAsOutput = FALSE;
+}
+
+void displayWakeUpCallback()
+{
+// todo delete this if not necessary
 }
 
 void displayInit()

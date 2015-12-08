@@ -14,8 +14,10 @@ static pWakeUpCallback_t pIsrClbck;
 
 static void wakeUpRoutine()
 {
-    // todo null
-    pIsrClbck();
+    if (0 != pIsrClbck)
+    {        
+        pIsrClbck();
+    }
     kbiDisable();
 }
 
@@ -31,7 +33,6 @@ void pwrMgmtInit(pWakeUpCallback_t pWakeUpCallback)
     cfg.bLowVoltageWarningPointHigh = TRUE;
     systemConfigure(cfg);
     
-    // todo null
     pIsrClbck = pWakeUpCallback;
     kbiInstallIsrCallback(&wakeUpRoutine);
 }

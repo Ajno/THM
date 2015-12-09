@@ -5,8 +5,8 @@
  *      Author: Jano
  */
 
-#ifndef DISPLAY_TEST_H_
-#define DISPLAY_TEST_H_
+#ifndef LCD_TEST_H_
+#define LCD_TEST_H_
 
 #include <string>
 #include <lcd.h>

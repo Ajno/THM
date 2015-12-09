@@ -5,8 +5,8 @@
  *      Author: z0037ysj
  */
 
-#ifndef DISPLAY_H_
-#define DISPLAY_H_
+#ifndef LCD_H_
+#define LCD_H_
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -21,9 +21,9 @@ void main(void)
 {
 	systemEnableInterrupts();
 	timersInit();
-	displayInit();
+	lcdInit();
 	buttonsInit();
-	pwrMgmtInit(&displayWakeUpCallback);
+	pwrMgmtInit(&lcdWakeUpCallback);
 	temperatureInit();
 	oscillatorInit();
 	baseInitApp();

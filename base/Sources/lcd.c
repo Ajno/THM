@@ -12,14 +12,14 @@
 
 enum displayBus_t
 {
-    cDisplayBus_DB4         = cPin_B0,
-    cDisplayBus_DB5         = cPin_B1,
-    cDisplayBus_DB6         = cPin_B2,
-    cDisplayBus_DB7         = cPin_B3,
-    cDisplayBus_backLight   = cPin_B4,
-    cDisplayBus_E           = cPin_B5,
-    cDisplayBus_RW          = cPin_B6,
-    cDisplayBus_RS          = cPin_B7
+    cLcdBus_DB4         = cPin_B0,
+    cLcdBus_DB5         = cPin_B1,
+    cLcdBus_DB6         = cPin_B2,
+    cLcdBus_DB7         = cPin_B3,
+    cLcdBus_backLight   = cPin_B4,
+    cLcdBus_E           = cPin_B5,
+    cLcdBus_RW          = cPin_B6,
+    cLcdBus_RS          = cPin_B7
 };
 
 static const Word cDutyCycle = 45;// 4,5% duty cycle
@@ -28,7 +28,7 @@ static const Word cContrastToDutyCycleOffset = 28;
 static const Word cDutyCycleToContrastQuotient = 5;
 static Bool bDataBusConfiguredAsOutput = FALSE;
 
-static void displayPrepareBusForWrite()
+static void lcdPrepareBusForWrite()
 {
     Byte portB = 0;
     ioConfig_t pinCfg;
@@ -41,27 +41,27 @@ static void displayPrepareBusForWrite()
     {
         pinCfg.bOutput = TRUE;
         pinCfg.bPullUp = FALSE;
-        ioConfigure(cDisplayBus_DB4,pinCfg);
-        ioConfigure(cDisplayBus_DB5,pinCfg);
-        ioConfigure(cDisplayBus_DB6,pinCfg);
-        ioConfigure(cDisplayBus_DB7,pinCfg);
+        ioConfigure(cLcdBus_DB4,pinCfg);
+        ioConfigure(cLcdBus_DB5,pinCfg);
+        ioConfigure(cLcdBus_DB6,pinCfg);
+        ioConfigure(cLcdBus_DB7,pinCfg);
         bDataBusConfiguredAsOutput = pinCfg.bOutput;
     }
 }
 
-static void displayToggleEnable()
+static void lcdToggleEnable()
 {
     // set enable
-    ioWrite(cDisplayBus_E,TRUE);
+    ioWrite(cLcdBus_E,TRUE);
     // wait
     wait500ns();
     // clear enable
-    ioWrite(cDisplayBus_E,FALSE);
+    ioWrite(cLcdBus_E,FALSE);
     // wait
     wait500ns();
 }
 
-static void displayReadBusyAndAddress(Bool* pBusy, Byte* pAddress)
+static void lcdReadBusyAndAddress(Bool* pBusy, Byte* pAddress)
 {
     ioConfig_t pinCfg;
     Byte upperBits = 0;
@@ -72,79 +72,79 @@ static void displayReadBusyAndAddress(Bool* pBusy, Byte* pAddress)
         // configure data bits as inputs
         pinCfg.bOutput = FALSE;
         pinCfg.bPullUp = FALSE;
-        ioConfigure(cDisplayBus_DB4,pinCfg);
-        ioConfigure(cDisplayBus_DB5,pinCfg);
-        ioConfigure(cDisplayBus_DB6,pinCfg);
-        ioConfigure(cDisplayBus_DB7,pinCfg);
+        ioConfigure(cLcdBus_DB4,pinCfg);
+        ioConfigure(cLcdBus_DB5,pinCfg);
+        ioConfigure(cLcdBus_DB6,pinCfg);
+        ioConfigure(cLcdBus_DB7,pinCfg);
         bDataBusConfiguredAsOutput = pinCfg.bOutput;
     }
     // clear RS
-    ioWrite(cDisplayBus_RS,FALSE);
+    ioWrite(cLcdBus_RS,FALSE);
     // set RW
-    ioWrite(cDisplayBus_RW,TRUE);
+    ioWrite(cLcdBus_RW,TRUE);
     wait500ns();
     // set enable
-    ioWrite(cDisplayBus_E,TRUE);
+    ioWrite(cLcdBus_E,TRUE);
     wait500ns();
     // read upper 4 bits
-    ioRead(cDisplayBus_DB7, pBusy);
+    ioRead(cLcdBus_DB7, pBusy);
     ioReadPortB(&upperBits);
     // clear enable
-    ioWrite(cDisplayBus_E,FALSE);
+    ioWrite(cLcdBus_E,FALSE);
     wait500ns();
     
     // set enable
-    ioWrite(cDisplayBus_E,TRUE);
+    ioWrite(cLcdBus_E,TRUE);
     wait500ns();
     // read lower 4 bits
     ioReadPortB(&lowerBits); 
     // clear enable
-    ioWrite(cDisplayBus_E,FALSE);
+    ioWrite(cLcdBus_E,FALSE);
     wait500ns();
     
     upperBits = ((upperBits << 4) & 0x70);
     *pAddress = (lowerBits & 0x0F) | (upperBits & 0xF0);
 }
 
-static void displayWaitTillNotBusy()
+static void lcdWaitTillNotBusy()
 {
     Bool bBusy = TRUE;
     Byte address = 0;
     
     do
     {
-        displayReadBusyAndAddress(&bBusy, &address);
+        lcdReadBusyAndAddress(&bBusy, &address);
     } while (bBusy);
 }
 
-void displayClear()
+void lcdClear()
 {
-    displayPrepareBusForWrite();
-    displayToggleEnable();
+    lcdPrepareBusForWrite();
+    lcdToggleEnable();
     
     // set bit 0
-    ioWrite(cDisplayBus_DB4, TRUE);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB4, TRUE);
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-void displayReturnHome()
+void lcdReturnHome()
 {
-    displayPrepareBusForWrite();
-    displayToggleEnable();
+    lcdPrepareBusForWrite();
+    lcdToggleEnable();
     
     // set bit 1
-    ioWrite(cDisplayBus_DB5, TRUE);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB5, TRUE);
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-void displayOnOffControl(const displayOnOffControl_t cControl)
+void lcdOnOffControl(const lcdOnOffControl_t cControl)
 {
-    displayPrepareBusForWrite();
-    displayToggleEnable();
+    lcdPrepareBusForWrite();
+    lcdToggleEnable();
     
     /* 
      * write lower 4 bits
@@ -153,216 +153,216 @@ void displayOnOffControl(const displayOnOffControl_t cControl)
      * set bit C in X
      * set bit B in X
      * */
-    ioWrite(cDisplayBus_DB7,TRUE);
-    ioWrite(cDisplayBus_DB6,cControl.bDisplayOn);
-    ioWrite(cDisplayBus_DB5,cControl.bCursorOn);
-    ioWrite(cDisplayBus_DB4,cControl.bBlinkingCursor);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB7,TRUE);
+    ioWrite(cLcdBus_DB6,cControl.bLcdOn);
+    ioWrite(cLcdBus_DB5,cControl.bCursorOn);
+    ioWrite(cLcdBus_DB4,cControl.bBlinkingCursor);
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-void displayOrCursorShift(const displayMovingDirection_t cSetting)
+void lcdScreenOrCursorShift(const lcdMovingDirection_t cSetting)
 {
-    displayPrepareBusForWrite();
-    ioWrite(cDisplayBus_DB4, TRUE);
-    displayToggleEnable();
+    lcdPrepareBusForWrite();
+    ioWrite(cLcdBus_DB4, TRUE);
+    lcdToggleEnable();
     
     // write lower 4 bits, set S/C, set R/L
-    ioWrite(cDisplayBus_DB7, cSetting.bShiftScreenInsteadOfCursor);
-    ioWrite(cDisplayBus_DB6, cSetting.bShiftRightInsteadOfLeft);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB7, cSetting.bShiftScreenInsteadOfCursor);
+    ioWrite(cLcdBus_DB6, cSetting.bShiftRightInsteadOfLeft);
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-static void displayFunctionSet()
+static void lcdFunctionSet()
 {
-    displayPrepareBusForWrite();
+    lcdPrepareBusForWrite();
     // set bit 1 of higher byte
-    ioWrite(cDisplayBus_DB5,TRUE);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB5,TRUE);
+    lcdToggleEnable();
     
     // write lower 4 bits, set bit N in X,  bit F has no meaning when N is set
-    ioWrite(cDisplayBus_DB7,TRUE);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB7,TRUE);
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-void displayEntryModeSet(const displayMovingDirection_t cSetting)
+void lcdEntryModeSet(const lcdMovingDirection_t cSetting)
 {
-    displayPrepareBusForWrite();
+    lcdPrepareBusForWrite();
     // set bit 2 in higher 4 bits
-    ioWrite(cDisplayBus_DB6,TRUE);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB6,TRUE);
+    lcdToggleEnable();
     
     // write lower 4 bits, set bit ID, set bit S
-    ioWrite(cDisplayBus_DB5, cSetting.bShiftRightInsteadOfLeft);
-    ioWrite(cDisplayBus_DB4,cSetting.bShiftScreenInsteadOfCursor);
-    displayToggleEnable();
+    ioWrite(cLcdBus_DB5, cSetting.bShiftRightInsteadOfLeft);
+    ioWrite(cLcdBus_DB4,cSetting.bShiftScreenInsteadOfCursor);
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-static void displayWriteDDRAM(const Byte cData)
+static void lcdWriteDDRAM(const Byte cData)
 {
     Byte portB = 0;
     
-    displayPrepareBusForWrite();
+    lcdPrepareBusForWrite();
     // set RS
-    ioWrite(cDisplayBus_RS, TRUE);
+    ioWrite(cLcdBus_RS, TRUE);
     // write upper 4 bits
     ioReadPortB(&portB);
     portB = portB | ((cData >> 4) & 0x0F);
     ioWritePortB(portB);
-    displayToggleEnable();
+    lcdToggleEnable();
     
     // write lower 4 bits
     portB = portB & 0xF0;
     portB = portB | (cData & 0x0F);
     ioWritePortB(portB);
-    displayToggleEnable();
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-void displayMoveCursor(const Byte cAddress)
+void lcdMoveCursor(const Byte cAddress)
 {
     Byte portB = 0;
     
-    displayPrepareBusForWrite();
+    lcdPrepareBusForWrite();
     // set bit 4 in higher 4 bits
-    ioWrite(cDisplayBus_DB7,TRUE);
+    ioWrite(cLcdBus_DB7,TRUE);
     // write upper 4 bits
     ioReadPortB(&portB);
     portB |= ((cAddress >> 4) & 0x07);
     ioWritePortB(portB);
-    displayToggleEnable();
+    lcdToggleEnable();
     
     // write lower 4 bits
     portB = portB & 0xF0;
     portB |= (cAddress & 0x0F);
     ioWritePortB(portB);
-    displayToggleEnable();
+    lcdToggleEnable();
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
 }
 
-void displayWrite(const char* pString)
+void lcdWrite(const char* pString)
 {
 	Byte i;
 	
 	for (i = 0; pString[i] != 0; ++i) 
 	{
-		displayWriteDDRAM(pString[i]);
-		displayWaitTillNotBusy();
+		lcdWriteDDRAM(pString[i]);
+		lcdWaitTillNotBusy();
 	}
 }
 
-void displaySetContrast(const Word cContrast)
+void lcdSetContrast(const Word cContrast)
 {
     Word dutyCycle = cContrast;
-    if (cDisplayMaxContrast < cContrast) 
+    if (cLcdMaxContrast < cContrast) 
     {                
-        dutyCycle = cDisplayMaxContrast;
+        dutyCycle = cLcdMaxContrast;
     }
     
     dutyCycle = cContrastToDutyCycleOffset + (dutyCycle / cDutyCycleToContrastQuotient);
     pwmWriteChannel(dutyCycle);
     
 }
-Word displayGetContrast()
+Word lcdGetContrast()
 {
     Word ret = pwmReadChannel();
     ret = (ret - cContrastToDutyCycleOffset) * cDutyCycleToContrastQuotient;
     return ret;
 }
 
-void displayBackLightOn(const Bool bBackLightOn)
+void lcdBackLightOn(const Bool bBackLightOn)
 {
-    ioWrite(cDisplayBus_backLight, bBackLightOn);
+    ioWrite(cLcdBus_backLight, bBackLightOn);
 }
 
-static void displayFirstStart()
+static void lcdFirstStart()
 {
-    displayOnOffControl_t onOffSetting;
-    displayMovingDirection_t dirSetting;
+    lcdOnOffControl_t onOffSetting;
+    lcdMovingDirection_t dirSetting;
     
     // wait 45 ms
     waitX100us(450);
         
     // write DB5 DB4
-    displayPrepareBusForWrite();
-    ioWrite(cDisplayBus_DB5, TRUE);
-    ioWrite(cDisplayBus_DB4, TRUE);
-    displayToggleEnable();
+    lcdPrepareBusForWrite();
+    ioWrite(cLcdBus_DB5, TRUE);
+    ioWrite(cLcdBus_DB4, TRUE);
+    lcdToggleEnable();
     
     // wait 5 ms
     waitX100us(50);
     
     // write DB5 DB4
-    displayToggleEnable();
+    lcdToggleEnable();
     
     // wait 0,5 ms
     waitX100us(5);
     
     // write DB5 DB4
-    displayToggleEnable();
+    lcdToggleEnable();
     
     //Function set (Set interface to be 4 bits long.)
     //Interface is 8 bits in length.
     // write upper 4 bits
-    ioWrite(cDisplayBus_DB4, FALSE);
-    displayToggleEnable();
-    displayWaitTillNotBusy();
+    ioWrite(cLcdBus_DB4, FALSE);
+    lcdToggleEnable();
+    lcdWaitTillNotBusy();
     
     //Function set (Interface is 4 bits long. Specify the
     //number of display lines and character font.)
     //The number of display lines and character font
     //cannot be changed after this point.
-    displayFunctionSet();
+    lcdFunctionSet();
     
     //Display off
-    onOffSetting.bDisplayOn = FALSE;
+    onOffSetting.bLcdOn = FALSE;
     onOffSetting.bCursorOn = FALSE;
     onOffSetting.bBlinkingCursor = FALSE;
-    displayOnOffControl(onOffSetting);
+    lcdOnOffControl(onOffSetting);
     
     //Display clear
-    displayClear();
+    lcdClear();
     
     //Entry mode set
     dirSetting.bShiftRightInsteadOfLeft = TRUE;
     dirSetting.bShiftScreenInsteadOfCursor = FALSE;
-    displayEntryModeSet(dirSetting);
+    lcdEntryModeSet(dirSetting);
 }
 
-void displayPrepareForSleep()
+void lcdPrepareForSleep()
 {
     ioConfig_t pinCfg;
     
-    displayWaitTillNotBusy();
+    lcdWaitTillNotBusy();
     
     // these pins have external pullup 
-    ioWrite(cDisplayBus_RS, TRUE);
-    ioWrite(cDisplayBus_RW, TRUE);
+    ioWrite(cLcdBus_RS, TRUE);
+    ioWrite(cLcdBus_RW, TRUE);
     
     pinCfg.bOutput = FALSE;
     pinCfg.bPullUp = FALSE;
-    ioConfigure(cDisplayBus_DB4,pinCfg);
-    ioConfigure(cDisplayBus_DB5,pinCfg);
-    ioConfigure(cDisplayBus_DB6,pinCfg);
-    ioConfigure(cDisplayBus_DB7,pinCfg);
+    ioConfigure(cLcdBus_DB4,pinCfg);
+    ioConfigure(cLcdBus_DB5,pinCfg);
+    ioConfigure(cLcdBus_DB6,pinCfg);
+    ioConfigure(cLcdBus_DB7,pinCfg);
     bDataBusConfiguredAsOutput = FALSE;
 }
 
-void displayWakeUpCallback()
+void lcdWakeUpCallback()
 {
 // todo delete this if not necessary
 }
 
-void displayInit()
+void lcdInit()
 {
     ioConfig_t pinCfg;
     pwmChannelConfig_t chnlCfg;
@@ -377,5 +377,5 @@ void displayInit()
     pwmConfigureChannel(chnlCfg);
     pwmWriteChannel(cChannelValue);
     
-    displayFirstStart();
+    lcdFirstStart();
 }

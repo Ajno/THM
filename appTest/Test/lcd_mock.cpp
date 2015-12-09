@@ -1,56 +1,56 @@
 /*
- * display_test.cpp
+ * lcd_mock.cpp
  *
  *  Created on: 3.10.2015
  *      Author: Jano
  */
 
-#include <display_mock.h>
-#include <display.h>
+#include <lcd_mock.h>
+#include <lcd.h>
 
 static bool bBacklightIsOn = false;
-static bool bDisplayOn = false;
+static bool bLcdOn = false;
 static Word contrast = 0;
-static DisplayMock::screen_t screen = {"", 0};
-static DisplayMock::cursor_t cursor = {DisplayMock::cCursor_off, 0};
+static LcdMock::screen_t screen = {"", 0};
+static LcdMock::cursor_t cursor = {LcdMock::cCursor_off, 0};
 
-extern "C" void displayBackLightOn(const Bool bBackLightOn)
+extern "C" void lcdBackLightOn(const Bool bBackLightOn)
 {
 	bBacklightIsOn = bBackLightOn;
 }
 
-extern "C" void displayOnOffControl(const displayOnOffControl_t cControl)
+extern "C" void lcdOnOffControl(const lcdOnOffControl_t cControl)
 {
-	bDisplayOn = cControl.bDisplayOn;
+	bLcdOn = cControl.bLcdOn;
 	if (cControl.bBlinkingCursor && cControl.bCursorOn)
 	{
-		cursor.state = DisplayMock::cCursor_blinking;
+		cursor.state = LcdMock::cCursor_blinking;
 	}
 	else if (cControl.bCursorOn)
 	{
-	    cursor.state = DisplayMock::cCursor_on;
+	    cursor.state = LcdMock::cCursor_on;
 	}
 	else
 	{
-	    cursor.state = DisplayMock::cCursor_off;
+	    cursor.state = LcdMock::cCursor_off;
 	}
 }
 
-extern "C" void displayClear()
+extern "C" void lcdClear()
 {
     screen.text = "";
     screen.position = 0;
     cursor.position = 0;
 }
 
-extern "C" void displayWrite(const char* pString)
+extern "C" void lcdWrite(const char* pString)
 {
     string str(pString);
     screen.text.replace(cursor.position, str.length(), str);
     cursor.position += str.length();
 }
 
-extern "C" void displayOrCursorShift(const displayMovingDirection_t cSetting)
+extern "C" void lcdScreenOrCursorShift(const lcdMovingDirection_t cSetting)
 {
     if (cSetting.bShiftRightInsteadOfLeft)
     {
@@ -76,52 +76,52 @@ extern "C" void displayOrCursorShift(const displayMovingDirection_t cSetting)
     }
 }
 
-extern "C" void displayMoveCursor(const Byte cAddress)
+extern "C" void lcdMoveCursor(const Byte cAddress)
 {
     cursor.position = static_cast<int>(cAddress);
 }
 
-extern "C" void displaySetContrast(const Word cContrast)
+extern "C" void lcdSetContrast(const Word cContrast)
 {
     contrast = cContrast;
 }
 
-extern "C" Word displayGetContrast()
+extern "C" Word lcdGetContrast()
 {
     return contrast;
 }
 
-extern "C" void displayPrepareForSleep()
+extern "C" void lcdPrepareForSleep()
 {
 }
 
-DisplayMock::DisplayMock()
+LcdMock::LcdMock()
 {
 	bBacklightIsOn = false;
-	bDisplayOn = false;
+	bLcdOn = false;
 	screen.text = "idkfa iddqd";
 	screen.position = 0;
-	cursor.state = DisplayMock::cCursor_off;
+	cursor.state = LcdMock::cCursor_off;
 	cursor.position = 0;
 	contrast = 0;
 }
 
-bool DisplayMock::backlightIsOn()
+bool LcdMock::backlightIsOn()
 {
 	return bBacklightIsOn;
 }
 
-bool DisplayMock::displayIsOn()
+bool LcdMock::lcdIsOn()
 {
-	return bDisplayOn;
+	return bLcdOn;
 }
 
-DisplayMock::cursor_t DisplayMock::getCursor()
+LcdMock::cursor_t LcdMock::getCursor()
 {
 	return cursor;
 }
 
-DisplayMock::screen_t DisplayMock::getScreen()
+LcdMock::screen_t LcdMock::getScreen()
 {
     return screen;
 }

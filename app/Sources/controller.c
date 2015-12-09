@@ -23,15 +23,15 @@ static const Word cContrastIncrement = 5;
 
 static Bool                     bBacklightOn = FALSE;
 static Byte                     cntrBacklightToggle = cNumOfBacklightToggle;
-static displayOnOffControl_t    displayOnOff;
-static displayMovingDirection_t displayDirection;
+static lcdOnOffControl_t    lcdOnOff;
+static lcdMovingDirection_t lcdDirection;
 static Byte                     screenShifts = 0;
 static Word                     contrast = 75;
 static menuState_t              menu = cMenuState_idle1;
 
 static void screenShift()
 {
-    displayOrCursorShift(displayDirection);
+    lcdScreenOrCursorShift(lcdDirection);
     screenShifts++;
     timerRestartMiliSec(cScreenShiftTimeMiliSec);
 }
@@ -41,17 +41,17 @@ void backlightOn()
     if (!bBacklightOn)
     {
         bBacklightOn = TRUE;
-        displayBackLightOn(bBacklightOn);
+        lcdBackLightOn(bBacklightOn);
     }
 }
 
 void contrastUpdateOnScreen()
 {
-    displayMoveCursor(cContrastPositionOnScreen);
-    displayWrite("    ");
-    displayMoveCursor(cContrastPositionOnScreen);
-    displayWrite(thmLibItoa(contrast));
-    displayWrite("%");
+    lcdMoveCursor(cContrastPositionOnScreen);
+    lcdWrite("    ");
+    lcdMoveCursor(cContrastPositionOnScreen);
+    lcdWrite(thmLibItoa(contrast));
+    lcdWrite("%");
 }
 
 void temperatureUpdateOnScreen()
@@ -59,50 +59,50 @@ void temperatureUpdateOnScreen()
     sWord temperatureRaw = 0;
 
     // get cursor    
-    displayMoveCursor(cTemperaturePositionOnSreen);
-    displayWrite("    ");
-    displayMoveCursor(cTemperaturePositionOnSreen);
+    lcdMoveCursor(cTemperaturePositionOnSreen);
+    lcdWrite("    ");
+    lcdMoveCursor(cTemperaturePositionOnSreen);
     temperatureRaw = temperatureRead();
-    displayWrite(thmLibItoa(temperatureRaw / 10));
-    displayWrite(",");
+    lcdWrite(thmLibItoa(temperatureRaw / 10));
+    lcdWrite(",");
     if (0 > temperatureRaw)
     {
         temperatureRaw = -temperatureRaw;
     }
-    displayWrite(thmLibItoa(temperatureRaw % 10));
-    displayWrite(&cDisplayDegreeSymbol);
-    displayWrite("C");
+    lcdWrite(thmLibItoa(temperatureRaw % 10));
+    lcdWrite(&cLcdDegreeSymbol);
+    lcdWrite("C");
     // set cursor back
-    displayMoveCursor(cContrastPositionOnScreen);
+    lcdMoveCursor(cContrastPositionOnScreen);
 }
 
 void contrastAdd(const Word cAdd)
 {
-    contrast = displayGetContrast();
-    if (cDisplayMaxContrast > contrast)
+    contrast = lcdGetContrast();
+    if (cLcdMaxContrast > contrast)
     {
         contrast += cAdd;
     }
-    displaySetContrast(contrast);
+    lcdSetContrast(contrast);
     contrastUpdateOnScreen();
 }
 
 void contrastDec(const Word cDecrease)
 {
-    contrast = displayGetContrast();
+    contrast = lcdGetContrast();
     if (0 < contrast)
     {
         contrast -= cDecrease;
     }
-    displaySetContrast(contrast);
+    lcdSetContrast(contrast);
     contrastUpdateOnScreen();
 }
 
 void cursorOn(const Bool cCursorOn)
 {
-    displayOnOff.bBlinkingCursor = cCursorOn;
-    displayOnOff.bCursorOn = cCursorOn;
-    displayOnOffControl(displayOnOff);
+    lcdOnOff.bBlinkingCursor = cCursorOn;
+    lcdOnOff.bCursorOn = cCursorOn;
+    lcdOnOffControl(lcdOnOff);
 }
 
 void onElapsedVeryShortTimer()
@@ -110,32 +110,32 @@ void onElapsedVeryShortTimer()
     switch (menu)
     {
         case cMenuState_goto1:
-            if (cDisplayNumOfChars <= screenShifts)
+            if (cLcdNumOfChars <= screenShifts)
             {
                 screenShifts = 0;
                 menu = cMenuState_idle1;
             }
             else
             {
-                displayDirection.bShiftRightInsteadOfLeft = TRUE;
+                lcdDirection.bShiftRightInsteadOfLeft = TRUE;
                 screenShift();
             }
             break;
         case cMenuState_goto2:
-            if (cDisplayNumOfChars <= screenShifts)
+            if (cLcdNumOfChars <= screenShifts)
             {
                 screenShifts = 0;
                 menu = cMenuState_idle2;
             }
             else
             {
-                displayDirection.bShiftRightInsteadOfLeft = FALSE;
+                lcdDirection.bShiftRightInsteadOfLeft = FALSE;
                 screenShift();
             }
             break;
         case cMenuState_upperPressedInIdle2:
             cursorOn(TRUE);
-            displayMoveCursor(cContrastPositionOnScreen);
+            lcdMoveCursor(cContrastPositionOnScreen);
             menu = cMenuState_waitToChangeContrast;
             break;
         case cMenuState_upperPressedInChangeContrast:
@@ -158,15 +158,15 @@ void onElapsedLongTimer()
     if (bBacklightOn)
     {
         bBacklightOn = FALSE;
-        displayBackLightOn(bBacklightOn);
+        lcdBackLightOn(bBacklightOn);
         timerRestartSec(cAwakeTimeSec);
     }
     else
     {
-        displayOnOff.bDisplayOn = FALSE;
-        displayOnOffControl(displayOnOff);
+        lcdOnOff.bLcdOn = FALSE;
+        lcdOnOffControl(lcdOnOff);
         menu = cMenuState_sleep;
-        displayPrepareForSleep();
+        lcdPrepareForSleep();
         pwrMgmtGoToSleep(TRUE);
     }
 }
@@ -225,12 +225,12 @@ void processLowerButton()
         switch (menu)
         {
             case cMenuState_idle1:
-                displayDirection.bShiftRightInsteadOfLeft = FALSE;
+                lcdDirection.bShiftRightInsteadOfLeft = FALSE;
                 screenShift();
                 menu = cMenuState_goto2;
                 break;
             case cMenuState_idle2:
-                displayDirection.bShiftRightInsteadOfLeft = TRUE;
+                lcdDirection.bShiftRightInsteadOfLeft = TRUE;
                 screenShift();
                 menu = cMenuState_goto1;
                 break;
@@ -265,7 +265,7 @@ void controller()
         if (timerElapsedMiliSec())
         {
             bBacklightOn = bBacklightOn ? FALSE : TRUE;
-            displayBackLightOn(bBacklightOn);
+            lcdBackLightOn(bBacklightOn);
             cntrBacklightToggle--;
             if (0 != cntrBacklightToggle)
             {
@@ -275,18 +275,18 @@ void controller()
     }
     else
     {
-        if (!displayOnOff.bDisplayOn)
+        if (!lcdOnOff.bLcdOn)
         {
-            displayClear();
-            displayOnOff.bDisplayOn = TRUE;
-            if (displayOnOff.bCursorOn)
+            lcdClear();
+            lcdOnOff.bLcdOn = TRUE;
+            if (lcdOnOff.bCursorOn)
             {
-                displayOnOff.bCursorOn = FALSE;
-                displayOnOff.bBlinkingCursor = FALSE;
+                lcdOnOff.bCursorOn = FALSE;
+                lcdOnOff.bBlinkingCursor = FALSE;
             }
-            displayOnOffControl(displayOnOff);
+            lcdOnOffControl(lcdOnOff);
             backlightOn();
-            displayWrite("Teplota:        Kontrast:               Vlhkost neznama Jazyk: SVK");
+            lcdWrite("Teplota:        Kontrast:               Vlhkost neznama Jazyk: SVK");
             temperatureUpdateOnScreen();
             contrastUpdateOnScreen();
             timerRestartSec(cAwakeTimeSec);
@@ -318,15 +318,15 @@ void baseInitApp()
 {
     bBacklightOn = FALSE;
     cntrBacklightToggle = cNumOfBacklightToggle;
-    displayOnOff.bDisplayOn = FALSE;
-    displayOnOff.bCursorOn = FALSE;
-    displayOnOff.bBlinkingCursor = FALSE;
-    displayDirection.bShiftRightInsteadOfLeft = TRUE;
-    displayDirection.bShiftScreenInsteadOfCursor = TRUE;
+    lcdOnOff.bLcdOn = FALSE;
+    lcdOnOff.bCursorOn = FALSE;
+    lcdOnOff.bBlinkingCursor = FALSE;
+    lcdDirection.bShiftRightInsteadOfLeft = TRUE;
+    lcdDirection.bShiftScreenInsteadOfCursor = TRUE;
     menu = cMenuState_idle1;
     screenShifts = 0;
     contrast = 50;
-    displaySetContrast(contrast);
+    lcdSetContrast(contrast);
 
     baseInstallApp(&controller);
 }

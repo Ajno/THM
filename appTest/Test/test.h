@@ -10,7 +10,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 #include "buttons_mock.h"
-#include "display_mock.h"
+#include "lcd_mock.h"
 #include "timer_mock.h"
 #include "pwr_mgmt_mock.h"
 #include "temperature_mock.h"
@@ -20,7 +20,7 @@ class ControllerTest : public TestFixture
 {
     ButtonsMock*        pButtons;
     TimerMock*          pTimer;
-    DisplayMock*        pDisplay;
+    LcdMock*            pLcd;
     PwrMgmtMock*        pPwrMgmt;
     TemperatureMock*    pTemperature;
 

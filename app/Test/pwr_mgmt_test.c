@@ -17,12 +17,12 @@ static Bool bAwake = FALSE;
 
 static test_pwrMgmt_isrCallback()
 {
-    displayBackLightOn(TRUE);
+    lcdBackLightOn(TRUE);
 }
 
 void test_pwrMgmt_sleep_init()
 {
-    displayOnOffControl_t setting;
+    lcdOnOffControl_t setting;
     
     pwrMgmtInit(0);
     timersInit();
@@ -33,78 +33,78 @@ void test_pwrMgmt_sleep_init()
     kbiConfigure(cKbiIn_P2,kbiCfg);
     kbiInstallIsrCallback(&test_pwrMgmt_isrCallback);
     
-    displayInit();
-    displayClear();
+    lcdInit();
+    lcdClear();
     setting.bBlinkingCursor = FALSE;
     setting.bCursorOn = FALSE;
-    setting.bDisplayOn = TRUE;
-    displayOnOffControl(setting);
-    displayWrite("cierna - uspi");
-    displayMoveCursor(cDisplayAddressMax/2);
-    displayWrite("cervena - zobud");
-    displayBackLightOn(TRUE);
+    setting.bLcdOn = TRUE;
+    lcdOnOffControl(setting);
+    lcdWrite("cierna - uspi");
+    lcdMoveCursor(cLcdAddressMax/2);
+    lcdWrite("cervena - zobud");
+    lcdBackLightOn(TRUE);
 }
 
 void test_pwrMgmt_sleep_run()
 {
     if (buttonIsPressed(cButton_Upper))
     {        
-        displayBackLightOn(FALSE);
+        lcdBackLightOn(FALSE);
         pwrMgmtGoToSleep(TRUE);
     }
 }
 
 void test_pwrMgmt_recentReset_init()
 {
-    displayOnOffControl_t setting;
+    lcdOnOffControl_t setting;
     pwrMgmtRecentresetSource_t source;
     
     timersInit();
-    displayInit();
+    lcdInit();
     buttonsInit();
     pwrMgmtInit(0);
     
     pwrMgmtGetRcentResetSource(&source);
-    displayClear();
+    lcdClear();
     setting.bBlinkingCursor = FALSE;
     setting.bCursorOn = FALSE;
-    setting.bDisplayOn = TRUE;
-    displayOnOffControl(setting);
-    displayWrite("posledny reset:");
-    displayMoveCursor(cDisplayAddressMax/2);
+    setting.bLcdOn = TRUE;
+    lcdOnOffControl(setting);
+    lcdWrite("posledny reset:");
+    lcdMoveCursor(cLcdAddressMax/2);
     if (cPwrMgmtResetSource_powerOn == source) 
     {
-        displayWrite("nabeh napajania");
+        lcdWrite("nabeh napajania");
     } 
     else if (cPwrMgmtResetSource_watchdog == source)
     {
-        displayWrite("watchdog");
+        lcdWrite("watchdog");
     }
     else if (cPwrMgmtResetSource_lowVoltage == source)
     {
-        displayWrite("slaba bateria");
+        lcdWrite("slaba bateria");
     }
     else if (cPwrMgmtResetSource_illegalOpCode == source)
     {
-        displayWrite("nepovolena oper.");
+        lcdWrite("nepovolena oper.");
     }
     else if (cPwrMgmtResetSource_illegalAddress == source)
     {
-        displayWrite("nepovolena addr.");
+        lcdWrite("nepovolena addr.");
     }
     else if (cPwrMgmtResetSource_external == source)
     {
-        displayWrite("externy pin");
+        lcdWrite("externy pin");
     }
     else if (cPwrMgmtResetSource_unknown == source)
     {
-        displayWrite("neznamy");
+        lcdWrite("neznamy");
     }
     else
     {
-        displayWrite("fatal error!");
+        lcdWrite("fatal error!");
     }
-    displayBackLightOn(TRUE);
+    lcdBackLightOn(TRUE);
 }
 
 void test_pwrMgmt_recentReset_run()

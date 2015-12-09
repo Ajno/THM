@@ -9,11 +9,11 @@
 #define DISPLAY_TEST_H_
 
 #include <string>
-#include <display.h>
+#include <lcd.h>
 using namespace std;
 
 
-class DisplayMock
+class LcdMock
 {
 public:
 	typedef enum
@@ -36,9 +36,9 @@ public:
         int     contrast;
     }screen_t;
 
-	DisplayMock();
+	LcdMock();
 	bool backlightIsOn();
-	bool displayIsOn();
+	bool lcdIsOn();
 	cursor_t getCursor();
 	screen_t getScreen();
 private:

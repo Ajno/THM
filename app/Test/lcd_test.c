@@ -11,31 +11,31 @@
 
 void test_display_shiftAndBackLight_init()
 {
-    displayOnOffControl_t onOffSetting;
+    lcdOnOffControl_t onOffSetting;
 
     timersInit();
-    displayInit();
+    lcdInit();
     buttonsInit();
 
-    displayBackLightOn(TRUE);
+    lcdBackLightOn(TRUE);
 
     // Display on
-    onOffSetting.bDisplayOn = TRUE;
+    onOffSetting.bLcdOn = TRUE;
     onOffSetting.bCursorOn = TRUE;
     onOffSetting.bBlinkingCursor = TRUE;
-    displayOnOffControl(onOffSetting);
+    lcdOnOffControl(onOffSetting);
 
     //Display clear
-    displayClear();
+    lcdClear();
 
-    displayWrite("vrchnym tlacitkom zmen smer");
-    displayMoveCursor(cDisplayAddressMax/2);
-    displayWrite("spodnym tlacitkom vypni/zapni LED");
+    lcdWrite("vrchnym tlacitkom zmen smer");
+    lcdMoveCursor(cLcdAddressMax/2);
+    lcdWrite("spodnym tlacitkom vypni/zapni LED");
 }
 
 void test_display_shiftAndBackLight_run()
 {
-    static displayMovingDirection_t dir = {TRUE, TRUE};
+    static lcdMovingDirection_t dir = {TRUE, TRUE};
     static Word cntr = 0;
     static Bool bBacklightOn = TRUE;
     static Bool stateLowerCurrent = FALSE;
@@ -57,13 +57,13 @@ void test_display_shiftAndBackLight_run()
     if ((!stateLowerPrevious) && (stateLowerCurrent))
     {
         bBacklightOn = (bBacklightOn ? FALSE : TRUE );
-        displayBackLightOn(bBacklightOn);
+        lcdBackLightOn(bBacklightOn);
     }
     
     if (cntr >= 5)
     {        
         dir.bShiftScreenInsteadOfCursor = TRUE;   
-        displayOrCursorShift(dir);
+        lcdScreenOrCursorShift(dir);
         cntr = 0;
     }
     
@@ -73,25 +73,25 @@ void test_display_shiftAndBackLight_run()
 
 void test_display_contrast_init()
 {
-    displayOnOffControl_t onOffSetting;
+    lcdOnOffControl_t onOffSetting;
 
     timersInit();
     buttonsInit();
 
-    displayBackLightOn(TRUE);
+    lcdBackLightOn(TRUE);
 
     // Display on
-    onOffSetting.bDisplayOn = TRUE;
+    onOffSetting.bLcdOn = TRUE;
     onOffSetting.bCursorOn = TRUE;
     onOffSetting.bBlinkingCursor = TRUE;
-    displayOnOffControl(onOffSetting);
+    lcdOnOffControl(onOffSetting);
 
     //Display clear
-    displayClear();
+    lcdClear();
 
-    displayWrite("contrast:");
-    displayMoveCursor(cDisplayAddressMax/2);
-    displayWrite("red(+), black(-)");
+    lcdWrite("contrast:");
+    lcdMoveCursor(cLcdAddressMax/2);
+    lcdWrite("red(+), black(-)");
 }
 
 void test_display_contrast_run()
@@ -109,8 +109,8 @@ void test_display_contrast_run()
         if (100 != contrastOut) 
         {
             contrastOut = contrastOut + 5;            
-            displaySetContrast(contrastOut);
-            contrastIn = displayGetContrast();
+            lcdSetContrast(contrastOut);
+            contrastIn = lcdGetContrast();
         }
     }
     
@@ -120,8 +120,8 @@ void test_display_contrast_run()
         if (0 != contrastOut) 
         {
             contrastOut = contrastOut - 5;   
-            displaySetContrast(contrastOut);
-            contrastIn = displayGetContrast();
+            lcdSetContrast(contrastOut);
+            contrastIn = lcdGetContrast();
         }
     }
     

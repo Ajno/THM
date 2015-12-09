@@ -22,7 +22,7 @@ static struct
 void test_timer_wait_init()
 {    
     timersInit();
-    displayInit();
+    lcdInit();
 }
 
 void test_timer_wait_run(const Word cDelayToggle_x100ms)
@@ -33,7 +33,7 @@ void test_timer_wait_run(const Word cDelayToggle_x100ms)
     if (cDelayToggle_x100ms <= test_wait.cntr) 
     {
         test_wait.light = !test_wait.light;
-        displayBackLightOn(test_wait.light);
+        lcdBackLightOn(test_wait.light);
         test_wait.cntr = 0;
     }
 }
@@ -42,16 +42,16 @@ static Bool bLongTimeInsteadOfShort = FALSE;
 
 void test_timer_startStop_init()
 {
-    displayOnOffControl_t control;
+    lcdOnOffControl_t control;
     
     bLongTimeInsteadOfShort = FALSE;
-    displayClear();
+    lcdClear();
     control.bBlinkingCursor = FALSE;
     control.bCursorOn = FALSE;
-    control.bDisplayOn = TRUE;
-    displayOnOffControl(control);
+    control.bLcdOn = TRUE;
+    lcdOnOffControl(control);
     
-    displayWrite("<timer test>");
+    lcdWrite("<timer test>");
 }
 
 void test_timer_startStop_run()
@@ -74,7 +74,7 @@ void test_timer_startStop_run()
             {                
                 timerRestartSec(2);// 2 sec
                 bBacklighOn = (bBacklighOn ? FALSE : TRUE);
-                displayBackLightOn(bBacklighOn);
+                lcdBackLightOn(bBacklighOn);
             }
         }
     }
@@ -92,7 +92,7 @@ void test_timer_startStop_run()
             {                
                 timerRestartMiliSec(500);// 500 ms
                 bBacklighOn = (bBacklighOn ? FALSE : TRUE);
-                displayBackLightOn(bBacklighOn);
+                lcdBackLightOn(bBacklighOn);
             }
         }
     }

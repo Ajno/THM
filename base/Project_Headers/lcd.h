@@ -15,35 +15,35 @@ extern "C" {
 
 typedef struct
 {
-    Bool    bDisplayOn;
+    Bool    bLcdOn;
     Bool    bCursorOn;
     Bool    bBlinkingCursor;
-}displayOnOffControl_t;
+}lcdOnOffControl_t;
 
 typedef struct
 {
     Bool bShiftScreenInsteadOfCursor;
     Bool bShiftRightInsteadOfLeft;
-}displayMovingDirection_t;
+}lcdMovingDirection_t;
 
-static const Byte cDisplayAddressMax = 80;
-static const Word cDisplayMaxContrast = 100;
-static const Byte cDisplayNumOfChars = 16;
-static const char cDisplayDegreeSymbol[2] = {223,0};// degree symbol = °
+static const Byte cLcdAddressMax = 80;
+static const Word cLcdMaxContrast = 100;
+static const Byte cLcdNumOfChars = 16;
+static const char cLcdDegreeSymbol[2] = {223,0};// degree symbol = °
 
-void displayInit();
-void displayBackLightOn(const Bool bBackLightOn);
-void displayClear();
-void displayReturnHome();
-void displayOnOffControl(const displayOnOffControl_t cControl);
-void displayOrCursorShift(const displayMovingDirection_t cSetting);
-void displayEntryModeSet(const displayMovingDirection_t cSetting);
-void displayMoveCursor(const Byte cAddress);
-void displayWrite(const char* pString);
-void displaySetContrast(const Word cContrast);
-Word displayGetContrast();
-void displayPrepareForSleep();
-void displayWakeUpCallback();
+void lcdInit();
+void lcdBackLightOn(const Bool bBackLightOn);
+void lcdClear();
+void lcdReturnHome();
+void lcdOnOffControl(const lcdOnOffControl_t cControl);
+void lcdScreenOrCursorShift(const lcdMovingDirection_t cSetting);
+void lcdEntryModeSet(const lcdMovingDirection_t cSetting);
+void lcdMoveCursor(const Byte cAddress);
+void lcdWrite(const char* pString);
+void lcdSetContrast(const Word cContrast);
+Word lcdGetContrast();
+void lcdPrepareForSleep();
+void lcdWakeUpCallback();
 
 #ifdef __cplusplus
 }

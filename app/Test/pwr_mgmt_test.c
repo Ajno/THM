@@ -8,7 +8,7 @@
 #include "pwr_mgmt_test.h"
 #include "pwr_mgmt.h"
 #include "kbi.h"
-#include "display.h"
+#include "lcd.h"
 #include "timer.h"
 #include "buttons.h"
 
@@ -24,7 +24,7 @@ void test_pwrMgmt_sleep_init()
 {
     displayOnOffControl_t setting;
     
-    pwrMgmtInit();
+    pwrMgmtInit(0);
     timersInit();
     buttonsInit();
     
@@ -62,7 +62,7 @@ void test_pwrMgmt_recentReset_init()
     timersInit();
     displayInit();
     buttonsInit();
-    pwrMgmtInit();
+    pwrMgmtInit(0);
     
     pwrMgmtGetRcentResetSource(&source);
     displayClear();

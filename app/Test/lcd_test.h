@@ -8,7 +8,7 @@
 #ifndef DISPLAY_TEST_H_
 #define DISPLAY_TEST_H_
 
-#include "display.h"
+#include "lcd.h"
 
 void test_display_shiftAndBackLight_init();
 void test_display_shiftAndBackLight_run();

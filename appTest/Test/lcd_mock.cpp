@@ -91,6 +91,10 @@ extern "C" Word displayGetContrast()
     return contrast;
 }
 
+extern "C" void displayPrepareForSleep()
+{
+}
+
 DisplayMock::DisplayMock()
 {
 	bBacklightIsOn = false;

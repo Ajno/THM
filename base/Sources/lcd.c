@@ -5,7 +5,7 @@
  *      Author: z0037ysj
  */
 
-#include "display.h"
+#include "lcd.h"
 #include "pwm.h"
 #include "io.h"
 #include "timer.h"

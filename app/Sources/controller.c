@@ -10,7 +10,7 @@
 #include "base.h"
 #include "buttons.h"
 #include "timer.h"
-#include "display.h"
+#include "lcd.h"
 #include "pwr_mgmt.h"
 #include "temperature.h"
 #include "controller.h"
@@ -58,7 +58,7 @@ void temperatureUpdateOnScreen()
 {
     sWord temperatureRaw = 0;
 
-    // todo get cursor    
+    // get cursor    
     displayMoveCursor(cTemperaturePositionOnSreen);
     displayWrite("    ");
     displayMoveCursor(cTemperaturePositionOnSreen);
@@ -72,8 +72,8 @@ void temperatureUpdateOnScreen()
     displayWrite(thmLibItoa(temperatureRaw % 10));
     displayWrite(&cDisplayDegreeSymbol);
     displayWrite("C");
-    // todo set cursor back
-    displayMoveCursor(cContrastPositionOnScreen);// fixme replace this
+    // set cursor back
+    displayMoveCursor(cContrastPositionOnScreen);
 }
 
 void contrastAdd(const Word cAdd)

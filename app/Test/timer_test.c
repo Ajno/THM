@@ -7,7 +7,7 @@
 
 #include "timer_test.h"
 #include "timer.h"
-#include "display.h"
+#include "lcd.h"
 
 static struct
 {

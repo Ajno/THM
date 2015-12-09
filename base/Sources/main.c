@@ -1,7 +1,7 @@
 #include "system.h"
 #include "base.h"
 #include "time.h"
-#include "display.h"
+#include "lcd.h"
 #include "buttons.h"
 #include "pwr_mgmt.h"
 #include "temperature.h"

@@ -5,7 +5,7 @@
  *      Author: z0037ysj
  */
 
-#include "display_test.h"
+#include "lcd_test.h"
 #include "timer.h"
 #include "buttons.h"
 

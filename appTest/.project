@@ -36,6 +36,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/app/Sources/controller.c</locationURI>
 		</link>
 		<link>
+			<name>Sources/display.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app/Sources/display.c</locationURI>
+		</link>
+		<link>
 			<name>Test/base</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>

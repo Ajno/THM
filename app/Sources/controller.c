@@ -11,6 +11,7 @@
 #include "buttons.h"
 #include "timer.h"
 #include "lcd.h"
+#include "display.h"
 #include "pwr_mgmt.h"
 #include "temperature.h"
 #include "controller.h"
@@ -21,28 +22,18 @@ static const Word cMenuActivationTimeMiliSec = 2000;
 static const Word cTemperatureSamplingMiliSecX100 = 5; // 500 ms
 static const Word cContrastIncrement = 5;
 
-static Bool                     bBacklightOn = FALSE;
-static Byte                     cntrBacklightToggle = cNumOfBacklightToggle;
+static Byte                 cntrBacklightToggle = cNumOfBacklightToggle;
 static lcdOnOffControl_t    lcdOnOff;
 static lcdMovingDirection_t lcdDirection;
-static Byte                     screenShifts = 0;
-static Word                     contrast = 75;
-static menuState_t              menu = cMenuState_idle1;
+static Byte                 screenShifts = 0;
+static Word                 contrast = 75;
+static menuState_t          menu = cMenuState_idle1;
 
 static void screenShift()
 {
     lcdScreenOrCursorShift(lcdDirection);
     screenShifts++;
     timerRestartMiliSec(cScreenShiftTimeMiliSec);
-}
-
-void backlightOn()
-{
-    if (!bBacklightOn)
-    {
-        bBacklightOn = TRUE;
-        lcdBackLightOn(bBacklightOn);
-    }
 }
 
 void contrastUpdateOnScreen()
@@ -155,10 +146,9 @@ void onElapsedShortTimer()
 
 void onElapsedLongTimer()
 {
-    if (bBacklightOn)
+    if (displayBacklightIsOn())
     {
-        bBacklightOn = FALSE;
-        lcdBackLightOn(bBacklightOn);
+        displayBacklightTurnOff();
         timerRestartSec(cAwakeTimeSec);
     }
     else
@@ -175,7 +165,7 @@ void processUpperButton()
 {
     if (buttonIsPressed(cButton_Upper))
     {
-        backlightOn();
+        displayBacklightTurnOn();
         timerRestartSec(cAwakeTimeSec);
 
         switch (menu)
@@ -219,7 +209,7 @@ void processLowerButton()
 {
     if (buttonIsPressed(cButton_Lower))
     {
-        backlightOn();
+        displayBacklightTurnOn();
         timerRestartSec(cAwakeTimeSec);
 
         switch (menu)
@@ -264,8 +254,7 @@ void controller()
     {
         if (timerElapsedMiliSec())
         {
-            bBacklightOn = bBacklightOn ? FALSE : TRUE;
-            lcdBackLightOn(bBacklightOn);
+            displayBacklightToggle();
             cntrBacklightToggle--;
             if (0 != cntrBacklightToggle)
             {
@@ -285,7 +274,7 @@ void controller()
                 lcdOnOff.bBlinkingCursor = FALSE;
             }
             lcdOnOffControl(lcdOnOff);
-            backlightOn();
+            displayBacklightTurnOn();
             lcdWrite("Teplota:        Kontrast:               Vlhkost neznama Jazyk: SVK");
             temperatureUpdateOnScreen();
             contrastUpdateOnScreen();
@@ -316,7 +305,6 @@ void controller()
 
 void baseInitApp()
 {
-    bBacklightOn = FALSE;
     cntrBacklightToggle = cNumOfBacklightToggle;
     lcdOnOff.bLcdOn = FALSE;
     lcdOnOff.bCursorOn = FALSE;
@@ -328,5 +316,6 @@ void baseInitApp()
     contrast = 50;
     lcdSetContrast(contrast);
 
+    displayInit();
     baseInstallApp(&controller);
 }

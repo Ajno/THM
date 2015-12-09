@@ -137,7 +137,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Sources/controller.c|Sources/app.c|Project_Settings/Startup_Code/start08.c|Lib/mc9s08qg8.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Sources/display.c|Sources/controller.c|Sources/app.c|Project_Settings/Startup_Code/start08.c|Lib/mc9s08qg8.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

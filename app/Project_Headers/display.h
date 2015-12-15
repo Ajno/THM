@@ -13,6 +13,13 @@ extern "C" {
 
 #include <stdtypes.h>
 
+enum displayConst_t
+{
+    cTemperaturePositionOnSreen = 9,
+    cContrastPositionOnScreen   = 26,
+    cHumidityPositionOnSreen    = 49
+};
+
 void displayBacklightTurnOn();
 void displayBacklightTurnOff();
 void displayBacklightToggle();

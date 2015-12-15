@@ -6,8 +6,10 @@
  */
 
 #include "humidity.h"
+#include "oscillator.h"
 
-Word humFreq2Humidity(const Word cFreq, const sWord cTemp)
+Word humidityRead(const sWord cTemp)
 {
-    return 0;
+    // fixme
+    return oscillatorReadAndClear();
 }

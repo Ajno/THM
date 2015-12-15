@@ -13,9 +13,7 @@ extern "C" {
 
 enum staticConst_t
 { 
-    cNumOfBacklightToggle = 7,
-    cContrastPositionOnScreen = 26,
-    cTemperaturePositionOnSreen = 9
+    cNumOfBacklightToggle = 7
 };
 
 typedef enum

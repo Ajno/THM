@@ -41,6 +41,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/app/Sources/display.c</locationURI>
 		</link>
 		<link>
+			<name>Sources/humidity.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app/Sources/humidity.c</locationURI>
+		</link>
+		<link>
 			<name>Test/base</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>

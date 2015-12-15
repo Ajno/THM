@@ -14,6 +14,8 @@
 #include "timer_mock.h"
 #include "pwr_mgmt_mock.h"
 #include "temperature_mock.h"
+#include "oscillator_mock.h"
+
 using namespace CppUnit;
 
 class ControllerTest : public TestFixture
@@ -23,6 +25,7 @@ class ControllerTest : public TestFixture
     LcdMock*            pLcd;
     PwrMgmtMock*        pPwrMgmt;
     TemperatureMock*    pTemperature;
+    OscillatorMock*     pOscillator;
 
     CPPUNIT_TEST_SUITE(ControllerTest);
 
@@ -50,6 +53,7 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(slideToMenu1AfterModify2);
     CPPUNIT_TEST(itoaTest);
     CPPUNIT_TEST(temperatureUpdate);
+    CPPUNIT_TEST(humidityUpdate);
 
     CPPUNIT_TEST_SUITE_END();
 public:
@@ -86,6 +90,7 @@ public:
 	void slideToMenu1AfterModify2();
 	void itoaTest();
 	void temperatureUpdate();
+	void humidityUpdate();
 };
 
 #endif /* TEST_H_ */

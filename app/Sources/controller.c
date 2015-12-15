@@ -14,6 +14,7 @@
 #include "display.h"
 #include "pwr_mgmt.h"
 #include "temperature.h"
+#include "humidity.h"
 #include "controller.h"
 
 static const Word cAwakeTimeSec = 10;
@@ -63,6 +64,23 @@ void temperatureUpdateOnScreen()
     lcdWrite(thmLibItoa(temperatureRaw % 10));
     lcdWrite(&cLcdDegreeSymbol);
     lcdWrite("C");
+    // set cursor back
+    lcdMoveCursor(cContrastPositionOnScreen);
+}
+
+// fixme
+void humidityUpdateOnScreen()
+{
+    sWord hum = 0;
+
+    // get cursor
+    lcdMoveCursor(cHumidityPositionOnSreen);
+    lcdWrite("      ");
+    lcdMoveCursor(cHumidityPositionOnSreen);
+
+    hum = humidityRead(0)*2;// hum/0,5
+    lcdWrite(thmLibItoa(hum));
+    lcdWrite("%");
     // set cursor back
     lcdMoveCursor(cContrastPositionOnScreen);
 }
@@ -141,6 +159,7 @@ void onElapsedVeryShortTimer()
 void onElapsedShortTimer()
 {
     temperatureUpdateOnScreen();
+    humidityUpdateOnScreen();
     timerRestartMiliSecX100(cTemperatureSamplingMiliSecX100);
 }
 
@@ -275,8 +294,9 @@ void controller()
             }
             lcdOnOffControl(lcdOnOff);
             displayBacklightTurnOn();
-            lcdWrite("Teplota:        Kontrast:               Vlhkost neznama Jazyk: SVK");
+            lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
             temperatureUpdateOnScreen();
+            humidityUpdateOnScreen();
             contrastUpdateOnScreen();
             timerRestartSec(cAwakeTimeSec);
         }

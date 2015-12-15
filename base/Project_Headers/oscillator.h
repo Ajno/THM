@@ -13,7 +13,6 @@ extern "C" {
 
 #include <stdtypes.h>
 
-void oscillatorInit();
 /*
  * read number of oscillations since last read,
  * bandwidth = 1,1 sec 

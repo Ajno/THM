@@ -7,8 +7,39 @@
 
 #include "display.h"
 #include "lcd.h"
+#include "thm_lib.h"
 
 static Bool bBacklightOn = FALSE;
+
+void displayUpdateContrast(const Word cContrast)
+{
+    lcdMoveCursor(cContrastPositionOnScreen);
+    lcdWrite("    ");
+    lcdMoveCursor(cContrastPositionOnScreen);
+    lcdWrite(thmLibItoa(cContrast));
+    lcdWrite("%");
+}
+
+void displayUpdateTemperature(const sWord cTemperature)
+{
+    sWord temperature = cTemperature;
+    
+    // get cursor    
+    lcdMoveCursor(cTemperaturePositionOnSreen);
+    lcdWrite("    ");
+    lcdMoveCursor(cTemperaturePositionOnSreen);
+    lcdWrite(thmLibItoa(temperature / 10));
+    lcdWrite(",");
+    if (0 > temperature)
+    {
+        temperature = -temperature;
+    }
+    lcdWrite(thmLibItoa(temperature % 10));
+    lcdWrite(&cLcdDegreeSymbol);
+    lcdWrite("C");
+    // set cursor back
+    lcdMoveCursor(cContrastPositionOnScreen);
+}
 
 void displayBacklightTurnOn()
 {

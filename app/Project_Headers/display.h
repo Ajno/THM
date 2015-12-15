@@ -20,6 +20,8 @@ enum displayConst_t
     cHumidityPositionOnSreen    = 49
 };
 
+void displayUpdateContrast(const Word cContrast);
+void displayUpdateTemperature(const sWord cTemperature);
 void displayBacklightTurnOn();
 void displayBacklightTurnOff();
 void displayBacklightToggle();

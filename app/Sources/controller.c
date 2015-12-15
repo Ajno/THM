@@ -10,7 +10,7 @@
 #include "base.h"
 #include "buttons.h"
 #include "timer.h"
-#include "lcd.h"
+#include "lcd.h"//todo remove when not needed
 #include "display.h"
 #include "pwr_mgmt.h"
 #include "temperature.h"
@@ -35,37 +35,6 @@ static void screenShift()
     lcdScreenOrCursorShift(lcdDirection);
     screenShifts++;
     timerRestartMiliSec(cScreenShiftTimeMiliSec);
-}
-
-void contrastUpdateOnScreen()
-{
-    lcdMoveCursor(cContrastPositionOnScreen);
-    lcdWrite("    ");
-    lcdMoveCursor(cContrastPositionOnScreen);
-    lcdWrite(thmLibItoa(contrast));
-    lcdWrite("%");
-}
-
-void temperatureUpdateOnScreen()
-{
-    sWord temperatureRaw = 0;
-
-    // get cursor    
-    lcdMoveCursor(cTemperaturePositionOnSreen);
-    lcdWrite("    ");
-    lcdMoveCursor(cTemperaturePositionOnSreen);
-    temperatureRaw = temperatureRead();
-    lcdWrite(thmLibItoa(temperatureRaw / 10));
-    lcdWrite(",");
-    if (0 > temperatureRaw)
-    {
-        temperatureRaw = -temperatureRaw;
-    }
-    lcdWrite(thmLibItoa(temperatureRaw % 10));
-    lcdWrite(&cLcdDegreeSymbol);
-    lcdWrite("C");
-    // set cursor back
-    lcdMoveCursor(cContrastPositionOnScreen);
 }
 
 // fixme
@@ -93,7 +62,7 @@ void contrastAdd(const Word cAdd)
         contrast += cAdd;
     }
     lcdSetContrast(contrast);
-    contrastUpdateOnScreen();
+    displayUpdateContrast(contrast);
 }
 
 void contrastDec(const Word cDecrease)
@@ -104,7 +73,7 @@ void contrastDec(const Word cDecrease)
         contrast -= cDecrease;
     }
     lcdSetContrast(contrast);
-    contrastUpdateOnScreen();
+    displayUpdateContrast(contrast);
 }
 
 void cursorOn(const Bool cCursorOn)
@@ -158,7 +127,7 @@ void onElapsedVeryShortTimer()
 
 void onElapsedShortTimer()
 {
-    temperatureUpdateOnScreen();
+    displayUpdateTemperature(temperatureRead());
     humidityUpdateOnScreen();
     timerRestartMiliSecX100(cTemperatureSamplingMiliSecX100);
 }
@@ -295,9 +264,9 @@ void controller()
             lcdOnOffControl(lcdOnOff);
             displayBacklightTurnOn();
             lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
-            temperatureUpdateOnScreen();
+            displayUpdateTemperature(temperatureRead());
             humidityUpdateOnScreen();
-            contrastUpdateOnScreen();
+            displayUpdateContrast(contrast);
             timerRestartSec(cAwakeTimeSec);
         }
         else

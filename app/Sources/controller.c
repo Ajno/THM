@@ -47,7 +47,7 @@ void humidityUpdateOnScreen()
     lcdWrite("      ");
     lcdMoveCursor(cHumidityPositionOnSreen);
 
-    hum = humidityRead(0)*2;// hum/0,5
+    hum = humidityRead(0,2);// smp freq = 2Hz
     lcdWrite(thmLibItoa(hum));
     lcdWrite("%");
     // set cursor back

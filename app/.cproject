@@ -2,7 +2,7 @@
 <?fileVersion 4.0.0?>
 
 <cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
-	<storageModule configRelations="2" moduleId="org.eclipse.cdt.core.settings">
+	<storageModule configRelations="1" moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="toolchain.config.hcs08.release.1645903910">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="toolchain.config.hcs08.release.1645903910" moduleId="org.eclipse.cdt.core.settings" name="Release">
 				<externalSettings/>

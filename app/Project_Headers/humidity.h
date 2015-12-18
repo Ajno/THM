@@ -13,7 +13,7 @@ extern "C" {
 
 #include <stdtypes.h>
 
-Word humidityRead(const sWord cTemp);
+Word humidityRead(const sWord cTemperature, const Word cSamplingFrequency);
 
 #ifdef __cplusplus
 }

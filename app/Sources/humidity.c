@@ -8,7 +8,7 @@
 #include "humidity.h"
 #include "oscillator.h"
 
-Word humidityRead(const sWord cTemp)
+Word humidityRead(const sWord cTemperature, const Word cSamplingFrequency)
 {
     // fixme
     return oscillatorReadAndClear();

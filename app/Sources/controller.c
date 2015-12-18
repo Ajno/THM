@@ -29,6 +29,8 @@ static lcdMovingDirection_t lcdDirection;
 static Byte                 screenShifts = 0;
 static Word                 contrast = 75;
 static menuState_t          menu = cMenuState_idle1;
+static sWord temperatureRaw = 0;
+static Word humidityRaw = 0;
 
 static void screenShift()
 {
@@ -37,21 +39,12 @@ static void screenShift()
     timerRestartMiliSec(cScreenShiftTimeMiliSec);
 }
 
-// fixme
-void humidityUpdateOnScreen()
+void updateTemperatureAndHumidity()
 {
-    sWord hum = 0;
-
-    // get cursor
-    lcdMoveCursor(cHumidityPositionOnSreen);
-    lcdWrite("      ");
-    lcdMoveCursor(cHumidityPositionOnSreen);
-
-    hum = humidityRead(0,2);// smp freq = 2Hz
-    lcdWrite(thmLibItoa(hum));
-    lcdWrite("%");
-    // set cursor back
-    lcdMoveCursor(cContrastPositionOnScreen);
+    temperatureRaw = temperatureRead();
+    humidityRaw = humidityRead(temperatureRaw, 2);// todo define samplign frequency
+    displayUpdateTemperature(temperatureRaw);
+    displayUpdateHumidity(humidityRaw);
 }
 
 void contrastAdd(const Word cAdd)
@@ -127,8 +120,7 @@ void onElapsedVeryShortTimer()
 
 void onElapsedShortTimer()
 {
-    displayUpdateTemperature(temperatureRead());
-    humidityUpdateOnScreen();
+    updateTemperatureAndHumidity();
     timerRestartMiliSecX100(cTemperatureSamplingMiliSecX100);
 }
 
@@ -264,8 +256,7 @@ void controller()
             lcdOnOffControl(lcdOnOff);
             displayBacklightTurnOn();
             lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
-            displayUpdateTemperature(temperatureRead());
-            humidityUpdateOnScreen();
+            updateTemperatureAndHumidity();
             displayUpdateContrast(contrast);
             timerRestartSec(cAwakeTimeSec);
         }

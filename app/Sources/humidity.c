@@ -11,5 +11,7 @@
 Word humidityRead(const sWord cTemperature, const Word cSamplingFrequency)
 {
     // fixme
-    return oscillatorReadAndClear()*cSamplingFrequency;
+    Word ret = oscillatorReadAndClear();
+    ret = ret * cSamplingFrequency; 
+    return ret;
 }

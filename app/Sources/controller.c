@@ -17,14 +17,15 @@
 #include "humidity.h"
 #include "controller.h"
 
+static const Word cBacklightToggleTimeMiliSec = 250;
 static const Word cAwakeTimeSec = 10;
 static const Word cScreenShiftTimeMiliSec = 50;
-static const Word cMenuActivationTimeMiliSec = 2000;
-static const Word cTemperatureSamplingMiliSecX100 = 5; // 500 ms
+static const Word cButtonPressTimeMiliSec = 2000;
+static const Word cSamplingPeriodMiliSecX100 = 5; // 500 ms
+static const Word cSamplingFreqMiliSecX100 = 10/cSamplingPeriodMiliSecX100;
 static const Word cContrastIncrement = 5;
 
 static Byte                 cntrBacklightToggle = cNumOfBacklightToggle;
-static lcdOnOffControl_t    lcdOnOff;
 static lcdMovingDirection_t lcdDirection;
 static Byte                 screenShifts = 0;
 static Word                 contrast = 75;
@@ -42,7 +43,7 @@ static void screenShift()
 void updateTemperatureAndHumidity()
 {
     temperatureRaw = temperatureRead();
-    humidityRaw = humidityRead(temperatureRaw, 2);// todo define samplign frequency
+    humidityRaw = humidityRead(temperatureRaw, cSamplingFreqMiliSecX100);
     displayUpdateTemperature(temperatureRaw);
     displayUpdateHumidity(humidityRaw);
 }
@@ -67,13 +68,6 @@ void contrastDec(const Word cDecrease)
     }
     lcdSetContrast(contrast);
     displayUpdateContrast(contrast);
-}
-
-void cursorOn(const Bool cCursorOn)
-{
-    lcdOnOff.bBlinkingCursor = cCursorOn;
-    lcdOnOff.bCursorOn = cCursorOn;
-    lcdOnOffControl(lcdOnOff);
 }
 
 void onElapsedVeryShortTimer()
@@ -105,12 +99,12 @@ void onElapsedVeryShortTimer()
             }
             break;
         case cMenuState_upperPressedInIdle2:
-            cursorOn(TRUE);
+            displayCursorTurnOn();
             lcdMoveCursor(cContrastPositionOnScreen);
             menu = cMenuState_waitToChangeContrast;
             break;
         case cMenuState_upperPressedInChangeContrast:
-            cursorOn(FALSE);
+            displayCursorTurnOff();
             menu = cMenuState_waitToEnterIdle2;
             break;
         default:
@@ -121,7 +115,7 @@ void onElapsedVeryShortTimer()
 void onElapsedShortTimer()
 {
     updateTemperatureAndHumidity();
-    timerRestartMiliSecX100(cTemperatureSamplingMiliSecX100);
+    timerRestartMiliSecX100(cSamplingPeriodMiliSecX100);
 }
 
 void onElapsedLongTimer()
@@ -133,10 +127,8 @@ void onElapsedLongTimer()
     }
     else
     {
-        lcdOnOff.bLcdOn = FALSE;
-        lcdOnOffControl(lcdOnOff);
+        displayTurnOff();
         menu = cMenuState_sleep;
-        lcdPrepareForSleep();
         pwrMgmtGoToSleep(TRUE);
     }
 }
@@ -151,11 +143,11 @@ void processUpperButton()
         switch (menu)
         {
             case cMenuState_idle2:
-                timerRestartMiliSec(cMenuActivationTimeMiliSec);
+                timerRestartMiliSec(cButtonPressTimeMiliSec);
                 menu = cMenuState_upperPressedInIdle2;
                 break;
             case cMenuState_changeContrast:
-                timerRestartMiliSec(cMenuActivationTimeMiliSec);
+                timerRestartMiliSec(cButtonPressTimeMiliSec);
                 menu = cMenuState_upperPressedInChangeContrast;
                 break;
             default:
@@ -238,22 +230,15 @@ void controller()
             cntrBacklightToggle--;
             if (0 != cntrBacklightToggle)
             {
-                timerRestartMiliSec(250); // 250 ms
+                timerRestartMiliSec(cBacklightToggleTimeMiliSec);
             }
         }
     }
     else
     {
-        if (!lcdOnOff.bLcdOn)
+        if (!displayIsOn())
         {
-            lcdClear();
-            lcdOnOff.bLcdOn = TRUE;
-            if (lcdOnOff.bCursorOn)
-            {
-                lcdOnOff.bCursorOn = FALSE;
-                lcdOnOff.bBlinkingCursor = FALSE;
-            }
-            lcdOnOffControl(lcdOnOff);
+            displayTurnOn();
             displayBacklightTurnOn();
             lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
             updateTemperatureAndHumidity();
@@ -286,9 +271,6 @@ void controller()
 void baseInitApp()
 {
     cntrBacklightToggle = cNumOfBacklightToggle;
-    lcdOnOff.bLcdOn = FALSE;
-    lcdOnOff.bCursorOn = FALSE;
-    lcdOnOff.bBlinkingCursor = FALSE;
     lcdDirection.bShiftRightInsteadOfLeft = TRUE;
     lcdDirection.bShiftScreenInsteadOfCursor = TRUE;
     menu = cMenuState_idle1;

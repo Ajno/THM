@@ -10,6 +10,7 @@
 #include "thm_lib.h"
 
 static Bool bBacklightOn = FALSE;
+static lcdOnOffControl_t lcdOnOff;
 
 void displayUpdateContrast(const Word cContrast)
 {
@@ -53,6 +54,44 @@ void displayUpdateHumidity(const Word cHumidity)
     lcdMoveCursor(cContrastPositionOnScreen);
 }
 
+void displayCursorTurnOn()
+{
+    lcdOnOff.bBlinkingCursor = TRUE;
+    lcdOnOff.bCursorOn = TRUE;
+    lcdOnOffControl(lcdOnOff);
+}
+
+void displayCursorTurnOff()
+{
+    lcdOnOff.bBlinkingCursor = FALSE;
+    lcdOnOff.bCursorOn = FALSE;
+    lcdOnOffControl(lcdOnOff);    
+}
+
+void displayTurnOff()
+{
+    lcdOnOff.bLcdOn = FALSE;
+    lcdOnOffControl(lcdOnOff);
+    lcdPrepareForSleep();
+}
+
+void displayTurnOn()
+{
+    lcdClear();
+    lcdOnOff.bLcdOn = TRUE;
+    if (lcdOnOff.bCursorOn)
+    {
+        lcdOnOff.bCursorOn = FALSE;
+        lcdOnOff.bBlinkingCursor = FALSE;
+    }
+    lcdOnOffControl(lcdOnOff);    
+}
+
+Bool displayIsOn()
+{
+    return lcdOnOff.bLcdOn;
+}
+
 void displayBacklightTurnOn()
 {
     if (!bBacklightOn)
@@ -82,4 +121,7 @@ void displayBacklightToggle()
 void displayInit()
 {
     bBacklightOn = FALSE;
+    lcdOnOff.bLcdOn = FALSE;
+    lcdOnOff.bBlinkingCursor = FALSE;
+    lcdOnOff.bCursorOn = FALSE;
 }

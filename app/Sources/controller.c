@@ -28,7 +28,7 @@ static const Word cContrastIncrement = 5;
 static Byte                 cntrBacklightToggle = cNumOfBacklightToggle;
 static lcdMovingDirection_t lcdDirection;
 static Byte                 screenShifts = 0;
-static Word                 contrast = 75;
+static Word                 contrast = 40;
 static menuState_t          menu = cMenuState_idle1;
 static sWord temperatureRaw = 0;
 static Word humidityRaw = 0;
@@ -48,23 +48,23 @@ void updateTemperatureAndHumidity()
     displayUpdateHumidity(humidityRaw);
 }
 
-void contrastAdd(const Word cAdd)
+void contrastAdd()
 {
     contrast = lcdGetContrast();
     if (cLcdMaxContrast > contrast)
     {
-        contrast += cAdd;
+        contrast += cContrastIncrement;
     }
     lcdSetContrast(contrast);
     displayUpdateContrast(contrast);
 }
 
-void contrastDec(const Word cDecrease)
+void contrastDec()
 {
     contrast = lcdGetContrast();
     if (0 < contrast)
     {
-        contrast -= cDecrease;
+        contrast -= cContrastIncrement;
     }
     lcdSetContrast(contrast);
     displayUpdateContrast(contrast);
@@ -165,7 +165,7 @@ void processUpperButton()
                 menu = cMenuState_changeContrast;
                 break;
             case cMenuState_upperPressedInChangeContrast:
-                contrastAdd(cContrastIncrement);
+                contrastAdd();
                 menu = cMenuState_changeContrast;
                 break;
             case cMenuState_waitToEnterIdle2:
@@ -208,7 +208,7 @@ void processLowerButton()
         switch (menu)
         {
             case cMenuState_lowerPressedInChangeContrast:
-                contrastDec(cContrastIncrement);
+                contrastDec();
                 menu = cMenuState_changeContrast;
                 break;
             case cMenuState_sleep:
@@ -275,7 +275,7 @@ void baseInitApp()
     lcdDirection.bShiftScreenInsteadOfCursor = TRUE;
     menu = cMenuState_idle1;
     screenShifts = 0;
-    contrast = 50;
+    contrast = 40;
     lcdSetContrast(contrast);
 
     displayInit();

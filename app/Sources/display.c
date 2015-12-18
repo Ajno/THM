@@ -41,6 +41,18 @@ void displayUpdateTemperature(const sWord cTemperature)
     lcdMoveCursor(cContrastPositionOnScreen);
 }
 
+void displayUpdateHumidity(const Word cHumidity)
+{
+    // get cursor
+    lcdMoveCursor(cHumidityPositionOnSreen);
+    lcdWrite("      ");
+    lcdMoveCursor(cHumidityPositionOnSreen);
+    lcdWrite(thmLibItoa(cHumidity));
+    lcdWrite("%");
+    // set cursor back
+    lcdMoveCursor(cContrastPositionOnScreen);
+}
+
 void displayBacklightTurnOn()
 {
     if (!bBacklightOn)

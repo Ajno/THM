@@ -22,6 +22,7 @@ enum displayConst_t
 
 void displayUpdateContrast(const Word cContrast);
 void displayUpdateTemperature(const sWord cTemperature);
+void displayUpdateHumidity(const Word cHumidity);
 void displayBacklightTurnOn();
 void displayBacklightTurnOff();
 void displayBacklightToggle();

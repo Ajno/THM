@@ -10,8 +10,8 @@
 
 static const Word cInc = 0x0100; // 256
 static const Word cLimit = 0xff00; // 65280
-static Word oscillator = 0;
-static Bool bClearOscillator = FALSE;
+static Word overflowCounter = 0;
+static Bool bBlockOverflowCounter = FALSE;
 
 /*
  * read number of oscillations since last read,
@@ -21,34 +21,32 @@ static Bool bClearOscillator = FALSE;
  */
 Word oscillatorReadAndClear()
 {
-    Word oscillatorRet = oscillator;
+    Word oscillatorRet;
     
-    if (bClearOscillator)
-    {
-        oscillatorRet = 0;
-    }
-    oscillatorRet += mtimReadCounter();        
-    bClearOscillator = TRUE;    
+    bBlockOverflowCounter = TRUE;
+    
+    oscillatorRet = mtimReadCounter();    
+    mtimResetCounter();
+    oscillatorRet += overflowCounter;
+    overflowCounter = 0;
+    
+    bBlockOverflowCounter = FALSE;
     
     return oscillatorRet;
 }
 
 void counterIsrCallback()
 {
-    if ((bClearOscillator) || (cLimit <= oscillator))
+    if (!bBlockOverflowCounter)
     {
-        oscillator = cInc;
-        bClearOscillator = FALSE;
-    }
-    else
-    {
-        oscillator += cInc;        
+        overflowCounter += cInc;
     }
 }
 
 void oscillatorInit()
 {
     mtimConfigure();// counter is started here
-    oscillator = 0;
+    overflowCounter = 0;
+    bBlockOverflowCounter = FALSE;
     mtimInstallIsrCallback(&counterIsrCallback);
 }

@@ -11,6 +11,7 @@
 void test_oscillator_init()
 {
     oscillatorInit();
+    timerRestartSec(2);
 }
 
 void test_oscillator_run()
@@ -20,6 +21,6 @@ void test_oscillator_run()
     if (timerElapsedSec()) 
     {
         oscillator = oscillatorReadAndClear();
-        timerRestartSec(50);
+        timerRestartSec(2);
     }
 }

@@ -14,7 +14,7 @@ static pMtimInterruptCallback_t pIsrClbck;
 
 void mtimResetCounter()
 {
-    MTIMSC_TSTP = 0; // start the counter
+    MTIMSC_TRST = 1; // start the counter
 }
 
 Byte mtimReadCounter()
@@ -35,6 +35,7 @@ void mtimConfigure()
 {
     MTIMCLK_CLKS = 3; // External source (TCLK pin), rising edge
     MTIMSC_TOIE = 1; // interrupts are enabled
+    MTIMSC_TSTP = 0; // start timer
     mtimResetCounter();
 }
 

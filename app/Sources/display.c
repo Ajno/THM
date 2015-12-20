@@ -11,17 +11,18 @@
 
 static Bool bBacklightOn = FALSE;
 static lcdOnOffControl_t lcdOnOff;
+static Word contrast = cDefaultContrast;
 
-void displayUpdateContrast(const Word cContrast)
+void displayContrastSet()
 {
     lcdMoveCursor(cContrastPositionOnScreen);
     lcdWrite("    ");
     lcdMoveCursor(cContrastPositionOnScreen);
-    lcdWrite(thmLibItoa(cContrast));
+    lcdWrite(thmLibItoa(contrast));
     lcdWrite("%");
 }
 
-void displayUpdateTemperature(const sWord cTemperature)
+void displayTemperatureSet(const sWord cTemperature)
 {
     sWord temperature = cTemperature;
     
@@ -42,7 +43,7 @@ void displayUpdateTemperature(const sWord cTemperature)
     lcdMoveCursor(cContrastPositionOnScreen);
 }
 
-void displayUpdateHumidity(const Word cHumidity)
+void displayHumiditySet(const Word cHumidity)
 {
     // get cursor
     lcdMoveCursor(cHumidityPositionOnSreen);
@@ -92,6 +93,28 @@ Bool displayIsOn()
     return lcdOnOff.bLcdOn;
 }
 
+void displayContrastIncrement()
+{
+    contrast = lcdGetContrast();
+    if (cLcdMaxContrast > contrast)
+    {
+        contrast += cContrastIncrement;
+    }
+    lcdSetContrast(contrast);
+    displayContrastSet(contrast);
+}
+
+void displayContrastDecrement()
+{
+    contrast = lcdGetContrast();
+    if (0 < contrast)
+    {
+        contrast -= cContrastIncrement;
+    }
+    lcdSetContrast(contrast);
+    displayContrastSet(contrast);
+}
+
 void displayBacklightTurnOn()
 {
     if (!bBacklightOn)
@@ -124,4 +147,6 @@ void displayInit()
     lcdOnOff.bLcdOn = FALSE;
     lcdOnOff.bBlinkingCursor = FALSE;
     lcdOnOff.bCursorOn = FALSE;
+    contrast = cDefaultContrast;
+    lcdSetContrast(contrast);
 }

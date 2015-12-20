@@ -21,12 +21,10 @@ static const Word cBacklightToggleTimeMiliSec = 250;
 static const Word cAwakeTimeSec = 10;
 static const Word cScreenShiftTimeMiliSec = 50;
 static const Word cButtonPressTimeMiliSec = 2000;
-static const Word cContrastIncrement = 5;
 
 static Byte                 cntrBacklightToggle = cNumOfBacklightToggle;
 static lcdMovingDirection_t lcdDirection;
 static Byte                 screenShifts = 0;
-static Word                 contrast = 40;
 static menuState_t          menu = cMenuState_idle1;
 static sWord temperatureRaw = 0;
 static Word humidityRaw = 0;
@@ -42,30 +40,8 @@ void updateTemperatureAndHumidity()
 {
     temperatureRaw = temperatureRead();
     humidityRaw = humidityRead(temperatureRaw, 10/cSamplingPeriodMiliSecX100);
-    displayUpdateTemperature(temperatureRaw);
-    displayUpdateHumidity(humidityRaw);
-}
-
-void contrastAdd()
-{
-    contrast = lcdGetContrast();
-    if (cLcdMaxContrast > contrast)
-    {
-        contrast += cContrastIncrement;
-    }
-    lcdSetContrast(contrast);
-    displayUpdateContrast(contrast);
-}
-
-void contrastDec()
-{
-    contrast = lcdGetContrast();
-    if (0 < contrast)
-    {
-        contrast -= cContrastIncrement;
-    }
-    lcdSetContrast(contrast);
-    displayUpdateContrast(contrast);
+    displayTemperatureSet(temperatureRaw);
+    displayHumiditySet(humidityRaw);
 }
 
 void onElapsedVeryShortTimer()
@@ -163,7 +139,7 @@ void processUpperButton()
                 menu = cMenuState_changeContrast;
                 break;
             case cMenuState_upperPressedInChangeContrast:
-                contrastAdd();
+                displayContrastIncrement();
                 menu = cMenuState_changeContrast;
                 break;
             case cMenuState_waitToEnterIdle2:
@@ -206,7 +182,7 @@ void processLowerButton()
         switch (menu)
         {
             case cMenuState_lowerPressedInChangeContrast:
-                contrastDec();
+                displayContrastDecrement();
                 menu = cMenuState_changeContrast;
                 break;
             case cMenuState_sleep:
@@ -240,7 +216,7 @@ void controller()
             displayBacklightTurnOn();
             lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
             updateTemperatureAndHumidity();
-            displayUpdateContrast(contrast);
+            displayContrastSet();
             timerRestartSec(cAwakeTimeSec);
         }
         else
@@ -273,8 +249,6 @@ void baseInitApp()
     lcdDirection.bShiftScreenInsteadOfCursor = TRUE;
     menu = cMenuState_idle1;
     screenShifts = 0;
-    contrast = 40;
-    lcdSetContrast(contrast);
 
     displayInit();
     baseInstallApp(&controller);

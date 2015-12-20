@@ -17,17 +17,21 @@ enum displayConst_t
 {
     cTemperaturePositionOnSreen = 9,
     cContrastPositionOnScreen   = 26,
-    cHumidityPositionOnSreen    = 49
+    cHumidityPositionOnSreen    = 49,
+    cDefaultContrast            = 40,
+    cContrastIncrement          = 5
 };
 
-void displayUpdateContrast(const Word cContrast);
-void displayUpdateTemperature(const sWord cTemperature);
-void displayUpdateHumidity(const Word cHumidity);
+void displayContrastSet();
+void displayTemperatureSet(const sWord cTemperature);
+void displayHumiditySet(const Word cHumidity);
 void displayCursorTurnOn();
 void displayCursorTurnOff();
 void displayTurnOff();
 void displayTurnOn();
 Bool displayIsOn();
+void displayContrastIncrement();
+void displayContrastDecrement();
 void displayBacklightTurnOn();
 void displayBacklightTurnOff();
 void displayBacklightToggle();

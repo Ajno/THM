@@ -25,3 +25,7 @@ OscillatorMock::~OscillatorMock()
     // TODO Auto-generated destructor stub
 }
 
+void OscillatorMock::setFrequency(const Word cFrequency)
+{
+    frequency = cFrequency;
+}

@@ -15,6 +15,7 @@ class OscillatorMock
 public:
     OscillatorMock(const Word cFreq);
     virtual ~OscillatorMock();
+    void setFrequency(const Word cFrequency);
 };
 
 #endif /* OSCILLATOR_MOCK_H_ */

@@ -21,8 +21,6 @@ static const Word cBacklightToggleTimeMiliSec = 250;
 static const Word cAwakeTimeSec = 10;
 static const Word cScreenShiftTimeMiliSec = 50;
 static const Word cButtonPressTimeMiliSec = 2000;
-static const Word cSamplingPeriodMiliSecX100 = 5; // 500 ms
-static const Word cSamplingFreqMiliSecX100 = 10/cSamplingPeriodMiliSecX100;
 static const Word cContrastIncrement = 5;
 
 static Byte                 cntrBacklightToggle = cNumOfBacklightToggle;
@@ -43,7 +41,7 @@ static void screenShift()
 void updateTemperatureAndHumidity()
 {
     temperatureRaw = temperatureRead();
-    humidityRaw = humidityRead(temperatureRaw, cSamplingFreqMiliSecX100);
+    humidityRaw = humidityRead(temperatureRaw, 10/cSamplingPeriodMiliSecX100);
     displayUpdateTemperature(temperatureRaw);
     displayUpdateHumidity(humidityRaw);
 }

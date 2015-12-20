@@ -74,7 +74,6 @@ void onElapsedVeryShortTimer()
             break;
         case cMenuState_upperPressedInIdle2:
             displayCursorTurnOn();
-            lcdMoveCursor(cContrastPositionOnScreen);
             menu = cMenuState_waitToChangeContrast;
             break;
         case cMenuState_upperPressedInChangeContrast:
@@ -214,7 +213,6 @@ void controller()
         {
             displayTurnOn();
             displayBacklightTurnOn();
-            lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
             updateTemperatureAndHumidity();
             displayContrastSet();
             timerRestartSec(cAwakeTimeSec);

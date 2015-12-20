@@ -60,6 +60,7 @@ void displayCursorTurnOn()
     lcdOnOff.bBlinkingCursor = TRUE;
     lcdOnOff.bCursorOn = TRUE;
     lcdOnOffControl(lcdOnOff);
+    lcdMoveCursor(cContrastPositionOnScreen);
 }
 
 void displayCursorTurnOff()
@@ -85,7 +86,8 @@ void displayTurnOn()
         lcdOnOff.bCursorOn = FALSE;
         lcdOnOff.bBlinkingCursor = FALSE;
     }
-    lcdOnOffControl(lcdOnOff);    
+    lcdOnOffControl(lcdOnOff);
+    lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
 }
 
 Bool displayIsOn()
@@ -101,7 +103,7 @@ void displayContrastIncrement()
         contrast += cContrastIncrement;
     }
     lcdSetContrast(contrast);
-    displayContrastSet(contrast);
+    displayContrastSet();
 }
 
 void displayContrastDecrement()
@@ -112,7 +114,7 @@ void displayContrastDecrement()
         contrast -= cContrastIncrement;
     }
     lcdSetContrast(contrast);
-    displayContrastSet(contrast);
+    displayContrastSet();
 }
 
 void displayBacklightTurnOn()

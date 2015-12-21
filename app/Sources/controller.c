@@ -10,7 +10,6 @@
 #include "base.h"
 #include "buttons.h"
 #include "timer.h"
-#include "lcd.h"//todo remove when not needed
 #include "display.h"
 #include "pwr_mgmt.h"
 #include "temperature.h"
@@ -19,22 +18,12 @@
 
 static const Word cBacklightToggleTimeMiliSec = 250;
 static const Word cAwakeTimeSec = 10;
-static const Word cScreenShiftTimeMiliSec = 50;
 static const Word cButtonPressTimeMiliSec = 2000;
 
-static Byte                 cntrBacklightToggle = cNumOfBacklightToggle;
-static lcdMovingDirection_t lcdDirection;
-static Byte                 screenShifts = 0;
-static menuState_t          menu = cMenuState_idle1;
-static sWord temperatureRaw = 0;
-static Word humidityRaw = 0;
-
-static void screenShift()
-{
-    lcdScreenOrCursorShift(lcdDirection);
-    screenShifts++;
-    timerRestartMiliSec(cScreenShiftTimeMiliSec);
-}
+static Byte         cntrBacklightToggle = cNumOfBacklightToggle;
+static menuState_t  menu = cMenuState_idle1;
+static sWord        temperatureRaw = 0;
+static Word         humidityRaw = 0;
 
 void updateTemperatureAndHumidity()
 {
@@ -49,27 +38,25 @@ void onElapsedVeryShortTimer()
     switch (menu)
     {
         case cMenuState_goto1:
-            if (cLcdNumOfChars <= screenShifts)
+            if (displayIsNotSliding())
             {
-                screenShifts = 0;
                 menu = cMenuState_idle1;
             }
             else
             {
-                lcdDirection.bShiftRightInsteadOfLeft = TRUE;
-                screenShift();
+                displaySlideLeft();
+                timerRestartMiliSec(cScreenShiftTimeMiliSec);
             }
             break;
         case cMenuState_goto2:
-            if (cLcdNumOfChars <= screenShifts)
+                if (displayIsNotSliding())
             {
-                screenShifts = 0;
                 menu = cMenuState_idle2;
             }
             else
             {
-                lcdDirection.bShiftRightInsteadOfLeft = FALSE;
-                screenShift();
+                displaySlideRight();
+                timerRestartMiliSec(cScreenShiftTimeMiliSec);
             }
             break;
         case cMenuState_upperPressedInIdle2:
@@ -160,13 +147,13 @@ void processLowerButton()
         switch (menu)
         {
             case cMenuState_idle1:
-                lcdDirection.bShiftRightInsteadOfLeft = FALSE;
-                screenShift();
+                displaySlideRight();
+                timerRestartMiliSec(cScreenShiftTimeMiliSec);
                 menu = cMenuState_goto2;
                 break;
             case cMenuState_idle2:
-                lcdDirection.bShiftRightInsteadOfLeft = TRUE;
-                screenShift();
+                displaySlideLeft();
+                timerRestartMiliSec(cScreenShiftTimeMiliSec);
                 menu = cMenuState_goto1;
                 break;
             case cMenuState_changeContrast:
@@ -243,11 +230,7 @@ void controller()
 void baseInitApp()
 {
     cntrBacklightToggle = cNumOfBacklightToggle;
-    lcdDirection.bShiftRightInsteadOfLeft = TRUE;
-    lcdDirection.bShiftScreenInsteadOfCursor = TRUE;
     menu = cMenuState_idle1;
-    screenShifts = 0;
-
     displayInit();
     baseInstallApp(&controller);
 }

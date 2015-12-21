@@ -19,7 +19,8 @@ enum displayConst_t
     cContrastPositionOnScreen   = 26,
     cHumidityPositionOnSreen    = 49,
     cDefaultContrast            = 40,
-    cContrastIncrement          = 5
+    cContrastIncrement          = 5,
+    cScreenShiftTimeMiliSec     = 50
 };
 
 void displayContrastSet();
@@ -30,6 +31,9 @@ void displayCursorTurnOff();
 void displayTurnOff();
 void displayTurnOn();
 Bool displayIsOn();
+Bool displayIsNotSliding();
+void displaySlideRight();
+void displaySlideLeft();
 void displayContrastIncrement();
 void displayContrastDecrement();
 void displayBacklightTurnOn();

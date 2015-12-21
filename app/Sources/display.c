@@ -11,7 +11,9 @@
 
 static Bool bBacklightOn = FALSE;
 static lcdOnOffControl_t lcdOnOff;
+static lcdMovingDirection_t lcdDirection;
 static Word contrast = cDefaultContrast;
+static Byte shifts = 0;
 
 void displayContrastSet()
 {
@@ -95,6 +97,33 @@ Bool displayIsOn()
     return lcdOnOff.bLcdOn;
 }
 
+Bool displayIsNotSliding()
+{
+    return (cLcdNumOfChars <= shifts);
+}
+
+void displaySlideRight()
+{
+    if (cLcdNumOfChars <= shifts)
+    {
+        shifts = 0;
+    }
+    lcdDirection.bShiftRightInsteadOfLeft = FALSE;
+    lcdScreenOrCursorShift(lcdDirection);
+    shifts++;
+}
+
+void displaySlideLeft()
+{
+    if (cLcdNumOfChars <= shifts)
+    {
+        shifts = 0;
+    }
+    lcdDirection.bShiftRightInsteadOfLeft = TRUE;
+    lcdScreenOrCursorShift(lcdDirection);
+    shifts++;
+}
+
 void displayContrastIncrement()
 {
     contrast = lcdGetContrast();
@@ -149,6 +178,9 @@ void displayInit()
     lcdOnOff.bLcdOn = FALSE;
     lcdOnOff.bBlinkingCursor = FALSE;
     lcdOnOff.bCursorOn = FALSE;
+    lcdDirection.bShiftRightInsteadOfLeft = TRUE;
+    lcdDirection.bShiftScreenInsteadOfCursor = TRUE;
+    shifts = 0;
     contrast = cDefaultContrast;
     lcdSetContrast(contrast);
 }

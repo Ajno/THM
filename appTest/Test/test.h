@@ -18,16 +18,16 @@
 
 using namespace CppUnit;
 
-class ControllerTest : public TestFixture
+class ControllerTest: public TestFixture
 {
-    ButtonsMock*        pButtons;
-    TimerMock*          pTimer;
-    LcdMock*            pLcd;
-    PwrMgmtMock*        pPwrMgmt;
-    TemperatureMock*    pTemperature;
-    OscillatorMock*     pOscillator;
+    ButtonsMock* pButtons;
+    TimerMock* pTimer;
+    LcdMock* pLcd;
+    PwrMgmtMock* pPwrMgmt;
+    TemperatureMock* pTemperature;
+    OscillatorMock* pOscillator;
 
-    CPPUNIT_TEST_SUITE(ControllerTest);
+CPPUNIT_TEST_SUITE(ControllerTest);
 
     CPPUNIT_TEST(initApp);
     CPPUNIT_TEST(backlightOn);
@@ -53,9 +53,13 @@ class ControllerTest : public TestFixture
     CPPUNIT_TEST(slideToMenu1AfterModify2);
     CPPUNIT_TEST(itoaTest);
     CPPUNIT_TEST(temperatureUpdate);
-    CPPUNIT_TEST(humidityUpdate);
+    CPPUNIT_TEST(humidityUpdate1);
+    CPPUNIT_TEST(humidityUpdate2);
+    CPPUNIT_TEST(humidityUpdate3);
+    CPPUNIT_TEST(humidityUpdate4);
 
-    CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END()
+    ;
 public:
     void setUp();
     void tearDown();
@@ -67,30 +71,33 @@ public:
     void pressAndReleaseButton(const buttons_t cButton, const uint count);
 
     void initApp();
-	void backlightOn();
-	void backlightOff();
-	void backlightStayOn();
-	void turnOnDisplay();
-	void turnOffBacklight();
-	void goToSleepInIdle();
-	void goToSleepInModifyAndWakeUp();
-	void wakeUpAfterMenu1();
-	void wakeUpAfterMenu2();
-	void shiftScreenRight();
-	void slideToMenu2();
-	void slideToMenu1();
-	void selectMenu2Start();
-	void selectMenu2End();
-	void increaseContrastBy5();
-	void increaseContrastToMax();
-	void decreaseContrastBy5();
-	void decreaseContrastToMin();
-	void unselectMenu2Start();
-	void unselectMenu2End();
-	void slideToMenu1AfterModify2();
-	void itoaTest();
-	void temperatureUpdate();
-	void humidityUpdate();
+    void backlightOn();
+    void backlightOff();
+    void backlightStayOn();
+    void turnOnDisplay();
+    void turnOffBacklight();
+    void goToSleepInIdle();
+    void goToSleepInModifyAndWakeUp();
+    void wakeUpAfterMenu1();
+    void wakeUpAfterMenu2();
+    void shiftScreenRight();
+    void slideToMenu2();
+    void slideToMenu1();
+    void selectMenu2Start();
+    void selectMenu2End();
+    void increaseContrastBy5();
+    void increaseContrastToMax();
+    void decreaseContrastBy5();
+    void decreaseContrastToMin();
+    void unselectMenu2Start();
+    void unselectMenu2End();
+    void slideToMenu1AfterModify2();
+    void itoaTest();
+    void temperatureUpdate();
+    void humidityUpdate1();
+    void humidityUpdate2();
+    void humidityUpdate3();
+    void humidityUpdate4();
 };
 
 #endif /* TEST_H_ */

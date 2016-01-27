@@ -9,7 +9,7 @@
 #include "oscillator.h"
 
 /*
- * freq vs RH table for 25 deg
+ * f[Hz] vs RH[%] - for 25 deg
  */
 static Word freqVsHum[10][2] =
 {
@@ -22,9 +22,18 @@ static Word freqVsHum[10][2] =
 { 9549, 70 },
 { 21008, 80 },
 { 45670, 90 },
-{ 61789, 95 }};
+{ 61789, 95 } };
 
-static Word freq2hum(const Word frequency)
+/*
+ * t[10xdeg] vs RH[%] error relative to reference 25 deg
+ */
+static sWord tempVsHumErr[3][2] =
+{
+{ 50, 10 },
+{ 150, 5 },
+{ 300, -2 } };
+
+static Word frequency2humidity(const Word frequency)
 {
     Word ret = 0;
 
@@ -96,9 +105,32 @@ static Word freq2hum(const Word frequency)
     return ret;
 }
 
+static void compensate4Temperature(const sWord cTemperature, Word* pHumidity)
+{
+    if (250 > cTemperature)
+    {
+        if (tempVsHumErr[0][0] > cTemperature)
+        {
+            *pHumidity += tempVsHumErr[0][1];
+        }
+        else if (tempVsHumErr[1][0] > cTemperature)
+        {
+            *pHumidity += tempVsHumErr[1][1];
+        }
+    }
+    else
+    {
+        if (tempVsHumErr[2][0] < cTemperature)
+        {
+            *pHumidity += tempVsHumErr[2][1];
+        }
+    }
+}
+
 Word humidityRead(const sWord cTemperature, const Word cSamplingFrequency)
 {
-    Word ret = oscillatorReadAndClear();
-    ret = freq2hum(ret * cSamplingFrequency);
-    return ret;
+    Word humidity = oscillatorReadAndClear();
+    humidity = frequency2humidity(humidity * cSamplingFrequency);
+    compensate4Temperature(cTemperature, &humidity);
+    return humidity;
 }

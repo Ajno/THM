@@ -540,8 +540,8 @@ void ControllerTest::temperatureUpdate()
     screenTemp2 = pLcd->getScreen().text;
 
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSecX100));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 12,3ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == screenTemp1));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: -15,1ßCKontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == screenTemp2));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 12,3ßC Kontrast: 40%           Vlhkost: 45%    Jazyk: SVK" == screenTemp1));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: -15,1ßCKontrast: 40%           Vlhkost: 50%    Jazyk: SVK" == screenTemp2));
 }
 
 void ControllerTest::humidityUpdate1()
@@ -594,4 +594,18 @@ void ControllerTest::humidityUpdate4()
     screen = pLcd->getScreen().text;
 
     CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 20%    Jazyk: SVK" == screen));
+}
+
+void ControllerTest::humidityUpdate5()
+{
+    string screen("");
+
+    ControllerTest::firstTurnOnDisplay();
+    pTemperature->setTemperature(310);
+    pOscillator->setFrequency(10*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screen = pLcd->getScreen().text;
+
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 31,0ßC Kontrast: 40%           Vlhkost: 18%    Jazyk: SVK" == screen));
 }

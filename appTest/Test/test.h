@@ -58,6 +58,7 @@ CPPUNIT_TEST_SUITE(ControllerTest);
     CPPUNIT_TEST(humidityUpdate3);
     CPPUNIT_TEST(humidityUpdate4);
     CPPUNIT_TEST(humidityUpdate5);
+    CPPUNIT_TEST(humidityUpdate5);
 
     CPPUNIT_TEST_SUITE_END()
     ;
@@ -100,6 +101,7 @@ public:
     void humidityUpdate3();
     void humidityUpdate4();
     void humidityUpdate5();
+    void humidityUpdate6();
 };
 
 #endif /* TEST_H_ */

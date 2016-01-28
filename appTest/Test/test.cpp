@@ -562,12 +562,12 @@ void ControllerTest::humidityUpdate2()
     string screen("");
 
     ControllerTest::firstTurnOnDisplay();
-    pOscillator->setFrequency(1600*cSamplingPeriodMiliSecX100/10);
+    pOscillator->setFrequency(1750*cSamplingPeriodMiliSecX100/10);
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     screen = pLcd->getScreen().text;
 
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    Jazyk: SVK" == screen));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 54%    Jazyk: SVK" == screen));
 }
 
 void ControllerTest::humidityUpdate3()
@@ -575,12 +575,12 @@ void ControllerTest::humidityUpdate3()
     string screen("");
 
     ControllerTest::firstTurnOnDisplay();
-    pOscillator->setFrequency(10000*cSamplingPeriodMiliSecX100/10);
+    pOscillator->setFrequency(3232*cSamplingPeriodMiliSecX100/10);
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     screen = pLcd->getScreen().text;
 
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 80%    Jazyk: SVK" == screen));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 60%    Jazyk: SVK" == screen));
 }
 
 void ControllerTest::humidityUpdate4()
@@ -608,4 +608,18 @@ void ControllerTest::humidityUpdate5()
     screen = pLcd->getScreen().text;
 
     CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 31,0ßC Kontrast: 40%           Vlhkost: 18%    Jazyk: SVK" == screen));
+}
+
+void ControllerTest::humidityUpdate6()
+{
+    string screen("");
+
+    ControllerTest::firstTurnOnDisplay();
+    pTemperature->setTemperature(205);
+    pOscillator->setFrequency(21008*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screen = pLcd->getScreen().text;
+
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 31,0ßC Kontrast: 40%           Vlhkost: 80%    Jazyk: SVK" == screen));
 }

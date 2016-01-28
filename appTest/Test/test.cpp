@@ -549,7 +549,7 @@ void ControllerTest::humidityUpdate1()
     string screen("");
 
     ControllerTest::firstTurnOnDisplay();
-    pOscillator->setFrequency(302*cSamplingPeriodMiliSecX100/10);
+    pOscillator->setFrequency(1050*cSamplingPeriodMiliSecX100/10);
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     screen = pLcd->getScreen().text;

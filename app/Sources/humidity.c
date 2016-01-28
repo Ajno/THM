@@ -10,19 +10,21 @@
 
 /*
  * f[Hz] vs RH[%] - for 25 deg
+ * {f,quotient,offset,scale_1,scale_2}
+ * RH=(quotient*f/scale_1+offset)/scale_2
  */
-static Word freqVsHum[10][2] =
+static Word freqVsHum[10][5] =
 {
-{ 21, 20 },
-{ 84, 30 },
-{ 300, 40 },
-{ 1050, 50 },
-{ 1750, 55 },
-{ 3232, 60 },
-{ 9549, 70 },
-{ 21008, 80 },
-{ 45670, 90 },
-{ 61789, 95 } };
+{ 21, 0, 20, 1, 1 }, //quot=0, off=20, scale_1=1, scale_2=1
+{ 84, 650, 8533, 8, 512 }, //quot=650=0.1587302*4096, off=8533=16.66667*512, scale_1=8=4096/512, scale_2=512
+{ 300, 192, 6684, 16, 256 }, //quot=190=0.0462963*4096, off=6684=256*26.11111111, scale_1=16, scale_2=256
+{ 1050, 0, 50, 1, 1 }, //quot=0, off=50
+{ 1750, 0, 55, 1, 1 }, //quot=0, off=55
+{ 3232, 0, 60, 1, 1 }, //quot=0, off=60
+{ 9549, 0, 70, 1, 1 }, //quot=0, off=70
+{ 21008, 0, 80, 1, 1 }, //quot=0, off=80
+{ 45670, 0, 90, 1, 1 }, //quot=2392=65536*0.00040548211, off=71.4816320363
+{ 61789, 0, 95, 1, 1 } }; //quot=1=0.00031019294*3223, off=75.8334884303, scale_1=3223, scale_2=1
 
 /*
  * t[10xdeg] vs RH[%] error relative to reference 25 deg
@@ -36,73 +38,76 @@ static sWord tempVsHumErr[3][2] =
 static Word frequency2humidity(const Word frequency)
 {
     Word ret = 0;
+    Byte idx = 0;
 
-    if (freqVsHum[3][0] >= frequency)
+    if (freqVsHum[3][idx] >= frequency)
     {
-        if (freqVsHum[1][0] >= frequency)
+        if (freqVsHum[1][idx] >= frequency)
         {
-            if (freqVsHum[0][0] >= frequency)
+            if (freqVsHum[0][idx] >= frequency)
             {
-                ret = freqVsHum[0][1];
+                idx = 0;
             }
             else
             {
-                ret = freqVsHum[1][1];
+                idx = 1;
             }
         }
         else
         {
-            if (freqVsHum[2][0] >= frequency)
+            if (freqVsHum[2][idx] >= frequency)
             {
-                ret = freqVsHum[2][1];
+                idx = 2;
             }
             else
             {
-                ret = freqVsHum[3][1];
+                idx = 3;
             }
         }
     }
     else
     {
-        if (freqVsHum[6][0] >= frequency)
+        if (freqVsHum[6][idx] >= frequency)
         {
-            if (freqVsHum[5][0] >= frequency)
+            if (freqVsHum[5][idx] >= frequency)
             {
-                if (freqVsHum[4][0] >= frequency)
+                if (freqVsHum[4][idx] >= frequency)
                 {
-                    ret = freqVsHum[4][1];
+                    idx = 4;
                 }
                 else
                 {
-                    ret = freqVsHum[5][1];
+                    idx = 5;
                 }
             }
             else
             {
-                ret = freqVsHum[6][1];
+                idx = 6;
             }
         }
         else
         {
-            if (freqVsHum[7][0] >= frequency)
+            if (freqVsHum[7][idx] >= frequency)
             {
-                ret = freqVsHum[7][1];
+                idx = 7;
             }
             else
             {
-                if (freqVsHum[8][0] >= frequency)
+                if (freqVsHum[8][idx] >= frequency)
                 {
-                    ret = freqVsHum[8][1];
+                    idx = 8;
                 }
                 else
                 {
-                    ret = freqVsHum[9][1];
+                    idx = 9;
                 }
             }
         }
     }
 
-    return ret;
+    // RH=(frequency*quotient/scale_1+offset)/scale_2
+    return (frequency * freqVsHum[idx][1] / freqVsHum[idx][3]
+            + freqVsHum[idx][2]) / freqVsHum[idx][4];
 }
 
 static void compensate4Temperature(const sWord cTemperature, Word* pHumidity)

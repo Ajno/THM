@@ -24,7 +24,7 @@ void ControllerTest::setUp()
     pLcd = new LcdMock();
     pPwrMgmt = new PwrMgmtMock();
     pTemperature = new TemperatureMock(205);
-    pOscillator = new OscillatorMock(135);
+    pOscillator = new OscillatorMock(150);
 }
 
 void ControllerTest::tearDown()
@@ -588,12 +588,12 @@ void ControllerTest::humidityUpdate4()
     string screen("");
 
     ControllerTest::firstTurnOnDisplay();
-    pOscillator->setFrequency(10*cSamplingPeriodMiliSecX100/10);
+    pOscillator->setFrequency(84*cSamplingPeriodMiliSecX100/10);
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     screen = pLcd->getScreen().text;
 
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 20%    Jazyk: SVK" == screen));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 29%    Jazyk: SVK" == screen));
 }
 
 void ControllerTest::humidityUpdate5()

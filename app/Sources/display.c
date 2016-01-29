@@ -24,13 +24,13 @@ void displayContrastSet()
     lcdWrite("%");
 }
 
-void displayTemperatureSet(const sWord cTemperature)
+void displayTemperatureSet(const sWord cTempInTenthsOfDeg)
 {
-    sWord temperature = cTemperature;
+    sWord temperature = cTempInTenthsOfDeg;
     
     // get cursor    
     lcdMoveCursor(cTemperaturePositionOnSreen);
-    lcdWrite("    ");
+    lcdWrite("      ");
     lcdMoveCursor(cTemperaturePositionOnSreen);
     lcdWrite(thmLibItoa(temperature / 10));
     lcdWrite(",");
@@ -45,13 +45,13 @@ void displayTemperatureSet(const sWord cTemperature)
     lcdMoveCursor(cContrastPositionOnScreen);
 }
 
-void displayHumiditySet(const Word cHumidity)
+void displayHumiditySet(const Word cHumidityInPercents)
 {
     // get cursor
     lcdMoveCursor(cHumidityPositionOnSreen);
     lcdWrite("      ");
     lcdMoveCursor(cHumidityPositionOnSreen);
-    lcdWrite(thmLibItoa(cHumidity));
+    lcdWrite(thmLibItoa(cHumidityInPercents));
     lcdWrite("%");
     // set cursor back
     lcdMoveCursor(cContrastPositionOnScreen);

@@ -24,8 +24,8 @@ enum displayConst_t
 };
 
 void displayContrastSet();
-void displayTemperatureSet(const sWord cTemperature);
-void displayHumiditySet(const Word cHumidity);
+void displayTemperatureSet(const sWord cTempInTenthsOfDeg);
+void displayHumiditySet(const Word cHumidityInPercents);
 void displayCursorTurnOn();
 void displayCursorTurnOff();
 void displayTurnOff();

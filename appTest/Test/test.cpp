@@ -546,15 +546,81 @@ void ControllerTest::temperatureUpdate()
 
 void ControllerTest::humidityUpdate1()
 {
-    string screen("");
+    string screenHum1("");
+    string screenHum2("");
+    string screenHum3("");
+    string screenHum4("");
+    string screenHum5("");
+    string screenHum6("");
+    string screenHum7("");
+    string screenHum8("");
+    string screenHum9("");
+    string screenHum10("");
+    string screenHum11("");
+    string screenHum12("");
 
     ControllerTest::firstTurnOnDisplay();
-    pOscillator->setFrequency(1050*cSamplingPeriodMiliSecX100/10);
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
-    screen = pLcd->getScreen().text;
+    screenHum1 = pLcd->getScreen().text;
+    pOscillator->setFrequency(19*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum2 = pLcd->getScreen().text;
+    pOscillator->setFrequency(45670*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum3 = pLcd->getScreen().text;
+    pOscillator->setFrequency(9549*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum4 = pLcd->getScreen().text;
+    pOscillator->setFrequency(21008*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum5 = pLcd->getScreen().text;
+    pOscillator->setFrequency(1750*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum6 = pLcd->getScreen().text;
+    pOscillator->setFrequency(61789*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum7 = pLcd->getScreen().text;
+    pOscillator->setFrequency(84*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum8 = pLcd->getScreen().text;
+    pOscillator->setFrequency(70*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum9 = pLcd->getScreen().text;
+    pOscillator->setFrequency(15000*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum10 = pLcd->getScreen().text;
+    pOscillator->setFrequency(5000*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum11 = pLcd->getScreen().text;
+    pOscillator->setFrequency(2500*cSamplingPeriodMiliSecX100/10);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    screenHum12 = pLcd->getScreen().text;
 
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 50%    Jazyk: SVK" == screen));
+    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSecX100));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == screenHum1));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 19%    Jazyk: SVK" == screenHum2));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 89%    Jazyk: SVK" == screenHum3));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 70%    Jazyk: SVK" == screenHum4));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 80%    Jazyk: SVK" == screenHum5));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    Jazyk: SVK" == screenHum6));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 94%    Jazyk: SVK" == screenHum7));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 30%    Jazyk: SVK" == screenHum8));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 27%    Jazyk: SVK" == screenHum9));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 74%    Jazyk: SVK" == screenHum10));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 62%    Jazyk: SVK" == screenHum11));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 57%    Jazyk: SVK" == screenHum12));
 }
 
 void ControllerTest::humidityUpdate2()
@@ -567,59 +633,5 @@ void ControllerTest::humidityUpdate2()
     controller();
     screen = pLcd->getScreen().text;
 
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 54%    Jazyk: SVK" == screen));
-}
-
-void ControllerTest::humidityUpdate3()
-{
-    string screen("");
-
-    ControllerTest::firstTurnOnDisplay();
-    pOscillator->setFrequency(3232*cSamplingPeriodMiliSecX100/10);
-    pTimer->stop(TimerMock::cTimerMiliSecX100);
-    controller();
-    screen = pLcd->getScreen().text;
-
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 60%    Jazyk: SVK" == screen));
-}
-
-void ControllerTest::humidityUpdate4()
-{
-    string screen("");
-
-    ControllerTest::firstTurnOnDisplay();
-    pOscillator->setFrequency(84*cSamplingPeriodMiliSecX100/10);
-    pTimer->stop(TimerMock::cTimerMiliSecX100);
-    controller();
-    screen = pLcd->getScreen().text;
-
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 29%    Jazyk: SVK" == screen));
-}
-
-void ControllerTest::humidityUpdate5()
-{
-    string screen("");
-
-    ControllerTest::firstTurnOnDisplay();
-    pTemperature->setTemperature(310);
-    pOscillator->setFrequency(10*cSamplingPeriodMiliSecX100/10);
-    pTimer->stop(TimerMock::cTimerMiliSecX100);
-    controller();
-    screen = pLcd->getScreen().text;
-
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 31,0ßC Kontrast: 40%           Vlhkost: 18%    Jazyk: SVK" == screen));
-}
-
-void ControllerTest::humidityUpdate6()
-{
-    string screen("");
-
-    ControllerTest::firstTurnOnDisplay();
-    pTemperature->setTemperature(205);
-    pOscillator->setFrequency(21008*cSamplingPeriodMiliSecX100/10);
-    pTimer->stop(TimerMock::cTimerMiliSecX100);
-    controller();
-    screen = pLcd->getScreen().text;
-
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 31,0ßC Kontrast: 40%           Vlhkost: 80%    Jazyk: SVK" == screen));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    Jazyk: SVK" == screen));
 }

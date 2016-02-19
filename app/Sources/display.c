@@ -14,6 +14,7 @@ static lcdOnOffControl_t lcdOnOff;
 static lcdMovingDirection_t lcdDirection;
 static Word contrast = cDefaultContrast;
 static Byte shifts = 0;
+static Byte animationState = 0;
 
 void displayContrastSet()
 {
@@ -27,7 +28,7 @@ void displayContrastSet()
 void displayTemperatureSet(const sWord cTempInTenthsOfDeg)
 {
     sWord temperature = cTempInTenthsOfDeg;
-    
+
     // get cursor    
     lcdMoveCursor(cTemperaturePositionOnSreen);
     lcdWrite("      ");
@@ -49,10 +50,66 @@ void displayHumiditySet(const Word cHumidityInPercents)
 {
     // get cursor
     lcdMoveCursor(cHumidityPositionOnSreen);
-    lcdWrite("      ");
+    lcdWrite("       ");
     lcdMoveCursor(cHumidityPositionOnSreen);
     lcdWrite(thmLibItoa(cHumidityInPercents));
     lcdWrite("%");
+    // set cursor back
+    lcdMoveCursor(cContrastPositionOnScreen);
+}
+
+void displayDoAnimation()
+{
+    lcdMoveCursor(cAnimationPositionOnSreen);
+    switch (animationState)
+    {
+    case 0:
+        lcdWrite("oooo (*_*) oooo");
+        animationState = 1;
+        break;
+    case 1:
+        lcdWrite("oooo (-_-) oooo");
+        animationState = 2;
+        break;
+    case 2:
+        lcdWrite("oOoo (-_-) ooOo");
+        animationState = 3;
+        break;
+    case 3:
+        lcdWrite("oOoo (-_-) ooOo");
+        animationState = 4;
+        break;
+    case 4:
+        lcdWrite("---> (-_-) ooOo");
+        animationState = 5;
+        break;
+    case 5:
+        lcdWrite("---->(o.o) ooOo");
+        animationState = 6;
+        break;
+    case 6:
+        lcdWrite("------->X) ooOo");
+        animationState = 7;
+        break;
+    case 7:
+        lcdWrite(">>-------> ooOo");
+        animationState = 8;
+        break;
+    case 8:
+        lcdWrite("  >>>------->Oo");
+        animationState = 9;
+        break;
+    case 9:
+        lcdWrite("    >>>------->");
+        animationState = 10;
+        break;
+    case 10:
+        lcdWrite("    >>>------->");
+        animationState = 0;
+        break;
+    default:
+        break;
+    }
     // set cursor back
     lcdMoveCursor(cContrastPositionOnScreen);
 }
@@ -69,7 +126,7 @@ void displayCursorTurnOff()
 {
     lcdOnOff.bBlinkingCursor = FALSE;
     lcdOnOff.bCursorOn = FALSE;
-    lcdOnOffControl(lcdOnOff);    
+    lcdOnOffControl(lcdOnOff);
 }
 
 void displayTurnOff()
@@ -89,7 +146,7 @@ void displayTurnOn()
         lcdOnOff.bBlinkingCursor = FALSE;
     }
     lcdOnOffControl(lcdOnOff);
-    lcdWrite("Teplota:        Kontrast:               Vlhkost:        Jazyk: SVK");
+    lcdWrite("Teplota:        Kontrast:               Vlhkost:     ");
 }
 
 Bool displayIsOn()
@@ -183,4 +240,5 @@ void displayInit()
     shifts = 0;
     contrast = cDefaultContrast;
     lcdSetContrast(contrast);
+    animationState = 0;
 }

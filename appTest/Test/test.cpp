@@ -134,7 +134,7 @@ void ControllerTest::turnOnDisplay()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
 }
@@ -148,7 +148,7 @@ void ControllerTest::turnOffBacklight()
     CPPUNIT_ASSERT(!pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
 }
@@ -163,7 +163,7 @@ void ControllerTest::goToSleepInIdle()
     CPPUNIT_ASSERT(!pLcd->backlightIsOn());
     CPPUNIT_ASSERT(!pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerSec));
 }
@@ -186,7 +186,7 @@ void ControllerTest::goToSleepInModifyAndWakeUp()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(0, pLcd->getScreen().position);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 35%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 35%           Vlhkost: 40%    " == pLcd->getScreen().text));
 //    CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",LcdMock::cCursor_off, pLcd->getCursor().state);
@@ -203,7 +203,7 @@ void ControllerTest::wakeUpAfterMenu1()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT(!pPwrMgmt->isSleeping());
@@ -227,7 +227,7 @@ void ControllerTest::wakeUpAfterMenu2()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL(1, pLcd->getScreen().position);
@@ -244,7 +244,7 @@ void ControllerTest::shiftScreenRight()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(1, pLcd->getScreen().position);
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
@@ -260,7 +260,7 @@ void ControllerTest::slideToMenu2()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
@@ -277,7 +277,7 @@ void ControllerTest::slideToMenu1()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(LcdMock::cCursor_off, pLcd->getCursor().state);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(0, pLcd->getScreen().position);
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
@@ -292,7 +292,7 @@ void ControllerTest::selectMenu2Start()
 
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
@@ -315,7 +315,7 @@ void ControllerTest::selectMenu2End()
 
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
@@ -338,7 +338,7 @@ void ControllerTest::increaseContrastBy5()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 45%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 45%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",LcdMock::cCursor_blinking, pLcd->getCursor().state);
@@ -360,7 +360,7 @@ void ControllerTest::increaseContrastToMax()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 100%          Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 100%          Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",LcdMock::cCursor_blinking, pLcd->getCursor().state);
@@ -382,7 +382,7 @@ void ControllerTest::decreaseContrastBy5()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 35%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 35%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",LcdMock::cCursor_blinking, pLcd->getCursor().state);
@@ -404,7 +404,7 @@ void ControllerTest::unselectMenu2Start()
 
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
@@ -430,7 +430,7 @@ void ControllerTest::unselectMenu2End()
 
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
@@ -452,7 +452,7 @@ void ControllerTest::decreaseContrastToMin()
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 0%            Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 0%            Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT(!pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cursor state",LcdMock::cCursor_blinking, pLcd->getCursor().state);
@@ -480,7 +480,7 @@ void ControllerTest::slideToMenu1AfterModify2()
 
     CPPUNIT_ASSERT(pLcd->backlightIsOn());
     CPPUNIT_ASSERT(pLcd->lcdIsOn());
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == pLcd->getScreen().text));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == pLcd->getScreen().text));
     CPPUNIT_ASSERT_EQUAL(cPositionMenu2 - 1, pLcd->getScreen().position);
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSec));
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerSec));
@@ -540,8 +540,8 @@ void ControllerTest::temperatureUpdate()
     screenTemp2 = pLcd->getScreen().text;
 
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSecX100));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 12,3ßC Kontrast: 40%           Vlhkost: 45%    Jazyk: SVK" == screenTemp1));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: -15,1ßCKontrast: 40%           Vlhkost: 50%    Jazyk: SVK" == screenTemp2));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 12,3ßC Kontrast: 40%           Vlhkost: 45%    " == screenTemp1));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: -15,1ßCKontrast: 40%           Vlhkost: 50%    " == screenTemp2));
 }
 
 void ControllerTest::humidityUpdate1()
@@ -609,18 +609,18 @@ void ControllerTest::humidityUpdate1()
     screenHum12 = pLcd->getScreen().text;
 
     CPPUNIT_ASSERT(pTimer->isRunning(TimerMock::cTimerMiliSecX100));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    Jazyk: SVK" == screenHum1));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 19%    Jazyk: SVK" == screenHum2));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 89%    Jazyk: SVK" == screenHum3));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 70%    Jazyk: SVK" == screenHum4));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 80%    Jazyk: SVK" == screenHum5));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    Jazyk: SVK" == screenHum6));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 94%    Jazyk: SVK" == screenHum7));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 30%    Jazyk: SVK" == screenHum8));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 27%    Jazyk: SVK" == screenHum9));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 74%    Jazyk: SVK" == screenHum10));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 62%    Jazyk: SVK" == screenHum11));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 57%    Jazyk: SVK" == screenHum12));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == screenHum1));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 19%    " == screenHum2));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 89%    " == screenHum3));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 70%    " == screenHum4));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 80%    " == screenHum5));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    " == screenHum6));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 94%    " == screenHum7));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 30%    " == screenHum8));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 27%    " == screenHum9));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 74%    " == screenHum10));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 62%    " == screenHum11));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 57%    " == screenHum12));
 }
 
 void ControllerTest::humidityUpdate2()
@@ -633,5 +633,5 @@ void ControllerTest::humidityUpdate2()
     controller();
     screen = pLcd->getScreen().text;
 
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    Jazyk: SVK" == screen));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    " == screen));
 }

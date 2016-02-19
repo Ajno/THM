@@ -46,8 +46,20 @@ extern "C" void lcdClear()
 extern "C" void lcdWrite(const char* pString)
 {
     string str(pString);
-    screen.text.replace(cursor.position, str.length(), str);
-    cursor.position += str.length();
+
+    if (64 <= cursor.position)
+    {
+        cursor.position -= 24;
+    }
+
+    if ((80-24) > cursor.position)
+    {
+        if (static_cast<unsigned int>(cursor.position) <= screen.text.length())
+        {
+            screen.text.replace(cursor.position, str.length(), str);
+            cursor.position += str.length();
+        }
+    }
 }
 
 extern "C" void lcdScreenOrCursorShift(const lcdMovingDirection_t cSetting)

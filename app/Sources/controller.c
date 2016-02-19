@@ -75,6 +75,7 @@ void onElapsedVeryShortTimer()
 void onElapsedShortTimer()
 {
     updateTemperatureAndHumidity();
+    displayDoAnimation();
     timerRestartMiliSecX100(cSamplingPeriodMiliSecX100);
 }
 

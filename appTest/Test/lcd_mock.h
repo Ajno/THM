@@ -26,7 +26,7 @@ public:
     typedef struct
     {
         cursorState_t   state;
-        int             position;
+       int    position;
     }cursor_t;
 
     typedef struct

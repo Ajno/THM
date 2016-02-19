@@ -15,9 +15,10 @@ extern "C" {
 
 enum displayConst_t
 {
-    cTemperaturePositionOnSreen = 9,
-    cContrastPositionOnScreen   = 26,
-    cHumidityPositionOnSreen    = 49,
+    cTemperaturePositionOnSreen = 0x09,
+    cContrastPositionOnScreen   = 0x1a,
+    cHumidityPositionOnSreen    = 0x49,
+    cAnimationPositionOnSreen   = 0x50,
     cDefaultContrast            = 40,
     cContrastIncrement          = 5,
     cScreenShiftTimeMiliSec     = 50
@@ -26,6 +27,7 @@ enum displayConst_t
 void displayContrastSet();
 void displayTemperatureSet(const sWord cTempInTenthsOfDeg);
 void displayHumiditySet(const Word cHumidityInPercents);
+void displayDoAnimation();
 void displayCursorTurnOn();
 void displayCursorTurnOff();
 void displayTurnOff();

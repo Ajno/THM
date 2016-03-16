@@ -43,10 +43,11 @@ char* thmLibItoa(const sWord cNum)
 sWord thmLibMovAvgFilter(const sWord in, sWord pBuff[], const Byte buffLen)
 {
     static Bool bFirstCall = TRUE;
+    Byte idx;
+    sWord out = 0;
 
     if (bFirstCall)
     {
-        Byte  idx;
         for (idx = 0; idx < buffLen; ++idx)
         {
             pBuff[idx] = in;
@@ -55,7 +56,6 @@ sWord thmLibMovAvgFilter(const sWord in, sWord pBuff[], const Byte buffLen)
     }
     else
     {
-        Byte idx;
         // shift values in buffer
         for (idx = (buffLen - 1); idx > 0 ; --idx) 
         {
@@ -65,8 +65,6 @@ sWord thmLibMovAvgFilter(const sWord in, sWord pBuff[], const Byte buffLen)
     }
 
     // calculate moving average
-    Byte idx;
-    sWord out = 0;
     for (idx = 0; idx < buffLen; ++idx) 
     {
         out += pBuff[idx];

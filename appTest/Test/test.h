@@ -52,6 +52,7 @@ CPPUNIT_TEST_SUITE(ControllerTest);
     CPPUNIT_TEST(unselectMenu2End);
     CPPUNIT_TEST(slideToMenu1AfterModify2);
     CPPUNIT_TEST(itoaTest);
+    CPPUNIT_TEST(movAvgFilterTest);
     CPPUNIT_TEST(temperatureUpdate);
     CPPUNIT_TEST(humidityUpdate1);
     CPPUNIT_TEST(humidityUpdate2);
@@ -91,6 +92,7 @@ public:
     void unselectMenu2End();
     void slideToMenu1AfterModify2();
     void itoaTest();
+    void movAvgFilterTest();
     void temperatureUpdate();
     void humidityUpdate1();
     void humidityUpdate2();

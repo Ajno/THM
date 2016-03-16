@@ -37,7 +37,6 @@ static sWord tempVsHumErr[3][2] =
 
 static Word frequency2humidity(const Word frequency)
 {
-    Word ret = 0;
     Byte idx = 0;
 
     if (freqVsHum[3][idx] >= frequency)

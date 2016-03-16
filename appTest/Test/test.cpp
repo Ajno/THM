@@ -635,3 +635,7 @@ void ControllerTest::humidityUpdate2()
 
     CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 55%    " == screen));
 }
+
+void ControllerTest::movAvgFilterTest()
+{
+}

@@ -5,8 +5,6 @@
  *      Author: Jano
  */
 
-#include "thm_lib.h"
-
 #include "base.h"
 #include "buttons.h"
 #include "timer.h"

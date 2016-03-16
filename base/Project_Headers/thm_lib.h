@@ -19,6 +19,12 @@ extern "C" {
  * @param[in] <-32767, 32767>
  */
 char* thmLibItoa(const sWord cNum);
+/*
+ * @brief moving average filter
+ *
+ * @param[in] todo
+ */
+void movAvgFilter();
 
 #ifdef __cplusplus
 }

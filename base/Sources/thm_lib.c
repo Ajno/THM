@@ -39,3 +39,37 @@ char* thmLibItoa(const sWord cNum)
 
     return &buffer[i];
 }
+
+sWord thmLibMovAvgFilter(const sWord in, sWord pBuff[], const Byte buffLen)
+{
+    static Bool bFirstCall = TRUE;
+
+    if (bFirstCall)
+    {
+        Byte  idx;
+        for (idx = 0; idx < buffLen; ++idx)
+        {
+            pBuff[idx] = in;
+        }
+        bFirstCall = FALSE;
+    }
+    else
+    {
+        Byte idx;
+        // shift values in buffer
+        for (idx = (buffLen - 1); idx > 0 ; --idx) 
+        {
+            pBuff[idx] = pBuff[idx - 1];
+        }
+        pBuff[0] = in;
+    }
+
+    // calculate moving average
+    Byte idx;
+    sWord out = 0;
+    for (idx = 0; idx < buffLen; ++idx) 
+    {
+        out += pBuff[idx];
+    }       
+    return out/buffLen;
+}

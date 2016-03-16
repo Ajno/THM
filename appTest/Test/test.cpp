@@ -638,4 +638,19 @@ void ControllerTest::humidityUpdate2()
 
 void ControllerTest::movAvgFilterTest()
 {
+    const Byte length = 4;
+    sWord buffer[length];
+    sWord input = 0;
+    sWord output = 0;
+    sWord expected = 0;
+
+    expected = 1;
+    input = -2;
+    output = thmLibMovAvgFilter(input,buffer,length);
+    output = thmLibMovAvgFilter(input,buffer,length);
+    input = 4;
+    output = thmLibMovAvgFilter(input,buffer,length);
+    output = thmLibMovAvgFilter(input,buffer,length);
+
+    CPPUNIT_ASSERT_EQUAL(expected,output);
 }

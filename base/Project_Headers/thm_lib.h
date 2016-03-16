@@ -22,9 +22,11 @@ char* thmLibItoa(const sWord cNum);
 /*
  * @brief moving average filter
  *
- * @param[in] todo
+ * @param[in] in Input raw value
+ * @param[in,out] pBuff Buffer with previous samples
+ * @param[in] buffLen Buffer size
  */
-void movAvgFilter();
+sWord thmLibMovAvgFilter(const sWord in, sWord pBuff[], const Byte buffLen);
 
 #ifdef __cplusplus
 }

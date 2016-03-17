@@ -531,10 +531,24 @@ void ControllerTest::temperatureUpdate()
 
     ControllerTest::firstTurnOnDisplay();
     pTemperature->setTemperature(cTemperature1);
+    // call controller until filter settle down
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     screenTemp1 = pLcd->getScreen().text;
     pTemperature->setTemperature(cTemperature2);
+    // call controller until filter settle down
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     screenTemp2 = pLcd->getScreen().text;
@@ -560,6 +574,13 @@ void ControllerTest::humidityUpdate1()
     string screenHum12("");
 
     ControllerTest::firstTurnOnDisplay();
+    // call controller until filter settle down
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     screenHum1 = pLcd->getScreen().text;
@@ -638,19 +659,18 @@ void ControllerTest::humidityUpdate2()
 
 void ControllerTest::movAvgFilterTest()
 {
-    const Byte length = 4;
-    sWord buffer[length];
+    FILTER_BUFFER_T(4) buffer = FILTER_INIT(4);
     sWord input = 0;
     sWord output = 0;
     sWord expected = 0;
 
-    expected = 1;
-    input = -2;
-    output = thmLibMovAvgFilter(input,buffer,length);
-    output = thmLibMovAvgFilter(input,buffer,length);
-    input = 4;
-    output = thmLibMovAvgFilter(input,buffer,length);
-    output = thmLibMovAvgFilter(input,buffer,length);
+    expected = 10;
+    input = -20;
+    output = thmLibMovAvgFilter(input,buffer.data,buffer.len);
+    output = thmLibMovAvgFilter(input,buffer.data,buffer.len);
+    input = 40;
+    output = thmLibMovAvgFilter(input,buffer.data,buffer.len);
+    output = thmLibMovAvgFilter(input,buffer.data,buffer.len);
 
     CPPUNIT_ASSERT_EQUAL(expected,output);
 }

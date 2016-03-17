@@ -8,10 +8,20 @@
 #ifndef THM_LIB_H_
 #define THM_LIB_H_
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <stdtypes.h>
+
+#define FILTER_BUFFER_T(order)\
+struct filter_t\
+{\
+    const sWord len;\
+    sWord       data[order];\
+}
+
+#define FILTER_INIT(order) {order,{0}}
 
 /*
  * @brief integer to string

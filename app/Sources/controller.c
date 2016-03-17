@@ -4,7 +4,7 @@
  *  Created on: Sep 20, 2015
  *      Author: Jano
  */
-
+#include "thm_lib.h"
 #include "base.h"
 #include "buttons.h"
 #include "timer.h"
@@ -20,14 +20,18 @@ static const Word cButtonPressTimeMiliSec = 2000;
 
 static Byte         cntrBacklightToggle = cNumOfBacklightToggle;
 static menuState_t  menu = cMenuState_idle1;
+
+FILTER_BUFFER_T(4)  temperatureSamples = FILTER_INIT(4);
 static sWord        temperatureRaw = 0;
+static sWord        temperatureFilt = 0;
 static Word         humidityRaw = 0;
 
 void updateTemperatureAndHumidity()
 {
     temperatureRaw = temperatureRead();
+    temperatureFilt = thmLibMovAvgFilter(temperatureRaw,temperatureSamples.data, temperatureSamples.len);
     humidityRaw = humidityRead(temperatureRaw, 10/cSamplingPeriodMiliSecX100);
-    displayTemperatureSet(temperatureRaw);
+    displayTemperatureSet(temperatureFilt);
     displayHumiditySet(humidityRaw);
 }
 

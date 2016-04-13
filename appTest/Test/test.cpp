@@ -674,3 +674,14 @@ void ControllerTest::movAvgFilterTest()
 
     CPPUNIT_ASSERT_EQUAL(expected,output);
 }
+
+// fixme
+void ControllerTest::lowBatteryWarning()
+{
+    ControllerTest::firstTurnOnDisplay();
+    pPwrMgmt->setLowBatteryWarning(true);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Low Battery!                            Low Battery!    " == pLcd->getScreen().text));
+}

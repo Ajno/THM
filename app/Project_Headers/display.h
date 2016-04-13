@@ -42,6 +42,7 @@ void displayBacklightTurnOn();
 void displayBacklightTurnOff();
 void displayBacklightToggle();
 Bool displayBacklightIsOn();
+void displayLowBatteryWarning();
 void displayInit();
 
 #ifdef __cplusplus

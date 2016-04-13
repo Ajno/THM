@@ -91,3 +91,10 @@ void pwrMgmtGetRecentResetSource(pwrMgmtRecentresetSource_t* pSource)
         *pSource = cPwrMgmtResetSource_unknown;
     }
 }
+
+Bool pwgMgmtIsLowBattery()
+{
+    // clear the low voltage warning if not present
+    systemClearLowVoltageWarning();
+    return systemLowVoltageWarningDetected();
+}

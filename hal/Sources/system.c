@@ -46,7 +46,7 @@ Bool systemLowVoltageWarningDetected()
 
 void systemClearLowVoltageWarning()
 {
-    SPMSC3_LVWACK = 0;
+    SPMSC3_LVWACK = 1;
 }
 
 void systemReadResetSource(systemRecentResetSource_t* pSource)

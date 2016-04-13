@@ -229,6 +229,14 @@ void displayBacklightToggle()
     lcdBackLightOn(bBacklightOn);
 }
 
+void displayLowBatteryWarning()
+{
+    lcdReturnHome();
+    lcdWrite("Low Battery!                            Low Battery!");
+    // set cursor back
+    lcdMoveCursor(cContrastPositionOnScreen);
+}
+
 void displayInit()
 {
     bBacklightOn = FALSE;

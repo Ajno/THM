@@ -56,6 +56,7 @@ CPPUNIT_TEST_SUITE(ControllerTest);
     CPPUNIT_TEST(temperatureUpdate);
     CPPUNIT_TEST(humidityUpdate1);
     CPPUNIT_TEST(humidityUpdate2);
+    CPPUNIT_TEST(lowBatteryWarning);
 
     CPPUNIT_TEST_SUITE_END()
     ;
@@ -96,6 +97,7 @@ public:
     void temperatureUpdate();
     void humidityUpdate1();
     void humidityUpdate2();
+    void lowBatteryWarning();
 };
 
 #endif /* TEST_H_ */

@@ -43,6 +43,7 @@ extern "C" void lcdClear()
     cursor.position = 0;
 }
 
+// the real LCD addresses are hexadecimal
 extern "C" void lcdWrite(const char* pString)
 {
     string str(pString);
@@ -91,6 +92,11 @@ extern "C" void lcdScreenOrCursorShift(const lcdMovingDirection_t cSetting)
 extern "C" void lcdMoveCursor(const Byte cAddress)
 {
     cursor.position = static_cast<int>(cAddress);
+}
+
+extern "C" void lcdReturnHome()
+{
+    cursor.position = 0;
 }
 
 extern "C" void lcdSetContrast(const Word cContrast)

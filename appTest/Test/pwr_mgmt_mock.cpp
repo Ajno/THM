@@ -9,15 +9,22 @@
 #include <pwr_mgmt.h>
 
 static bool bSleeping = false;
+static bool bLowBattery = false;
 
 extern "C" void pwrMgmtGoToSleep(const Bool bDeepSleep)
 {
     bSleeping = true;
 }
 
+extern "C" Bool pwgMgmtIsLowBattery()
+{
+    return bLowBattery;
+}
+
 PwrMgmtMock::PwrMgmtMock()
 {
     bSleeping = false;
+    bLowBattery = false;
 }
 
 PwrMgmtMock::~PwrMgmtMock()
@@ -33,4 +40,9 @@ bool PwrMgmtMock::isSleeping()
 void PwrMgmtMock::wakeUp()
 {
     bSleeping = false;
+}
+
+bool PwrMgmtMock::setLowBatteryWarning(bool cLowBattery)
+{
+    bLowBattery = cLowBattery;
 }

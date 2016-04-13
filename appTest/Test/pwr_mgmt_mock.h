@@ -15,6 +15,7 @@ public:
     virtual ~PwrMgmtMock();
     bool isSleeping();
     void wakeUp();
+    bool setLowBatteryWarning(bool cLowBattery);
 };
 
 #endif /* PWR_MGMT_MOCK_H_ */

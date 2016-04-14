@@ -19,7 +19,8 @@ static const Word cAwakeTimeSec = 10;
 static const Word cButtonPressTimeMiliSec = 2000;
 
 static Byte cntrBacklightToggle = cNumOfBacklightToggle;
-static menuState_t menu = cMenuState_idle1;
+static menuState_t state = cState_idle1;
+static menuState_t stateBeforeLowBatWarning = cState_idle1;
 
 FILTER_BUFFER_T(4) temperatureSamples = FILTER_INIT(4);
 static sWord temperatureRaw = 0;
@@ -38,12 +39,12 @@ void updateTemperatureAndHumidity()
 
 void onElapsedVeryShortTimer()
 {
-    switch (menu)
+    switch (state)
     {
-    case cMenuState_goto1:
+    case cState_goto1:
         if (displayIsNotSliding())
         {
-            menu = cMenuState_idle1;
+            state = cState_idle1;
         }
         else
         {
@@ -51,10 +52,10 @@ void onElapsedVeryShortTimer()
             timerRestartMiliSec(cScreenShiftTimeMiliSec);
         }
         break;
-    case cMenuState_goto2:
+    case cState_goto2:
         if (displayIsNotSliding())
         {
-            menu = cMenuState_idle2;
+            state = cState_idle2;
         }
         else
         {
@@ -62,13 +63,13 @@ void onElapsedVeryShortTimer()
             timerRestartMiliSec(cScreenShiftTimeMiliSec);
         }
         break;
-    case cMenuState_upperPressedInIdle2:
+    case cState_upperPressedInIdle2:
         displayCursorTurnOn();
-        menu = cMenuState_waitToChangeContrast;
+        state = cState_changeContrastActive;
         break;
-    case cMenuState_upperPressedInChangeContrast:
+    case cState_upperPressedInChangeContrast:
         displayCursorTurnOff();
-        menu = cMenuState_waitToEnterIdle2;
+        state = cState_waitToEnterIdle2;
         break;
     default:
         break;
@@ -77,11 +78,7 @@ void onElapsedVeryShortTimer()
 
 void onElapsedShortTimer()
 {
-    if (pwgMgmtIsLowBattery())
-    {
-        displayLowBatteryWarning();
-    }
-    else
+    if (cState_lowBatteryWarning != state)
     {
         updateTemperatureAndHumidity();
         displayDoAnimation();
@@ -99,27 +96,27 @@ void onElapsedLongTimer()
     else
     {
         displayTurnOff();
-        menu = cMenuState_sleep;
+        state = cState_sleep;
         pwrMgmtGoToSleep(TRUE);
     }
 }
 
-void processUpperButton()
+void handleUpperButton()
 {
     if (buttonIsPressed(cButton_Upper))
     {
         displayBacklightTurnOn();
         timerRestartSec(cAwakeTimeSec);
 
-        switch (menu)
+        switch (state)
         {
-        case cMenuState_idle2:
+        case cState_idle2:
             timerRestartMiliSec(cButtonPressTimeMiliSec);
-            menu = cMenuState_upperPressedInIdle2;
+            state = cState_upperPressedInIdle2;
             break;
-        case cMenuState_changeContrast:
+        case cState_idleChangeContrast:
             timerRestartMiliSec(cButtonPressTimeMiliSec);
-            menu = cMenuState_upperPressedInChangeContrast;
+            state = cState_upperPressedInChangeContrast;
             break;
         default:
             break;
@@ -127,20 +124,20 @@ void processUpperButton()
     }
     else
     {
-        switch (menu)
+        switch (state)
         {
-        case cMenuState_upperPressedInIdle2:
-            menu = cMenuState_idle2;
+        case cState_upperPressedInIdle2:
+            state = cState_idle2;
             break;
-        case cMenuState_waitToChangeContrast:
-            menu = cMenuState_changeContrast;
+        case cState_changeContrastActive:
+            state = cState_idleChangeContrast;
             break;
-        case cMenuState_upperPressedInChangeContrast:
+        case cState_upperPressedInChangeContrast:
             displayContrastIncrement();
-            menu = cMenuState_changeContrast;
+            state = cState_idleChangeContrast;
             break;
-        case cMenuState_waitToEnterIdle2:
-            menu = cMenuState_idle2;
+        case cState_waitToEnterIdle2:
+            state = cState_idle2;
             break;
         default:
             break;
@@ -148,27 +145,27 @@ void processUpperButton()
     }
 }
 
-void processLowerButton()
+void handleLowerButton()
 {
     if (buttonIsPressed(cButton_Lower))
     {
         displayBacklightTurnOn();
         timerRestartSec(cAwakeTimeSec);
 
-        switch (menu)
+        switch (state)
         {
-        case cMenuState_idle1:
+        case cState_idle1:
             displaySlideRight();
             timerRestartMiliSec(cScreenShiftTimeMiliSec);
-            menu = cMenuState_goto2;
+            state = cState_goto2;
             break;
-        case cMenuState_idle2:
+        case cState_idle2:
             displaySlideLeft();
             timerRestartMiliSec(cScreenShiftTimeMiliSec);
-            menu = cMenuState_goto1;
+            state = cState_goto1;
             break;
-        case cMenuState_changeContrast:
-            menu = cMenuState_lowerPressedInChangeContrast;
+        case cState_idleChangeContrast:
+            state = cState_lowerPressedInChangeContrast;
             break;
         default:
             break;
@@ -176,17 +173,53 @@ void processLowerButton()
     }
     else
     {
-        switch (menu)
+        switch (state)
         {
-        case cMenuState_lowerPressedInChangeContrast:
+        case cState_lowerPressedInChangeContrast:
             displayContrastDecrement();
-            menu = cMenuState_changeContrast;
+            state = cState_idleChangeContrast;
             break;
-        case cMenuState_sleep:
-            menu = cMenuState_idle1;
+        case cState_sleep:
+            state = cState_idle1;
             break;
         default:
             break;
+        }
+    }
+}
+
+void leaveLowBatteryWarning()
+{
+    displayMenuTemplate();
+    displayContrastSet();
+    state = stateBeforeLowBatWarning;
+}
+
+void handleLowBattery()
+{
+    if (pwgMgmtIsLowBattery())
+    {
+        switch (state)
+        {
+            case cState_idle1:
+            case cState_idle2:
+            case cState_idleChangeContrast:
+                displayLowBatteryWarning();
+                stateBeforeLowBatWarning = state;
+                state = cState_lowBatteryWarning;
+                break;
+            case cState_lowBatteryWarning:
+                leaveLowBatteryWarning();
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        if (cState_lowBatteryWarning == state)
+        {
+            leaveLowBatteryWarning();
         }
     }
 }
@@ -217,8 +250,9 @@ void controller()
         }
         else
         {
-            processLowerButton();
-            processUpperButton();
+            handleLowBattery();
+            handleLowerButton();
+            handleUpperButton();
         }
 
         if (timerElapsedMiliSec())
@@ -241,7 +275,8 @@ void controller()
 void baseInitApp()
 {
     cntrBacklightToggle = cNumOfBacklightToggle;
-    menu = cMenuState_idle1;
+    state = cState_idle1;
+    stateBeforeLowBatWarning = cState_idle1;
     displayInit();
     baseInstallApp(&controller);
 }

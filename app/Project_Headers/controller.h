@@ -19,17 +19,18 @@ enum staticConst_t
 
 typedef enum
 {
-    cMenuState_sleep,
-	cMenuState_idle1,
-	cMenuState_idle2,
-	cMenuState_goto1,
-	cMenuState_goto2,
-	cMenuState_upperPressedInIdle2,
-	cMenuState_waitToChangeContrast,
-	cMenuState_upperPressedInChangeContrast,
-	cMenuState_waitToEnterIdle2,
-	cMenuState_lowerPressedInChangeContrast,
-	cMenuState_changeContrast
+    cState_sleep,
+	cState_idle1,
+	cState_idle2,
+	cState_goto1,
+	cState_goto2,
+	cState_upperPressedInIdle2,
+	cState_changeContrastActive,
+	cState_upperPressedInChangeContrast,
+	cState_waitToEnterIdle2,
+	cState_lowerPressedInChangeContrast,
+	cState_idleChangeContrast,
+	cState_lowBatteryWarning
 }menuState_t;
 
 void controller();

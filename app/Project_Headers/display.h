@@ -30,6 +30,7 @@ void displayHumiditySet(const Word cHumidityInPercents);
 void displayDoAnimation();
 void displayCursorTurnOn();
 void displayCursorTurnOff();
+void displayMenuTemplate();
 void displayTurnOff();
 void displayTurnOn();
 Bool displayIsOn();

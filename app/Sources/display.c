@@ -129,6 +129,12 @@ void displayCursorTurnOff()
     lcdOnOffControl(lcdOnOff);
 }
 
+void displayMenuTemplate()
+{
+    lcdReturnHome();
+    lcdWrite("Teplota:        Kontrast:               Vlhkost:     ");
+}
+
 void displayTurnOff()
 {
     lcdOnOff.bLcdOn = FALSE;
@@ -146,7 +152,7 @@ void displayTurnOn()
         lcdOnOff.bBlinkingCursor = FALSE;
     }
     lcdOnOffControl(lcdOnOff);
-    lcdWrite("Teplota:        Kontrast:               Vlhkost:     ");
+    displayMenuTemplate();
 }
 
 Bool displayIsOn()

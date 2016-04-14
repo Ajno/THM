@@ -78,11 +78,15 @@ void onElapsedVeryShortTimer()
 
 void onElapsedShortTimer()
 {
-    if (cState_lowBatteryWarning != state)
+    if (cState_lowBatteryWarningOn == state)
     {
-        updateTemperatureAndHumidity();
-        displayDoAnimation();
+        // fixme
+        displayMenuTemplate();
+        displayContrastSet();
+        state = stateBeforeLowBatWarning;
     }
+    updateTemperatureAndHumidity();
+    displayDoAnimation();
     timerRestartMiliSecX100(cSamplingPeriodMiliSecX100);
 }
 
@@ -188,13 +192,6 @@ void handleLowerButton()
     }
 }
 
-void leaveLowBatteryWarning()
-{
-    displayMenuTemplate();
-    displayContrastSet();
-    state = stateBeforeLowBatWarning;
-}
-
 void handleLowBattery()
 {
     if (pwgMgmtIsLowBattery())
@@ -204,12 +201,10 @@ void handleLowBattery()
             case cState_idle1:
             case cState_idle2:
             case cState_idleChangeContrast:
-                displayLowBatteryWarning();
                 stateBeforeLowBatWarning = state;
-                state = cState_lowBatteryWarning;
-                break;
-            case cState_lowBatteryWarning:
-                leaveLowBatteryWarning();
+                state = cState_lowBatteryWarningOn;
+                displayLowBatteryWarning();
+                timerRestartMiliSecX100(cSamplingPeriodMiliSecX100);
                 break;
             default:
                 break;
@@ -217,9 +212,12 @@ void handleLowBattery()
     }
     else
     {
-        if (cState_lowBatteryWarning == state)
+        if (cState_lowBatteryWarningOn == state)
         {
-            leaveLowBatteryWarning();
+            // fixme
+            displayMenuTemplate();
+            displayContrastSet();
+            state = stateBeforeLowBatWarning;
         }
     }
 }

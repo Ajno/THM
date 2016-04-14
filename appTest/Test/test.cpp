@@ -675,7 +675,6 @@ void ControllerTest::movAvgFilterTest()
     CPPUNIT_ASSERT_EQUAL(expected,output);
 }
 
-// fixme
 void ControllerTest::lowBatteryWarning()
 {
     ControllerTest::firstTurnOnDisplay();

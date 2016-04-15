@@ -16,7 +16,7 @@ extern "C" void pwrMgmtGoToSleep(const Bool bDeepSleep)
     bSleeping = true;
 }
 
-extern "C" Bool pwgMgmtIsLowBattery()
+extern "C" Bool pwrMgmtIsLowBattery()
 {
     return bLowBattery;
 }

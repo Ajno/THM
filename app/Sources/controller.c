@@ -22,12 +22,13 @@ static Byte cntrBacklightToggle = cNumOfBacklightToggle;
 static menuState_t state = cState_idle1;
 static menuState_t stateBeforeLowBatWarning = cState_idle1;
 
-FILTER_BUFFER_T(4) temperatureSamples = FILTER_INIT(4);
+FILTER_BUFFER_T(4)
+temperatureSamples = FILTER_INIT(4);
 static sWord temperatureRaw = 0;
 static sWord temperatureFilt = 0;
 static Word humidityRaw = 0;
 
-void updateTemperatureAndHumidity()
+void updateAndDisplayTempAndHum()
 {
     temperatureRaw = temperatureRead();
     temperatureFilt = thmLibMovAvgFilter(temperatureRaw,
@@ -76,17 +77,42 @@ void onElapsedVeryShortTimer()
     }
 }
 
+void leaveLowBatWarningAndDisplayContrast()
+{
+    state = stateBeforeLowBatWarning;
+    displayMenuTemplate();
+    displayContrastSet();
+}
+
 void onElapsedShortTimer()
 {
-    if (cState_lowBatteryWarningOn == state)
+    if (pwrMgmtIsLowBattery())
     {
-        // fixme
-        displayMenuTemplate();
-        displayContrastSet();
-        state = stateBeforeLowBatWarning;
+        if (cState_lowBatteryWarningOn == state)
+        {
+            leaveLowBatWarningAndDisplayContrast();
+        }
+        else
+        {
+            stateBeforeLowBatWarning = state;
+            state = cState_lowBatteryWarningOn;
+            displayLowBatteryWarning();
+        }
     }
-    updateTemperatureAndHumidity();
-    displayDoAnimation();
+    else
+    {
+        if (cState_lowBatteryWarningOn == state)
+        {
+            leaveLowBatWarningAndDisplayContrast();
+        }
+    }
+
+    if (cState_lowBatteryWarningOn != state)
+    {
+        updateAndDisplayTempAndHum();
+        displayDoAnimation();
+    }
+
     timerRestartMiliSecX100(cSamplingPeriodMiliSecX100);
 }
 
@@ -192,36 +218,6 @@ void handleLowerButton()
     }
 }
 
-void handleLowBattery()
-{
-    if (pwgMgmtIsLowBattery())
-    {
-        switch (state)
-        {
-            case cState_idle1:
-            case cState_idle2:
-            case cState_idleChangeContrast:
-                stateBeforeLowBatWarning = state;
-                state = cState_lowBatteryWarningOn;
-                displayLowBatteryWarning();
-                timerRestartMiliSecX100(cSamplingPeriodMiliSecX100);
-                break;
-            default:
-                break;
-        }
-    }
-    else
-    {
-        if (cState_lowBatteryWarningOn == state)
-        {
-            // fixme
-            displayMenuTemplate();
-            displayContrastSet();
-            state = stateBeforeLowBatWarning;
-        }
-    }
-}
-
 void controller()
 {
     if (0 < cntrBacklightToggle)
@@ -242,13 +238,12 @@ void controller()
         {
             displayTurnOn();
             displayBacklightTurnOn();
-            updateTemperatureAndHumidity();
+            updateAndDisplayTempAndHum();
             displayContrastSet();
             timerRestartSec(cAwakeTimeSec);
         }
         else
         {
-            handleLowBattery();
             handleLowerButton();
             handleUpperButton();
         }

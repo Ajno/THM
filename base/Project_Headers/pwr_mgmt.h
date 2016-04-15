@@ -29,7 +29,7 @@ typedef enum
 void pwrMgmtInit(pWakeUpCallback_t pWakeUpCallback);
 void pwrMgmtGoToSleep(const Bool bDeepSleep);
 void pwrMgmtGetRecentResetSource(pwrMgmtRecentresetSource_t* pSource);
-Bool pwgMgmtIsLowBattery();
+Bool pwrMgmtIsLowBattery();
 
 #ifdef __cplusplus
 }

@@ -30,8 +30,7 @@ typedef enum
 	cState_waitToEnterIdle2,
 	cState_lowerPressedInChangeContrast,
 	cState_idleChangeContrast,
-	cState_lowBatteryWarningOn,
-	cState_lowBatteryWarningOff //todo
+	cState_lowBatteryWarningOn
 }menuState_t;
 
 void controller();

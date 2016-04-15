@@ -686,12 +686,18 @@ void ControllerTest::lowBatteryWarning()
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     string screen2 = pLcd->getScreen().text;
-    pPwrMgmt->setLowBatteryWarning(false);
     pTimer->stop(TimerMock::cTimerMiliSecX100);
     controller();
     string screen3 = pLcd->getScreen().text;
+    pPwrMgmt->setLowBatteryWarning(false);
+    pTimer->stop(TimerMock::cTimerMiliSecX100);
+    controller();
+    string screen4 = pLcd->getScreen().text;
+    shiftTheScreen();
 
     CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Low Battery!                            Low Battery!    " == screen1));
     CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == screen2));
-    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == screen3));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Low Battery!                            Low Battery!    " == screen3));
+    CPPUNIT_ASSERT_MESSAGE(pLcd->getScreen().text,("Teplota: 20,5ßC Kontrast: 40%           Vlhkost: 40%    " == screen4));
+    CPPUNIT_ASSERT_EQUAL(cPositionMenu2, pLcd->getScreen().position);
 }

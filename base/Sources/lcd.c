@@ -357,11 +357,6 @@ void lcdPrepareForSleep()
     bDataBusConfiguredAsOutput = FALSE;
 }
 
-void lcdWakeUpCallback()
-{
-// todo delete this if not necessary
-}
-
 void lcdInit()
 {
     ioConfig_t pinCfg;

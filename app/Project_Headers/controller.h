@@ -14,7 +14,7 @@ extern "C" {
 enum staticConst_t
 { 
     cNumOfBacklightToggle = 7,
-    cSamplingPeriodMiliSecX100 = 5 // 500 ms
+    cTimeoutSamplingPeriod = 5 // 500 ms
 };
 
 typedef enum

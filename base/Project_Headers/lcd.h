@@ -43,7 +43,6 @@ void lcdWrite(const char* pString);
 void lcdSetContrast(const Word cContrast);
 Word lcdGetContrast();
 void lcdPrepareForSleep();
-void lcdWakeUpCallback();
 
 #ifdef __cplusplus
 }

@@ -21,7 +21,7 @@ enum displayConst_t
     cAnimationPositionOnSreen   = 0x50,
     cDefaultContrast            = 40,
     cContrastIncrement          = 5,
-    cScreenShiftTimeMiliSec     = 50
+    cTimeoutScreenShift         = 50 // 50 ms
 };
 
 void displayContrastSet();

@@ -14,9 +14,9 @@
 #include "humidity.h"
 #include "controller.h"
 
-static const Word cBacklightToggleTimeMiliSec = 250;
-static const Word cAwakeTimeSec = 10;
-static const Word cButtonPressTimeMiliSec = 2000;
+static const Word cTimeoutBacklightToggle = 250; // 250 ms
+static const Word cTimeoutAwake = 10; // 10 sec
+static const Word cTimeoutHoldButton = 2000; // 2000 ms
 
 static Byte cntrBacklightToggle = cNumOfBacklightToggle;
 static menuState_t state = cState_idle1;
@@ -33,7 +33,7 @@ void updateAndDisplayTempAndHum()
     temperatureRaw = temperatureRead();
     temperatureFilt = thmLibMovAvgFilter(temperatureRaw,
             temperatureSamples.data, temperatureSamples.len);
-    humidityRaw = humidityRead(temperatureRaw, 10 / cSamplingPeriodMiliSecX100);
+    humidityRaw = humidityRead(temperatureRaw, 10 / cTimeoutSamplingPeriod);
     displayTemperatureSet(temperatureFilt);
     displayHumiditySet(humidityRaw);
 }
@@ -50,7 +50,7 @@ void onElapsedVeryShortTimer()
         else
         {
             displaySlideLeft();
-            timerRestartMiliSec(cScreenShiftTimeMiliSec);
+            timerRestartMiliSec(cTimeoutScreenShift);
         }
         break;
     case cState_goto2:
@@ -61,7 +61,7 @@ void onElapsedVeryShortTimer()
         else
         {
             displaySlideRight();
-            timerRestartMiliSec(cScreenShiftTimeMiliSec);
+            timerRestartMiliSec(cTimeoutScreenShift);
         }
         break;
     case cState_upperPressedInIdle2:
@@ -77,33 +77,21 @@ void onElapsedVeryShortTimer()
     }
 }
 
-void leaveLowBatWarningAndDisplayContrast()
-{
-    state = stateBeforeLowBatWarning;
-    displayMenuTemplate();
-    displayContrastSet();
-}
-
 void onElapsedShortTimer()
 {
-    if (pwrMgmtIsLowBattery())
+    if (cState_lowBatteryWarningOn == state)
     {
-        if (cState_lowBatteryWarningOn == state)
-        {
-            leaveLowBatWarningAndDisplayContrast();
-        }
-        else
+        state = stateBeforeLowBatWarning;
+        displayMenuTemplate();
+        displayContrastSet();
+    }
+    else
+    {
+        if (pwrMgmtIsLowBattery())
         {
             stateBeforeLowBatWarning = state;
             state = cState_lowBatteryWarningOn;
             displayLowBatteryWarning();
-        }
-    }
-    else
-    {
-        if (cState_lowBatteryWarningOn == state)
-        {
-            leaveLowBatWarningAndDisplayContrast();
         }
     }
 
@@ -113,7 +101,7 @@ void onElapsedShortTimer()
         displayDoAnimation();
     }
 
-    timerRestartMiliSecX100(cSamplingPeriodMiliSecX100);
+    timerRestartMiliSecX100(cTimeoutSamplingPeriod);
 }
 
 void onElapsedLongTimer()
@@ -121,7 +109,7 @@ void onElapsedLongTimer()
     if (displayBacklightIsOn())
     {
         displayBacklightTurnOff();
-        timerRestartSec(cAwakeTimeSec);
+        timerRestartSec(cTimeoutAwake);
     }
     else
     {
@@ -136,16 +124,16 @@ void handleUpperButton()
     if (buttonIsPressed(cButton_Upper))
     {
         displayBacklightTurnOn();
-        timerRestartSec(cAwakeTimeSec);
+        timerRestartSec(cTimeoutAwake);
 
         switch (state)
         {
         case cState_idle2:
-            timerRestartMiliSec(cButtonPressTimeMiliSec);
+            timerRestartMiliSec(cTimeoutHoldButton);
             state = cState_upperPressedInIdle2;
             break;
         case cState_idleChangeContrast:
-            timerRestartMiliSec(cButtonPressTimeMiliSec);
+            timerRestartMiliSec(cTimeoutHoldButton);
             state = cState_upperPressedInChangeContrast;
             break;
         default:
@@ -180,18 +168,18 @@ void handleLowerButton()
     if (buttonIsPressed(cButton_Lower))
     {
         displayBacklightTurnOn();
-        timerRestartSec(cAwakeTimeSec);
+        timerRestartSec(cTimeoutAwake);
 
         switch (state)
         {
         case cState_idle1:
             displaySlideRight();
-            timerRestartMiliSec(cScreenShiftTimeMiliSec);
+            timerRestartMiliSec(cTimeoutScreenShift);
             state = cState_goto2;
             break;
         case cState_idle2:
             displaySlideLeft();
-            timerRestartMiliSec(cScreenShiftTimeMiliSec);
+            timerRestartMiliSec(cTimeoutScreenShift);
             state = cState_goto1;
             break;
         case cState_idleChangeContrast:
@@ -228,7 +216,7 @@ void controller()
             cntrBacklightToggle--;
             if (0 != cntrBacklightToggle)
             {
-                timerRestartMiliSec(cBacklightToggleTimeMiliSec);
+                timerRestartMiliSec(cTimeoutBacklightToggle);
             }
         }
     }
@@ -240,7 +228,7 @@ void controller()
             displayBacklightTurnOn();
             updateAndDisplayTempAndHum();
             displayContrastSet();
-            timerRestartSec(cAwakeTimeSec);
+            timerRestartSec(cTimeoutAwake);
         }
         else
         {

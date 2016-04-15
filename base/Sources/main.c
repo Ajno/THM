@@ -23,7 +23,7 @@ void main(void)
 	timersInit();
 	lcdInit();
 	buttonsInit();
-	pwrMgmtInit(&lcdWakeUpCallback);
+	pwrMgmtInit();
 	temperatureInit();
 	oscillatorInit();
 	baseInitApp();

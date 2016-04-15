@@ -10,18 +10,12 @@
 #include "kbi.h"
 #include "io.h"
 
-static pWakeUpCallback_t pIsrClbck;
-
 static void wakeUpRoutine()
 {
-    if (0 != pIsrClbck)
-    {        
-        pIsrClbck();
-    }
     kbiDisable();
 }
 
-void pwrMgmtInit(pWakeUpCallback_t pWakeUpCallback)
+void pwrMgmtInit()
 {
     systemConfig_t cfg;
     
@@ -32,8 +26,6 @@ void pwrMgmtInit(pWakeUpCallback_t pWakeUpCallback)
     cfg.bLowVoltageTripPointHigh = TRUE;
     cfg.bLowVoltageWarningPointHigh = TRUE;
     systemConfigure(cfg);
-    
-    pIsrClbck = pWakeUpCallback;
     kbiInstallIsrCallback(&wakeUpRoutine);
 }
 
